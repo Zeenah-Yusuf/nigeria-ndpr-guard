@@ -1,44 +1,70 @@
 import heroBg from "@/assets/hero-bg.jpg";
-import { ShieldCheck, ArrowDown } from "lucide-react";
+import { ShieldCheck, ArrowDown, Zap, Users } from "lucide-react";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background layers */}
       <div className="absolute inset-0">
         <img src={heroBg} alt="Lagos skyline" className="w-full h-full object-cover" width={1920} height={1080} />
-        <div className="absolute inset-0 bg-hero-gradient opacity-90" />
+        <div className="absolute inset-0 bg-hero-gradient opacity-[0.92]" />
+        {/* Decorative gradient orbs */}
+        <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full opacity-20 blur-3xl" style={{ background: "hsl(207, 72%, 38%)" }} />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full opacity-15 blur-3xl" style={{ background: "hsl(152, 65%, 40%)" }} />
       </div>
-      <div className="relative z-10 container mx-auto px-4 text-center pt-20">
-        <div className="animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/30 rounded-full px-4 py-1.5 mb-6">
-            <ShieldCheck className="w-4 h-4 text-primary" style={{ color: "hsl(152, 69%, 50%)" }} />
-            <span className="text-sm font-medium" style={{ color: "hsl(152, 69%, 70%)" }}>AI-Powered Compliance for Nigerian Startups</span>
-          </div>
+
+      <div className="relative z-10 container mx-auto px-4 text-center pt-24 pb-12">
+        {/* Badge */}
+        <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full px-5 py-2 mb-8 border" style={{ background: "hsl(180, 40%, 30%, 0.15)", borderColor: "hsl(180, 40%, 40%, 0.3)" }}>
+          <ShieldCheck className="w-4 h-4" style={{ color: "hsl(165, 60%, 55%)" }} />
+          <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 70%)" }}>AI-Powered Compliance for Nigerian Startups</span>
         </div>
-        <h1 className="animate-fade-in-up font-heading text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl mx-auto leading-tight" style={{ color: "hsl(0, 0%, 100%)", animationDelay: "0.1s" }}>
+
+        {/* Headline */}
+        <h1 className="animate-fade-in-up font-heading text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl mx-auto leading-[1.1]" style={{ animationDelay: "0.1s", color: "hsl(0, 0%, 100%)" }}>
           Avoid NDPR fines{" "}
-          <span className="text-gradient-primary">before you launch.</span>
+          <span className="text-brand-gradient">before you launch.</span>
         </h1>
-        <p className="animate-fade-in-up text-lg md:text-xl max-w-2xl mx-auto mt-6" style={{ color: "hsl(220, 14%, 75%)", animationDelay: "0.2s" }}>
+
+        {/* Subtext */}
+        <p className="animate-fade-in-up text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed" style={{ animationDelay: "0.2s", color: "hsl(215, 15%, 65%)" }}>
           RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI and the full NDPR framework.
         </p>
-        <div className="animate-fade-in-up mt-8 flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: "0.3s" }}>
+
+        {/* CTAs */}
+        <div className="animate-fade-in-up mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: "0.3s" }}>
           <button
             onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}
-            className="px-8 py-4 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-lg hover:opacity-90 transition-all animate-pulse-glow"
+            className="group px-8 py-4 rounded-2xl bg-brand-gradient-vivid text-primary-foreground font-semibold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 animate-pulse-glow flex items-center gap-2"
           >
+            <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
             Try the Risk Scanner
           </button>
           <button
             onClick={() => document.getElementById("solution")?.scrollIntoView({ behavior: "smooth" })}
-            className="px-8 py-4 rounded-xl border font-semibold text-lg hover:bg-primary/5 transition-all"
-            style={{ borderColor: "hsl(220, 14%, 30%)", color: "hsl(220, 14%, 80%)" }}
+            className="px-8 py-4 rounded-2xl border font-semibold text-lg hover:bg-primary/5 transition-all duration-200"
+            style={{ borderColor: "hsl(215, 15%, 25%)", color: "hsl(215, 15%, 75%)" }}
           >
             Learn More
           </button>
         </div>
-        <div className="animate-fade-in-up mt-16" style={{ animationDelay: "0.5s" }}>
-          <ArrowDown className="w-6 h-6 mx-auto animate-bounce" style={{ color: "hsl(220, 14%, 50%)" }} />
+
+        {/* Stats row */}
+        <div className="animate-fade-in-up mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12" style={{ animationDelay: "0.5s" }}>
+          {[
+            { value: "16", label: "NDPR Clauses Indexed" },
+            { value: "₦10M", label: "Max Fine per Breach" },
+            { value: "72hrs", label: "Breach Report Deadline" },
+          ].map(stat => (
+            <div key={stat.label} className="text-center">
+              <p className="text-2xl md:text-3xl font-heading font-bold text-brand-gradient">{stat.value}</p>
+              <p className="text-xs mt-1" style={{ color: "hsl(215, 12%, 50%)" }}>{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="animate-fade-in mt-12" style={{ animationDelay: "0.7s" }}>
+          <ArrowDown className="w-5 h-5 mx-auto animate-bounce" style={{ color: "hsl(215, 12%, 40%)" }} />
         </div>
       </div>
     </section>
