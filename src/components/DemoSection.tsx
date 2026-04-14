@@ -1,45 +1,55 @@
 import { useState } from "react";
 import RiskScanner from "./RiskScanner";
 import ClauseFinder from "./ClauseFinder";
+import { Shield, Search } from "lucide-react";
 
 const DemoSection = () => {
   const [activeTab, setActiveTab] = useState<"scanner" | "finder">("scanner");
 
   return (
-    <section id="demo" className="py-24 bg-card">
+    <section id="demo" className="py-24 bg-card relative">
+      <div className="absolute top-0 left-0 right-0 h-px bg-brand-gradient opacity-20" />
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Try it now
+        <div className="text-center mb-10">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
+            Try it <span className="text-brand-gradient">now</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground">
             Test your app's NDPR compliance risk in under 2 minutes.
           </p>
         </div>
+
         <div className="max-w-2xl mx-auto">
-          <div className="flex rounded-xl bg-muted p-1 mb-8">
+          {/* Tabs */}
+          <div className="flex rounded-2xl bg-muted p-1.5 mb-8">
             <button
               onClick={() => setActiveTab("scanner")}
-              className={`flex-1 py-3 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                 activeTab === "scanner"
-                  ? "bg-gradient-primary text-primary-foreground shadow-card"
+                  ? "bg-brand-gradient text-primary-foreground shadow-card"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              🛡 Risk Scanner
+              <Shield className="w-4 h-4" />
+              Risk Scanner
             </button>
             <button
               onClick={() => setActiveTab("finder")}
-              className={`flex-1 py-3 rounded-lg text-sm font-semibold transition-all ${
+              className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                 activeTab === "finder"
                   ? "bg-secondary text-secondary-foreground shadow-card"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              🔍 Clause Finder
+              <Search className="w-4 h-4" />
+              Clause Finder
             </button>
           </div>
-          {activeTab === "scanner" ? <RiskScanner /> : <ClauseFinder />}
+
+          {/* Content with key to force remount for clean animations */}
+          <div key={activeTab} className="animate-fade-in">
+            {activeTab === "scanner" ? <RiskScanner /> : <ClauseFinder />}
+          </div>
         </div>
       </div>
     </section>
