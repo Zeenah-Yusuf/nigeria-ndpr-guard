@@ -1,4 +1,4 @@
-import nssLogo from "@/assets/nss-logo.png";
+import nssLogo from "@/assets/nss-logo.jpg";
 
 const Footer = () => {
   return (
@@ -14,7 +14,7 @@ const Footer = () => {
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-foreground transition-colors">About NSS</a>
-            <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+            <a href="mailto:yusufzeenah12@gmail.com" className="hover:text-foreground transition-colors">Contact</a>
             <button
               onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
               className="hover:text-primary transition-colors font-medium"

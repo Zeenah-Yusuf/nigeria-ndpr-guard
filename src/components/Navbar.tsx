@@ -1,4 +1,4 @@
-import nssLogo from "@/assets/nss-logo.png";
+import nssLogo from "@/assets/nss-logo.jpg";
 import { Shield } from "lucide-react";
 
 const Navbar = () => {
