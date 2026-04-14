@@ -1,0 +1,634 @@
+{
+  "metadata": {
+    "regulation": "Nigeria Data Protection Regulation 2019",
+    "document": "NDPR Implementation Framework",
+    "issued_by": "NITDA (National Information Technology Development Agency)",
+    "date": "November 2020",
+    "version": "1.0"
+  },
+  "clauses": [
+    {
+      "id": "1",
+      "title": "Background",
+      "article_ref": "Art. 1",
+      "category": "general",
+      "keywords": [
+        "background",
+        "regulation",
+        "nitda",
+        "data protection",
+        "compliance"
+      ],
+      "summary": "The NDPR is Nigeria's comprehensive data protection regulation issued by NITDA on 25th January 2019. It safeguards critical information infrastructure and protects personal data of Nigerian citizens and residents.",
+      "risk_factors": [
+        "operating_without_awareness",
+        "no_compliance_framework"
+      ],
+      "penalty_info": "Non-compliance with NDPR can result in fines up to \u20a610M or 2% of annual gross revenue, whichever is greater."
+    },
+    {
+      "id": "2",
+      "title": "Relationship of the NDPR to the Framework",
+      "article_ref": "Art. 2",
+      "category": "general",
+      "keywords": [
+        "framework",
+        "exceptions",
+        "national security",
+        "anonymised data"
+      ],
+      "summary": "The Framework clarifies NDPR provisions. Exceptions include: national security use, criminal/tax investigations, anonymised data processing, and personal/household activities.",
+      "risk_factors": [
+        "misunderstanding_exceptions"
+      ],
+      "penalty_info": "Misapplying exceptions does not shield from enforcement."
+    },
+    {
+      "id": "3",
+      "title": "Compliance Framework",
+      "article_ref": "Art. 2-4",
+      "category": "compliance",
+      "keywords": [
+        "compliance",
+        "audit",
+        "privacy policy",
+        "DPIA",
+        "DPO",
+        "data protection officer",
+        "DPCO",
+        "checklist"
+      ],
+      "summary": "Data Controllers must: conduct annual data protection audits, publish privacy policies within 3 months, design data-protection-compliant systems, appoint a DPO if processing 10,000+ data subjects, conduct DPIAs, notify NITDA of breaches within 72 hours, and train staff on data protection.",
+      "risk_factors": [
+        "no_privacy_policy",
+        "no_data_audit",
+        "no_dpo_appointed",
+        "no_dpia",
+        "no_breach_notification_process",
+        "no_staff_training"
+      ],
+      "penalty_info": "Failure to file audit: \u20a610,000-\u20a620,000 filing fees plus potential enforcement action."
+    },
+    {
+      "id": "4",
+      "title": "Handling Personal Data",
+      "article_ref": "Art. 3.1(7)m",
+      "category": "data_handling",
+      "keywords": [
+        "personal data",
+        "further processing",
+        "purpose limitation",
+        "DPIA",
+        "impact assessment"
+      ],
+      "summary": "Further processing of personal data beyond the original purpose requires: informing the data subject, obtaining new consent, and ensuring safeguards exist. DPIAs are required for high-impact processing including profiling, automated decision-making, and sensitive data.",
+      "risk_factors": [
+        "further_processing_without_consent",
+        "no_dpia_for_sensitive_data",
+        "purpose_creep"
+      ],
+      "penalty_info": "Processing without lawful basis can trigger enforcement proceedings."
+    },
+    {
+      "id": "5",
+      "title": "Understanding Consent",
+      "article_ref": "Art. 2.2(a), 2.4, 2.5(d)",
+      "category": "consent",
+      "keywords": [
+        "consent",
+        "explicit consent",
+        "opt-in",
+        "children",
+        "minor",
+        "cookies",
+        "direct marketing",
+        "sensitive data"
+      ],
+      "summary": "Consent must be freely given, specific, informed and unambiguous. No implied consent (silence/pre-ticked boxes). Separate consent needed for different data uses. Children under 13 need guardian consent. Cookie consent required. Explicit consent needed for sensitive personal data.",
+      "risk_factors": [
+        "no_consent_mechanism",
+        "pre_ticked_boxes",
+        "bundled_consent",
+        "children_data_no_guardian_consent",
+        "no_cookie_consent"
+      ],
+      "penalty_info": "Processing without valid consent is a direct NDPR violation subject to sanctions."
+    },
+    {
+      "id": "6",
+      "title": "Data Protection Audit",
+      "article_ref": "Art. 4.1(5)",
+      "category": "audit",
+      "keywords": [
+        "audit",
+        "DPCO",
+        "filing",
+        "compliance",
+        "annual report",
+        "verification"
+      ],
+      "summary": "Annual data protection audits are mandatory. Organizations processing 2,000+ data subjects must file reports through a DPCO. Filing fees: \u20a610,000 (under 2,000 subjects) or \u20a620,000 (2,000+). DPCOs must follow strict ethical codes including confidentiality, no conflict of interest, and honesty.",
+      "risk_factors": [
+        "no_annual_audit",
+        "no_dpco_engagement",
+        "audit_not_filed"
+      ],
+      "penalty_info": "Filing fees: \u20a610,000 for <2,000 data subjects, \u20a620,000 for 2,000+. Non-filing triggers enforcement."
+    },
+    {
+      "id": "7",
+      "title": "Transfer of Personal Data Abroad",
+      "article_ref": "Art. 2.11",
+      "category": "cross_border",
+      "keywords": [
+        "cross-border",
+        "transfer",
+        "international",
+        "white list",
+        "adequacy",
+        "BCR",
+        "SCC"
+      ],
+      "summary": "International data transfers require: listing recipient countries, verifying adequate data protection laws, NDPR-compliant privacy policy, encryption details. Transfers to White List countries are permitted. Non-White-List transfers need documented consent per Art. 2.12. Intra-group transfers require BCR or SCC.",
+      "risk_factors": [
+        "cross_border_transfer_no_safeguards",
+        "transfer_to_non_whitelist_country",
+        "no_bcr_or_scc"
+      ],
+      "penalty_info": "Unauthorized cross-border transfers subject to AGF intervention and enforcement."
+    },
+    {
+      "id": "8",
+      "title": "Retention of Records",
+      "article_ref": "Art. 2.1(1c)",
+      "category": "retention",
+      "keywords": [
+        "retention",
+        "storage",
+        "deletion",
+        "data destruction",
+        "records"
+      ],
+      "summary": "Data retention periods: 3 years after last active use of digital platform, 6 years after last transaction. Data subjects can request deletion. Data no longer needed must be destroyed per global best practices. Evidence of destruction is a valid defence against breach allegations.",
+      "risk_factors": [
+        "no_retention_policy",
+        "data_kept_indefinitely",
+        "no_deletion_mechanism"
+      ],
+      "penalty_info": "Improper retention can constitute a breach subject to enforcement."
+    },
+    {
+      "id": "9",
+      "title": "Data Privacy Breach",
+      "article_ref": "Art. 2.10, 4.1(8)",
+      "category": "breach",
+      "keywords": [
+        "breach",
+        "notification",
+        "72 hours",
+        "incident",
+        "self-reporting",
+        "data subject notification"
+      ],
+      "summary": "Data breaches must be self-reported to NITDA within 72 hours. Notification must include: breach circumstances, timeline, affected data description, risk assessment, estimated affected individuals, mitigation steps, and contact information. Data subjects must be notified if breach poses high risk.",
+      "risk_factors": [
+        "no_breach_notification_process",
+        "breach_unreported",
+        "no_incident_management"
+      ],
+      "penalty_info": "Failure to report breaches within 72 hours triggers enforcement and possible prosecution."
+    },
+    {
+      "id": "10",
+      "title": "Enforcement Framework",
+      "article_ref": "Art. 4.3a",
+      "category": "enforcement",
+      "keywords": [
+        "enforcement",
+        "surveillance",
+        "complaint",
+        "investigation",
+        "sanctions",
+        "prosecution",
+        "fine",
+        "penalty"
+      ],
+      "summary": "NITDA enforces through: surveillance, complaint filing, investigation, administrative sanctions, and criminal prosecution. Monetary fines based on: nature/gravity of breach, number of affected subjects, damage suffered, unexplored curtailment opportunities, and repeat offence status. Can include service suspension, public warnings, and prosecution referral.",
+      "risk_factors": [
+        "non_compliance_general"
+      ],
+      "penalty_info": "Fines up to \u20a610M or 2% of annual gross revenue. Criminal prosecution possible for national security breaches."
+    },
+    {
+      "id": "11",
+      "title": "Administrative Redress Panel",
+      "article_ref": "Art. 4.2",
+      "category": "enforcement",
+      "keywords": [
+        "redress",
+        "panel",
+        "dispute resolution",
+        "ARP"
+      ],
+      "summary": "NITDA establishes Administrative Redress Panels (ARP) composed of IT professionals, public administrators, and legal practitioners. ARP decisions are not preconditions for court action. Online dispute resolution is preferred.",
+      "risk_factors": [],
+      "penalty_info": "ARP can determine liability of officers."
+    },
+    {
+      "id": "12",
+      "title": "Third Party Processing",
+      "article_ref": "Art. 2.7",
+      "category": "third_party",
+      "keywords": [
+        "third party",
+        "processor",
+        "vendor",
+        "contract",
+        "disclosure"
+      ],
+      "summary": "Data Controllers must publish lists of third parties receiving personal data, including: categories (credit agencies, payment processors), jurisdiction, purpose of disclosure, and data types shared. Third-party processors must comply with NDPR and have written agreements specifying data protection roles.",
+      "risk_factors": [
+        "undisclosed_third_parties",
+        "no_processor_agreements",
+        "third_party_non_compliant"
+      ],
+      "penalty_info": "Controller liable for third-party processor violations without proper agreements."
+    },
+    {
+      "id": "13",
+      "title": "Data Protection in MDAs",
+      "article_ref": "Art. 4.1(1)",
+      "category": "public_sector",
+      "keywords": [
+        "government",
+        "MDA",
+        "public institution",
+        "privacy policy",
+        "DPO"
+      ],
+      "summary": "All public institutions must comply with the Guidelines for Management of Personal Data by Public Institutions (May 2020). Every PI must publish a privacy policy and designate a DPO responsible for compliance, monitoring, staff training, and NITDA liaison.",
+      "risk_factors": [
+        "government_non_compliance"
+      ],
+      "penalty_info": "Public institutions subject to same enforcement framework."
+    },
+    {
+      "id": "14",
+      "title": "Relationship with the Attorney-General",
+      "article_ref": "Art. 2.11",
+      "category": "cross_border",
+      "keywords": [
+        "attorney general",
+        "adequacy",
+        "white list",
+        "cross-border"
+      ],
+      "summary": "NITDA coordinates cross-border data transfer decisions with the Attorney-General of the Federation. The AGF may prohibit transfers to countries with inadequate data protection. White List transfers are permitted with NDPR compliance.",
+      "risk_factors": [
+        "unauthorized_cross_border_transfer"
+      ],
+      "penalty_info": "AGF can prohibit transfers and initiate prosecution."
+    },
+    {
+      "id": "15",
+      "title": "Public Awareness and Capacity Building",
+      "article_ref": "Art. 2.6, 4.1(3)",
+      "category": "general",
+      "keywords": [
+        "awareness",
+        "training",
+        "capacity building",
+        "seminars"
+      ],
+      "summary": "NITDA promotes data protection awareness through seminars, workshops, and conferences in cooperation with industry groups and civil society.",
+      "risk_factors": [
+        "no_staff_training"
+      ],
+      "penalty_info": "Lack of staff training can be cited as aggravating factor in enforcement."
+    },
+    {
+      "id": "16",
+      "title": "Application of International Laws",
+      "article_ref": "Art. 16",
+      "category": "general",
+      "keywords": [
+        "international",
+        "GDPR",
+        "Malabo Convention",
+        "EU",
+        "African Union"
+      ],
+      "summary": "Where NDPR does not provide for a principle, the AU Malabo Convention 2014 and EU GDPR and its judicial interpretations have persuasive effect in Nigeria.",
+      "risk_factors": [],
+      "penalty_info": "International standards may be applied in enforcement decisions."
+    }
+  ],
+  "risk_scanner_questions": [
+    {
+      "id": "q1",
+      "question": "Does your app collect personal data (names, emails, phone numbers)?",
+      "clause_ids": [
+        "3",
+        "5"
+      ],
+      "risk_weight": 3,
+      "explanation": "Collecting personal data triggers NDPR compliance requirements including privacy policies, consent mechanisms, and data protection audits."
+    },
+    {
+      "id": "q2",
+      "question": "Do you store health, biometric, or other sensitive personal data?",
+      "clause_ids": [
+        "5",
+        "4"
+      ],
+      "risk_weight": 5,
+      "explanation": "Sensitive personal data requires explicit consent and heightened security measures under NDPR. Health apps are high-risk."
+    },
+    {
+      "id": "q3",
+      "question": "Do you have a published privacy policy on your app/website?",
+      "clause_ids": [
+        "3"
+      ],
+      "risk_weight": -2,
+      "explanation": "A published privacy policy is mandatory within 3 months of business commencement per NDPR Art. 2.5."
+    },
+    {
+      "id": "q4",
+      "question": "Do you transfer user data outside Nigeria (e.g., cloud hosting abroad)?",
+      "clause_ids": [
+        "7",
+        "14"
+      ],
+      "risk_weight": 4,
+      "explanation": "Cross-border data transfers require adequacy verification, encryption details, and may need AGF coordination."
+    },
+    {
+      "id": "q5",
+      "question": "Do you have a process to obtain explicit user consent before data collection?",
+      "clause_ids": [
+        "5"
+      ],
+      "risk_weight": -2,
+      "explanation": "Valid consent must be freely given, specific, informed and unambiguous. Pre-ticked boxes and bundled consent are prohibited."
+    },
+    {
+      "id": "q6",
+      "question": "Does your app target users under 13 years old?",
+      "clause_ids": [
+        "5"
+      ],
+      "risk_weight": 4,
+      "explanation": "Processing children's data requires child-friendly privacy notices and guardian consent under NDPR Art. 3.1."
+    },
+    {
+      "id": "q7",
+      "question": "Do you share user data with third-party services (analytics, payment processors)?",
+      "clause_ids": [
+        "12"
+      ],
+      "risk_weight": 3,
+      "explanation": "All third-party data recipients must be disclosed, with written agreements specifying data protection obligations."
+    },
+    {
+      "id": "q8",
+      "question": "Do you have a data breach notification process (72-hour reporting to NITDA)?",
+      "clause_ids": [
+        "9"
+      ],
+      "risk_weight": -3,
+      "explanation": "NDPR requires self-reporting of data breaches to NITDA within 72 hours with detailed incident information."
+    }
+  ],
+  "audit_template": [
+    {
+      "section": "Accountability and Governance",
+      "questions": [
+        {
+          "ref": "1.1",
+          "article": "4.1(6)(7)",
+          "text": "Did you process the personal data of more than 1,000 Data Subjects in the last 6 months or more than 2,000 in the last 12 months?"
+        },
+        {
+          "ref": "1.2",
+          "article": "1.1, 1.2",
+          "text": "Is your top-management aware of the NDPR and the potential implication on your organisation?"
+        },
+        {
+          "ref": "1.3",
+          "article": "2.6",
+          "text": "Have you implemented any information security standard in your organisation?"
+        },
+        {
+          "ref": "1.4",
+          "article": "2.1(d)",
+          "text": "Do you have a documented data breach incident management procedure?"
+        },
+        {
+          "ref": "1.5",
+          "article": "1.2",
+          "text": "Do you collect and process personal information through digital mediums?"
+        },
+        {
+          "ref": "1.6",
+          "article": "2.6",
+          "text": "Have you organised any NDPR awareness seminar for your members of staff or suppliers?"
+        },
+        {
+          "ref": "1.7",
+          "article": "4.1(5)",
+          "text": "Have you conducted a detailed audit of your privacy and data protection practices?"
+        },
+        {
+          "ref": "1.8",
+          "article": "2.5",
+          "text": "Have you set out the management support and direction for data protection compliance?"
+        },
+        {
+          "ref": "1.9",
+          "article": "2.1",
+          "text": "Do you have a Data Protection compliance and review mechanism?"
+        },
+        {
+          "ref": "1.10",
+          "article": "2.6",
+          "text": "Have you developed a capacity building plan for compliance with data protection for all members of staff?"
+        },
+        {
+          "ref": "1.11",
+          "article": "3.1(1)",
+          "text": "Do you know the types of personal data you hold?"
+        },
+        {
+          "ref": "1.12",
+          "article": "4.1(5)",
+          "text": "Do you know the sources of the personal data you hold?"
+        },
+        {
+          "ref": "1.13",
+          "article": "4.1(5)",
+          "text": "Who do you share personal data with?"
+        },
+        {
+          "ref": "1.14",
+          "article": "4.1(2)",
+          "text": "Who is responsible for your compliance with data protection laws and processes?"
+        },
+        {
+          "ref": "1.15",
+          "article": "1.3",
+          "text": "Have you assessed whether you are a Data Controller or Data Processor?"
+        },
+        {
+          "ref": "1.16",
+          "article": "4.1(5)",
+          "text": "Have you reviewed your HR policy to ensure personal data of employees are handled in compliance with the NDPR?"
+        },
+        {
+          "ref": "1.17",
+          "article": "2.5(d)",
+          "text": "Have appropriate technical and organisational measures been implemented to integrate data protection into your processing activities?"
+        },
+        {
+          "ref": "1.18",
+          "article": "4.1(5)",
+          "text": "Do you have a policy for conducting Data Protection Impact Assessment (DPIA)?"
+        }
+      ]
+    },
+    {
+      "section": "DPO/DPCO",
+      "questions": [
+        {
+          "ref": "2.1",
+          "article": "4.1(2)",
+          "text": "Has a Data Protection Officer been appointed and given responsibility for NDPR compliance?"
+        },
+        {
+          "ref": "2.2",
+          "article": "4.1(3)",
+          "text": "Have you trained your Data Protection Officer in the last one year?"
+        },
+        {
+          "ref": "2.3",
+          "article": "2.5",
+          "text": "Is there a clearly available mechanism for data subjects to contact your organisation about personal data issues?"
+        }
+      ]
+    },
+    {
+      "section": "Documentation",
+      "questions": [
+        {
+          "ref": "3.1",
+          "article": "3.1",
+          "text": "Have you documented your data processing activities?"
+        },
+        {
+          "ref": "3.2",
+          "article": "2.5",
+          "text": "Have you included an appropriate privacy notice in each data collection process?"
+        },
+        {
+          "ref": "3.3",
+          "article": "2.2",
+          "text": "Has your organisation recorded legal grounds on which it processes employee data?"
+        },
+        {
+          "ref": "3.4",
+          "article": "4.1(5)",
+          "text": "Have you identified what personal data is collected and its sources?"
+        },
+        {
+          "ref": "3.5",
+          "article": "1.3",
+          "text": "Do you have a register of data breaches and security incidents?"
+        }
+      ]
+    },
+    {
+      "section": "Processing Activities",
+      "questions": [
+        {
+          "ref": "4.1",
+          "article": "2.2",
+          "text": "Have you carried out a comprehensive review of your processing activities?"
+        },
+        {
+          "ref": "4.2",
+          "article": "2.5",
+          "text": "Have you reviewed how you seek, record and manage consent?"
+        },
+        {
+          "ref": "4.3",
+          "article": "2.4",
+          "text": "If your organisation offers services to children, have you communicated privacy information in a clear way a child will understand?"
+        },
+        {
+          "ref": "4.12",
+          "article": "4.1(5)",
+          "text": "Has your organisation implemented appropriate procedures to detect, report and investigate data breaches?"
+        },
+        {
+          "ref": "4.16",
+          "article": "2.7",
+          "text": "Have you contracted with any third-party data processors?"
+        },
+        {
+          "ref": "4.19",
+          "article": "2.10",
+          "text": "Do you transfer personal data to organisations outside Nigeria?"
+        },
+        {
+          "ref": "4.23",
+          "article": "4.1(5)f",
+          "text": "Do you have adequate information systems security (e.g. ISO/IEC 27001)?"
+        }
+      ]
+    }
+  ],
+  "whitelist_countries": [
+    "All AU Malabo Convention signatories",
+    "All EU/EEA Countries",
+    "Algeria",
+    "Argentina",
+    "Bahrain",
+    "Benin",
+    "Brazil",
+    "Ghana",
+    "Mauritius",
+    "South Africa",
+    "Togo",
+    "Tunisia",
+    "Canada",
+    "Cape Verde",
+    "China",
+    "Cyprus",
+    "Israel",
+    "Japan",
+    "Philippines",
+    "Singapore",
+    "South Korea",
+    "Faeroe Islands",
+    "Isle of Man",
+    "Jersey",
+    "Liechtenstein",
+    "Switzerland",
+    "Kenya",
+    "United States of America",
+    "Guernsey",
+    "Hong Kong",
+    "Malaysia"
+  ],
+  "penalty_framework": {
+    "max_fine_fixed": "\u20a610,000,000",
+    "max_fine_percentage": "2% of annual gross revenue",
+    "applies": "whichever is greater",
+    "breach_reporting_deadline": "72 hours",
+    "audit_filing_fees": {
+      "under_2000_subjects": "\u20a610,000",
+      "over_2000_subjects": "\u20a620,000"
+    },
+    "criminal_prosecution": "Possible under NITDA Act 2007 Section 17(1)(3)"
+  }
+}
