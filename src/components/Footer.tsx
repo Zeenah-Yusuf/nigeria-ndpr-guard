@@ -37,10 +37,10 @@ const Footer = () => {
                   <Mail className="w-3.5 h-3.5" /> Contact
                 </a>
                 <a href="#" className="hover:text-foreground transition-colors flex items-center gap-1.5">
-                  <Twitter className="w-3.5 h-3.5" /> Twitter
+                  <ExternalLink className="w-3.5 h-3.5" /> Twitter
                 </a>
                 <a href="#" className="hover:text-foreground transition-colors flex items-center gap-1.5">
-                  <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+                  <ExternalLink className="w-3.5 h-3.5" /> LinkedIn
                 </a>
               </div>
             </div>
