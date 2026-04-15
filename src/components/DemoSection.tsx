@@ -1,7 +1,8 @@
 import { useState } from "react";
 import RiskScanner from "./RiskScanner";
 import ClauseFinder from "./ClauseFinder";
-import { Shield, Search } from "lucide-react";
+import ResourcesSidebar from "./ResourcesSidebar";
+import { Shield, Search, BookOpen } from "lucide-react";
 
 const DemoSection = () => {
   const [activeTab, setActiveTab] = useState<"scanner" | "finder">("scanner");
@@ -46,10 +47,14 @@ const DemoSection = () => {
             </button>
           </div>
 
-          {/* Content with key to force remount for clean animations */}
           <div key={activeTab} className="animate-fade-in">
             {activeTab === "scanner" ? <RiskScanner /> : <ClauseFinder />}
           </div>
+        </div>
+
+        {/* Resources section */}
+        <div id="resources" className="max-w-2xl mx-auto mt-16 pt-8 border-t border-border">
+          <ResourcesSidebar />
         </div>
       </div>
     </section>

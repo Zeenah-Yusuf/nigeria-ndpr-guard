@@ -21,6 +21,7 @@ const Navbar = () => {
     { label: "Problem", id: "problem" },
     { label: "Solution", id: "solution" },
     { label: "Demo", id: "demo" },
+    { label: "Resources", id: "resources" },
   ];
 
   return (
@@ -30,10 +31,11 @@ const Navbar = () => {
       }`}>
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           <div className="flex items-center gap-2.5">
+            <span className="text-lg">🇳🇬</span>
             <img src={nssLogo} alt="Nexus SafeSphere Logo" className="h-9 w-auto" />
             <div className="hidden sm:block">
               <span className="font-heading font-bold text-foreground text-base leading-none">RegTrack</span>
-              <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">by NSS</span>
+              <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">NDPR Compliance for Naija Startups</span>
             </div>
           </div>
 

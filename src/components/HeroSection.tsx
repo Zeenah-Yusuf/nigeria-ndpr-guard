@@ -1,5 +1,5 @@
 import heroBg from "@/assets/hero-bg.jpg";
-import { ShieldCheck, ArrowDown, Zap, Users } from "lucide-react";
+import { ShieldCheck, ArrowDown, Zap, Users, BadgeCheck } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -8,16 +8,22 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img src={heroBg} alt="Lagos skyline" className="w-full h-full object-cover" width={1920} height={1080} />
         <div className="absolute inset-0 bg-hero-gradient opacity-[0.92]" />
-        {/* Decorative gradient orbs */}
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full opacity-20 blur-3xl" style={{ background: "hsl(207, 72%, 38%)" }} />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full opacity-15 blur-3xl" style={{ background: "hsl(152, 65%, 40%)" }} />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 text-center pt-24 pb-12">
         {/* Badge */}
-        <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full px-5 py-2 mb-8 border" style={{ background: "hsl(180, 40%, 30%, 0.15)", borderColor: "hsl(180, 40%, 40%, 0.3)" }}>
+        <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full px-5 py-2 mb-4 border" style={{ background: "hsl(180, 40%, 30%, 0.15)", borderColor: "hsl(180, 40%, 40%, 0.3)" }}>
           <ShieldCheck className="w-4 h-4" style={{ color: "hsl(165, 60%, 55%)" }} />
           <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 70%)" }}>AI-Powered Compliance for Nigerian Startups</span>
+        </div>
+
+        {/* Trusted badge */}
+        <div className="animate-fade-in-up mb-6" style={{ animationDelay: "0.05s" }}>
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full" style={{ background: "hsl(152, 50%, 35%, 0.2)", color: "hsl(152, 60%, 65%)" }}>
+            <BadgeCheck className="w-3.5 h-3.5" /> Trusted by Nigerian Startups 🇳🇬
+          </span>
         </div>
 
         {/* Headline */}
