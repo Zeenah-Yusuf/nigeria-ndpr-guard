@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import nssLogo from "@/assets/nss-logo.png";
-import { Shield, Menu, X, BookOpen } from "lucide-react";
+import { Shield, Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
