@@ -1,16 +1,23 @@
 import { useState } from "react";
 import ndprData from "@/data/ndpr_dataset.json";
+import RiskResults from "./RiskResults";
+import SectorSelector from "./SectorSelector";
+import { getSectorById } from "@/lib/sectorRecommendations";
 
-interface ScanResult {
+export interface ScanResult {
   riskScore: number;
   riskLevel: "low" | "medium" | "high" | "critical";
   triggeredClauses: typeof ndprData.clauses;
   explanation: string;
+  appName: string;
+  sector: string;
+  answers: Record<string, boolean | null>;
 }
 
 const RiskScanner = () => {
   const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [appName, setAppName] = useState("");
+  const [sector, setSector] = useState("");
   const [result, setResult] = useState<ScanResult | null>(null);
   const [step, setStep] = useState<"form" | "result">("form");
   const [calculating, setCalculating] = useState(false);
@@ -23,7 +30,6 @@ const RiskScanner = () => {
 
   const calculateRisk = () => {
     setCalculating(true);
-    // Simulate brief processing for UX feel
     setTimeout(() => {
       let score = 0;
       const triggeredClauseIds = new Set<string>();
@@ -39,6 +45,12 @@ const RiskScanner = () => {
           q.clause_ids.forEach(id => triggeredClauseIds.add(id));
         }
       });
+
+      // Add sector-specific risk boost
+      const sectorProfile = getSectorById(sector);
+      if (sectorProfile) {
+        sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
+      }
 
       const maxScore = questions.reduce((sum, q) => sum + Math.abs(q.risk_weight), 0);
       const normalizedScore = Math.round((score / maxScore) * 100);
@@ -56,71 +68,25 @@ const RiskScanner = () => {
         critical: `"${appName || "Your app"}" is at critical risk! Multiple high-risk factors detected. Immediate action required to avoid severe penalties.`,
       };
 
-      setResult({ riskScore: normalizedScore, riskLevel, triggeredClauses, explanation: explanations[riskLevel] });
+      setResult({ riskScore: normalizedScore, riskLevel, triggeredClauses, explanation: explanations[riskLevel], appName, sector, answers });
       setStep("result");
       setCalculating(false);
     }, 800);
   };
 
+  const resetScanner = () => {
+    setStep("form");
+    setResult(null);
+    setAnswers({});
+    setAppName("");
+    setSector("");
+  };
+
   const allAnswered = questions.every(q => answers[q.id] !== undefined && answers[q.id] !== null);
   const answeredCount = questions.filter(q => answers[q.id] !== undefined && answers[q.id] !== null).length;
 
-  const riskConfig = {
-    low: { color: "text-secondary", bg: "bg-secondary", ring: "ring-secondary/30" },
-    medium: { color: "text-accent", bg: "bg-accent", ring: "ring-accent/30" },
-    high: { color: "text-destructive/80", bg: "bg-destructive/80", ring: "ring-destructive/30" },
-    critical: { color: "text-destructive", bg: "bg-destructive", ring: "ring-destructive/40" },
-  };
-
   if (step === "result" && result) {
-    const cfg = riskConfig[result.riskLevel];
-    return (
-      <div className="animate-fade-in-up space-y-6">
-        {/* Score display */}
-        <div className="text-center py-6">
-          <div className={`inline-flex items-center justify-center w-28 h-28 rounded-full ${cfg.bg} ring-8 ${cfg.ring} mb-5`}>
-            <span className="text-4xl font-heading font-bold text-primary-foreground">{result.riskScore}%</span>
-          </div>
-          <h3 className={`text-2xl font-heading font-bold ${cfg.color} capitalize`}>{result.riskLevel} Risk</h3>
-          <p className="text-muted-foreground mt-3 max-w-lg mx-auto text-sm leading-relaxed">{result.explanation}</p>
-        </div>
-
-        {/* Triggered clauses */}
-        {result.triggeredClauses.length > 0 && (
-          <div className="space-y-3">
-            <h4 className="font-heading font-semibold text-foreground text-sm">
-              Triggered NDPR Clauses ({result.triggeredClauses.length})
-            </h4>
-            {result.triggeredClauses.map((clause, i) => (
-              <div
-                key={clause.id}
-                className="rounded-xl border border-border bg-card p-4 shadow-card hover:shadow-elevated transition-all duration-200 animate-fade-in-up"
-                style={{ animationDelay: `${i * 0.08}s` }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-semibold bg-brand-gradient text-primary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref}</span>
-                  <span className="text-xs text-muted-foreground capitalize">{clause.category.replace("_", " ")}</span>
-                </div>
-                <h5 className="font-heading font-semibold text-foreground text-sm">{clause.title}</h5>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{clause.summary}</p>
-                {clause.penalty_info && (
-                  <p className="text-xs text-destructive mt-2 font-medium flex items-center gap-1">
-                    <span>⚠</span> {clause.penalty_info}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        <button
-          onClick={() => { setStep("form"); setResult(null); setAnswers({}); setAppName(""); }}
-          className="w-full py-3.5 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 active:scale-[0.98] transition-all duration-200"
-        >
-          🔄 Scan Another App
-        </button>
-      </div>
-    );
+    return <RiskResults result={result} onReset={resetScanner} />;
   }
 
   return (
@@ -149,9 +115,30 @@ const RiskScanner = () => {
         />
       </div>
 
+      {/* Sector selector */}
+      <SectorSelector selected={sector} onSelect={setSector} />
+
+      {/* Sector tips */}
+      {sector && (() => {
+        const sp = getSectorById(sector);
+        if (!sp) return null;
+        return (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 animate-fade-in">
+            <p className="text-xs font-semibold text-primary mb-1">{sp.emoji} {sp.name} — Key Risks</p>
+            <ul className="text-xs text-muted-foreground space-y-1">
+              {sp.keyRisks.slice(0, 3).map((r, i) => (
+                <li key={i} className="flex items-start gap-1.5">
+                  <span className="text-primary mt-0.5">•</span> {r}
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })()}
+
       {/* Questions */}
       <div className="space-y-3">
-        {questions.map((q, i) => {
+        {questions.map((q) => {
           const isAnswered = answers[q.id] !== undefined && answers[q.id] !== null;
           return (
             <div
@@ -183,7 +170,6 @@ const RiskScanner = () => {
                   No
                 </button>
               </div>
-              {/* Explanation preview on answer */}
               {isAnswered && (
                 <p className="text-xs text-muted-foreground mt-2.5 leading-relaxed animate-fade-in border-t border-border pt-2.5">
                   💡 {q.explanation}
