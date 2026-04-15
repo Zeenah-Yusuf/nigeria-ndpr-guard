@@ -1,5 +1,5 @@
 import nssLogo from "@/assets/nss-logo.png";
-import { Mail, Twitter, Linkedin, Heart } from "lucide-react";
+import { Mail, Heart, ExternalLink } from "lucide-react";
 
 const Footer = () => {
   return (
