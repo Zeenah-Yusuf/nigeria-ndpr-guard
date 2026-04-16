@@ -1,12 +1,12 @@
 import { FileText, Users, AlertTriangle, Shield, BookOpen, ClipboardList, ExternalLink } from "lucide-react";
 
 const resources = [
-  { icon: FileText, label: "Privacy Policy Template", desc: "NITDA Official", url: "https://ndpr.nitda.gov.ng/resources/privacy-template" },
-  { icon: Users, label: "DPCO Directory", desc: "Find licensed compliance organizations", url: "https://ndpr.nitda.gov.ng/dpco-directory" },
-  { icon: AlertTriangle, label: "Breach Notification Template", desc: "72-hour reporting", url: "https://ndpr.nitda.gov.ng/resources/breach-template" },
-  { icon: Shield, label: "Data Processing Agreement", desc: "DPA template", url: "https://ndpr.nitda.gov.ng/resources/privacy-template" },
-  { icon: BookOpen, label: "NDPR Full Text", desc: "Official PDF", url: "https://ndpr.nitda.gov.ng" },
-  { icon: ClipboardList, label: "Audit Filing Portal", desc: "File your annual audit", url: "https://ndpr.nitda.gov.ng/audit-filing-portal" },
+  { icon: FileText, label: "Privacy Policy Template", desc: "NDPC Official", url: "https://ndpc.gov.ng/our-data-privacy-policy/" },
+  { icon: Users, label: "DPCO Directory", desc: "Find licensed compliance organizations", url: "https://ndpc.gov.ng/dpco-directory" },
+  { icon: AlertTriangle, label: "Breach Notification Template", desc: "72-hour reporting", url: "https://ndpc.gov.ng/resources/data-breach-response-template" },
+  { icon: Shield, label: "Data Processing Agreement", desc: "DPA template", url: "https://ndpc.gov.ng/our-data-privacy-policy/" },
+  { icon: BookOpen, label: "NDPR Full Text & NDP Act GAID 2025", desc: "Official regulatory documents", url: "https://ndpc.gov.ng" },
+  { icon: ClipboardList, label: "Audit Filing Portal", desc: "File your annual audit", url: "https://ndpc.gov.ng/audit-filing-portal" },
 ];
 
 const ResourcesSidebar = () => (

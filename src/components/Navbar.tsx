@@ -35,7 +35,7 @@ const Navbar = () => {
             <img src={nssLogo} alt="Nexus SafeSphere Logo" className="h-9 w-auto" />
             <div className="hidden sm:block">
               <span className="font-heading font-bold text-foreground text-base leading-none">RegTrack</span>
-              <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">NDPR Compliance for Naija Startups</span>
+              <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">NDP Act Compliance for Naija Startups</span>
             </div>
           </div>
 

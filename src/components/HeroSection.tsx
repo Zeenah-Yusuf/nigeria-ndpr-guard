@@ -1,12 +1,12 @@
 import heroBg from "@/assets/hero-bg.jpg";
-import { ShieldCheck, ArrowDown, Zap, Users, BadgeCheck } from "lucide-react";
+import { ShieldCheck, ArrowDown, Zap, BadgeCheck } from "lucide-react";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background layers */}
       <div className="absolute inset-0">
-        <img src={heroBg} alt="Lagos skyline" className="w-full h-full object-cover" width={1920} height={1080} />
+        <img src={heroBg} alt="Nigeria skyline" className="w-full h-full object-cover" width={1920} height={1080} />
         <div className="absolute inset-0 bg-hero-gradient opacity-[0.92]" />
         <div className="absolute top-1/4 -left-32 w-96 h-96 rounded-full opacity-20 blur-3xl" style={{ background: "hsl(207, 72%, 38%)" }} />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full opacity-15 blur-3xl" style={{ background: "hsl(152, 65%, 40%)" }} />
@@ -28,13 +28,13 @@ const HeroSection = () => {
 
         {/* Headline */}
         <h1 className="animate-fade-in-up font-heading text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl mx-auto leading-[1.1]" style={{ animationDelay: "0.1s", color: "hsl(0, 0%, 100%)" }}>
-          Avoid NDPR fines{" "}
+          Avoid NDP Act fines{" "}
           <span className="text-brand-gradient">before you launch.</span>
         </h1>
 
         {/* Subtext */}
         <p className="animate-fade-in-up text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed" style={{ animationDelay: "0.2s", color: "hsl(215, 15%, 65%)" }}>
-          RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI and the full NDPR framework.
+          RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI, the NDP Act 2023, and the GAID 2025 framework.
         </p>
 
         {/* CTAs */}
@@ -58,7 +58,7 @@ const HeroSection = () => {
         {/* Stats row */}
         <div className="animate-fade-in-up mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12" style={{ animationDelay: "0.5s" }}>
           {[
-            { value: "16", label: "NDPR Clauses Indexed" },
+            { value: "52", label: "NDP Act GAID Articles" },
             { value: "₦10M", label: "Max Fine per Breach" },
             { value: "72hrs", label: "Breach Report Deadline" },
           ].map(stat => (

@@ -1,634 +1,357 @@
 {
   "metadata": {
-    "regulation": "Nigeria Data Protection Regulation 2019",
-    "document": "NDPR Implementation Framework",
-    "issued_by": "NITDA (National Information Technology Development Agency)",
-    "date": "November 2020",
-    "version": "1.0"
+    "regulation": "Nigeria Data Protection Act 2023 & NDPR 2019",
+    "document": "NDPR Implementation Framework + NDP Act GAID 2025",
+    "issued_by": "NDPC (Nigeria Data Protection Commission)",
+    "date": "March 2025",
+    "version": "2.0",
+    "gaid_reference": "NDPC/NDP ACT-GAID/01/2025"
   },
   "clauses": [
     {
       "id": "1",
-      "title": "Background",
-      "article_ref": "Art. 1",
+      "title": "Background & Objectives",
+      "article_ref": "NDP Act s.1, GAID Art.1",
       "category": "general",
-      "keywords": [
-        "background",
-        "regulation",
-        "nitda",
-        "data protection",
-        "compliance"
-      ],
-      "summary": "The NDPR is Nigeria's comprehensive data protection regulation issued by NITDA on 25th January 2019. It safeguards critical information infrastructure and protects personal data of Nigerian citizens and residents.",
-      "risk_factors": [
-        "operating_without_awareness",
-        "no_compliance_framework"
-      ],
-      "penalty_info": "Non-compliance with NDPR can result in fines up to \u20a610M or 2% of annual gross revenue, whichever is greater."
+      "keywords": ["background", "regulation", "ndpc", "data protection", "compliance", "NDP Act", "GAID", "constitutional"],
+      "summary": "The NDP Act 2023 is Nigeria's primary data protection law, superseding the NDPR 2019. Per GAID Art. 3(3), the NDPR ceases to apply as a legal instrument upon GAID issuance. The Act safeguards the constitutional right to privacy under s.37 of the 1999 Constitution. It applies to all data controllers/processors in Nigeria and those targeting Nigerian data subjects (s.2).",
+      "risk_factors": ["operating_without_awareness", "no_compliance_framework"],
+      "penalty_info": "Non-compliance can result in fines up to ₦10M or 2% of annual gross revenue, whichever is greater."
     },
     {
       "id": "2",
-      "title": "Relationship of the NDPR to the Framework",
-      "article_ref": "Art. 2",
+      "title": "Material Context & Exemptions",
+      "article_ref": "NDP Act s.3, GAID Art.5-6",
       "category": "general",
-      "keywords": [
-        "framework",
-        "exceptions",
-        "national security",
-        "anonymised data"
-      ],
-      "summary": "The Framework clarifies NDPR provisions. Exceptions include: national security use, criminal/tax investigations, anonymised data processing, and personal/household activities.",
-      "risk_factors": [
-        "misunderstanding_exceptions"
-      ],
-      "penalty_info": "Misapplying exceptions does not shield from enforcement."
+      "keywords": ["framework", "exceptions", "national security", "anonymised data", "household", "exemptions"],
+      "summary": "Exemptions under NDP Act s.3 apply to personal/household processing but even exempt activities must comply with: data protection principles (s.24), lawful bases (s.25), DPO designation (s.32), breach notification (s.40), and data subject rights (Part VI). Per GAID Art. 6, individuals who process data for personal purposes remain accountable if they put others' privacy at risk.",
+      "risk_factors": ["misunderstanding_exceptions"],
+      "penalty_info": "Misapplying exemptions does not shield from enforcement."
     },
     {
       "id": "3",
-      "title": "Compliance Framework",
-      "article_ref": "Art. 2-4",
+      "title": "Compliance Framework & Registration",
+      "article_ref": "NDP Act s.29,44-45, GAID Art.7-10",
       "category": "compliance",
-      "keywords": [
-        "compliance",
-        "audit",
-        "privacy policy",
-        "DPIA",
-        "DPO",
-        "data protection officer",
-        "DPCO",
-        "checklist"
-      ],
-      "summary": "Data Controllers must: conduct annual data protection audits, publish privacy policies within 3 months, design data-protection-compliant systems, appoint a DPO if processing 10,000+ data subjects, conduct DPIAs, notify NITDA of breaches within 72 hours, and train staff on data protection.",
-      "risk_factors": [
-        "no_privacy_policy",
-        "no_data_audit",
-        "no_dpo_appointed",
-        "no_dpia",
-        "no_breach_notification_process",
-        "no_staff_training"
-      ],
-      "penalty_info": "Failure to file audit: \u20a610,000-\u20a620,000 filing fees plus potential enforcement action."
+      "keywords": ["compliance", "audit", "privacy policy", "DPIA", "DPO", "DPCO", "CAR", "registration", "UHL", "EHL", "OHL"],
+      "summary": "Data controllers must: register with NDPC as data controller/processor of major importance (if processing 200+ subjects in 6 months), file annual Compliance Audit Returns (CAR) by March 31st, publish privacy policies on all platforms, designate a DPO, conduct DPIAs when required, notify NDPC of breaches within 72 hours, and train staff. Three classification levels: UHL (₦250,000), EHL (₦100,000), OHL (₦10,000). Late CAR filing incurs 50% penalty.",
+      "risk_factors": ["no_privacy_policy", "no_data_audit", "no_dpo_appointed", "no_dpia", "no_breach_notification_process", "no_staff_training", "not_registered"],
+      "penalty_info": "Registration fees: UHL ₦250,000, EHL ₦100,000, OHL ₦10,000. Late CAR filing: 50% administrative penalty."
     },
     {
       "id": "4",
-      "title": "Handling Personal Data",
-      "article_ref": "Art. 3.1(7)m",
+      "title": "Data Processing & DPIA",
+      "article_ref": "NDP Act s.28, GAID Art.28-29",
       "category": "data_handling",
-      "keywords": [
-        "personal data",
-        "further processing",
-        "purpose limitation",
-        "DPIA",
-        "impact assessment"
-      ],
-      "summary": "Further processing of personal data beyond the original purpose requires: informing the data subject, obtaining new consent, and ensuring safeguards exist. DPIAs are required for high-impact processing including profiling, automated decision-making, and sensitive data.",
-      "risk_factors": [
-        "further_processing_without_consent",
-        "no_dpia_for_sensitive_data",
-        "purpose_creep"
-      ],
-      "penalty_info": "Processing without lawful basis can trigger enforcement proceedings."
+      "keywords": ["personal data", "further processing", "purpose limitation", "DPIA", "impact assessment", "profiling", "automated"],
+      "summary": "DPIA is mandatory under GAID Art. 28 for: profiling/scoring, automated decision-making with legal effects, systematic monitoring, sensitive data, vulnerable data subjects, new technologies, financial services, healthcare, e-commerce, and surveillance cameras. Must be filed with NDPC. DPIA template provided in GAID Schedule 4 covers: nature of processing, lawful basis, necessity/proportionality, stakeholder consultation, vulnerabilities, and cross-border transfers.",
+      "risk_factors": ["further_processing_without_consent", "no_dpia_for_sensitive_data", "purpose_creep"],
+      "penalty_info": "Processing without lawful basis or required DPIA can trigger enforcement proceedings."
     },
     {
       "id": "5",
-      "title": "Understanding Consent",
-      "article_ref": "Art. 2.2(a), 2.4, 2.5(d)",
+      "title": "Consent & Lawful Bases",
+      "article_ref": "NDP Act s.25, GAID Art.16-20",
       "category": "consent",
-      "keywords": [
-        "consent",
-        "explicit consent",
-        "opt-in",
-        "children",
-        "minor",
-        "cookies",
-        "direct marketing",
-        "sensitive data"
-      ],
-      "summary": "Consent must be freely given, specific, informed and unambiguous. No implied consent (silence/pre-ticked boxes). Separate consent needed for different data uses. Children under 13 need guardian consent. Cookie consent required. Explicit consent needed for sensitive personal data.",
-      "risk_factors": [
-        "no_consent_mechanism",
-        "pre_ticked_boxes",
-        "bundled_consent",
-        "children_data_no_guardian_consent",
-        "no_cookie_consent"
-      ],
-      "penalty_info": "Processing without valid consent is a direct NDPR violation subject to sanctions."
+      "keywords": ["consent", "explicit consent", "opt-in", "children", "minor", "cookies", "direct marketing", "sensitive data", "lawful bases"],
+      "summary": "Six lawful bases: consent, contract, legal obligation, vital interest, public interest, legitimate interest. Consent must be freely given, specific, informed and unambiguous. No implied consent. Per GAID Art. 19, cookie banners must be conspicuous and obstruct the page — bottom placement is tantamount to lack of transparency. Children need guardian consent. GAID Art. 18 lists activities always requiring consent including marketing, sharing with third parties, and biometric processing.",
+      "risk_factors": ["no_consent_mechanism", "pre_ticked_boxes", "bundled_consent", "children_data_no_guardian_consent", "no_cookie_consent"],
+      "penalty_info": "Processing without valid consent or lawful basis is a direct violation subject to sanctions."
     },
     {
       "id": "6",
-      "title": "Data Protection Audit",
-      "article_ref": "Art. 4.1(5)",
+      "title": "Data Protection Audit & CAR",
+      "article_ref": "NDP Act s.6(d), GAID Art.10, Sch.2",
       "category": "audit",
-      "keywords": [
-        "audit",
-        "DPCO",
-        "filing",
-        "compliance",
-        "annual report",
-        "verification"
-      ],
-      "summary": "Annual data protection audits are mandatory. Organizations processing 2,000+ data subjects must file reports through a DPCO. Filing fees: \u20a610,000 (under 2,000 subjects) or \u20a620,000 (2,000+). DPCOs must follow strict ethical codes including confidentiality, no conflict of interest, and honesty.",
-      "risk_factors": [
-        "no_annual_audit",
-        "no_dpco_engagement",
-        "audit_not_filed"
-      ],
-      "penalty_info": "Filing fees: \u20a610,000 for <2,000 data subjects, \u20a620,000 for 2,000+. Non-filing triggers enforcement."
+      "keywords": ["audit", "DPCO", "filing", "compliance", "annual report", "CAR", "verification"],
+      "summary": "Annual Compliance Audit Returns (CAR) are mandatory for UHL/EHL data controllers. The CAR template in GAID Schedule 2 covers: governance (DPO, training, policies), technology (data security controls, access, encryption), accountability (DPIA, legitimate interest, ROPA), cross-border transfers, and data processors. UHL/EHL must file through a licensed DPCO. OHL must renew registration annually instead.",
+      "risk_factors": ["no_annual_audit", "no_dpco_engagement", "audit_not_filed"],
+      "penalty_info": "Late filing: 50% administrative penalty on filing fee. Non-filing triggers enforcement."
     },
     {
       "id": "7",
-      "title": "Transfer of Personal Data Abroad",
-      "article_ref": "Art. 2.11",
+      "title": "Cross-Border Data Transfer",
+      "article_ref": "NDP Act Part VIII, GAID Art.45, Sch.5",
       "category": "cross_border",
-      "keywords": [
-        "cross-border",
-        "transfer",
-        "international",
-        "white list",
-        "adequacy",
-        "BCR",
-        "SCC"
-      ],
-      "summary": "International data transfers require: listing recipient countries, verifying adequate data protection laws, NDPR-compliant privacy policy, encryption details. Transfers to White List countries are permitted. Non-White-List transfers need documented consent per Art. 2.12. Intra-group transfers require BCR or SCC.",
-      "risk_factors": [
-        "cross_border_transfer_no_safeguards",
-        "transfer_to_non_whitelist_country",
-        "no_bcr_or_scc"
-      ],
-      "penalty_info": "Unauthorized cross-border transfers subject to AGF intervention and enforcement."
+      "keywords": ["cross-border", "transfer", "international", "adequacy", "BCR", "SCC", "CBDTI"],
+      "summary": "Cross-border transfers require: NDPC adequacy decision, approved Cross-Border Data Transfer Instrument (CBDTI — codes of conduct, certifications, BCR, or SCC), or valid lawful basis with safeguards. GAID Schedule 5 details adequacy assessment criteria: enforceable data subject rights, independent supervisory authority, effective data protection law, and international commitments. Data sovereignty considerations are mandatory.",
+      "risk_factors": ["cross_border_transfer_no_safeguards", "transfer_to_non_whitelist_country", "no_bcr_or_scc"],
+      "penalty_info": "Unauthorized cross-border transfers subject to enforcement and possible prosecution."
     },
     {
       "id": "8",
-      "title": "Retention of Records",
-      "article_ref": "Art. 2.1(1c)",
+      "title": "Data Retention & Storage",
+      "article_ref": "NDP Act s.24(1)(d), GAID Art.49",
       "category": "retention",
-      "keywords": [
-        "retention",
-        "storage",
-        "deletion",
-        "data destruction",
-        "records"
-      ],
-      "summary": "Data retention periods: 3 years after last active use of digital platform, 6 years after last transaction. Data subjects can request deletion. Data no longer needed must be destroyed per global best practices. Evidence of destruction is a valid defence against breach allegations.",
-      "risk_factors": [
-        "no_retention_policy",
-        "data_kept_indefinitely",
-        "no_deletion_mechanism"
-      ],
+      "keywords": ["retention", "storage", "deletion", "data destruction", "records", "storage limitation"],
+      "summary": "Per NDP Act s.24(1)(d), data must not be retained longer than necessary. GAID Art. 49(3) specifies: where no timebound obligation exists, storage lapses 6 months after the original purpose is accomplished. Data subjects can request deletion. Data no longer needed must be destroyed. A clear data retention policy must be communicated to data subjects.",
+      "risk_factors": ["no_retention_policy", "data_kept_indefinitely", "no_deletion_mechanism"],
       "penalty_info": "Improper retention can constitute a breach subject to enforcement."
     },
     {
       "id": "9",
-      "title": "Data Privacy Breach",
-      "article_ref": "Art. 2.10, 4.1(8)",
+      "title": "Data Breach Notification",
+      "article_ref": "NDP Act s.40, GAID Art.33",
       "category": "breach",
-      "keywords": [
-        "breach",
-        "notification",
-        "72 hours",
-        "incident",
-        "self-reporting",
-        "data subject notification"
-      ],
-      "summary": "Data breaches must be self-reported to NITDA within 72 hours. Notification must include: breach circumstances, timeline, affected data description, risk assessment, estimated affected individuals, mitigation steps, and contact information. Data subjects must be notified if breach poses high risk.",
-      "risk_factors": [
-        "no_breach_notification_process",
-        "breach_unreported",
-        "no_incident_management"
-      ],
+      "keywords": ["breach", "notification", "72 hours", "incident", "self-reporting", "data subject notification"],
+      "summary": "Per NDP Act s.40(2) and GAID Art. 33, breaches must be reported to NDPC within 72 hours. Data subjects must be notified immediately if the breach poses high risk (risk of fraud, identity theft, or exposure of sensitive data). Notification must include: breach circumstances, timeline, affected data description, risk assessment, estimated affected individuals, mitigation steps, and DPO contact. Immediate notification to all relevant authorities is required for national-scale breaches.",
+      "risk_factors": ["no_breach_notification_process", "breach_unreported", "no_incident_management"],
       "penalty_info": "Failure to report breaches within 72 hours triggers enforcement and possible prosecution."
     },
     {
       "id": "10",
-      "title": "Enforcement Framework",
-      "article_ref": "Art. 4.3a",
+      "title": "Enforcement & Penalties",
+      "article_ref": "NDP Act Part X, GAID Art.48",
       "category": "enforcement",
-      "keywords": [
-        "enforcement",
-        "surveillance",
-        "complaint",
-        "investigation",
-        "sanctions",
-        "prosecution",
-        "fine",
-        "penalty"
-      ],
-      "summary": "NITDA enforces through: surveillance, complaint filing, investigation, administrative sanctions, and criminal prosecution. Monetary fines based on: nature/gravity of breach, number of affected subjects, damage suffered, unexplored curtailment opportunities, and repeat offence status. Can include service suspension, public warnings, and prosecution referral.",
-      "risk_factors": [
-        "non_compliance_general"
-      ],
-      "penalty_info": "Fines up to \u20a610M or 2% of annual gross revenue. Criminal prosecution possible for national security breaches."
+      "keywords": ["enforcement", "surveillance", "complaint", "investigation", "sanctions", "prosecution", "fine", "penalty"],
+      "summary": "NDPC enforces through: surveillance, complaint filing, investigation, administrative sanctions, and criminal prosecution. Compliance evidence (registration, CAR filing, DPIA submission) shows prima facie good faith but does not replace concrete evidence of compliance. Fines based on: nature/gravity of breach, number of affected subjects, damage suffered, and repeat offence status.",
+      "risk_factors": ["non_compliance_general"],
+      "penalty_info": "Fines up to ₦10M or 2% of annual gross revenue. Criminal prosecution possible."
     },
     {
       "id": "11",
-      "title": "Administrative Redress Panel",
-      "article_ref": "Art. 4.2",
-      "category": "enforcement",
-      "keywords": [
-        "redress",
-        "panel",
-        "dispute resolution",
-        "ARP"
-      ],
-      "summary": "NITDA establishes Administrative Redress Panels (ARP) composed of IT professionals, public administrators, and legal practitioners. ARP decisions are not preconditions for court action. Online dispute resolution is preferred.",
-      "risk_factors": [],
-      "penalty_info": "ARP can determine liability of officers."
+      "title": "Data Subject Rights",
+      "article_ref": "NDP Act Part VI, GAID Art.36-40",
+      "category": "rights",
+      "keywords": ["rights", "rectification", "portability", "erasure", "forgotten", "complaint", "access", "SNAG"],
+      "summary": "Data subjects have rights to: rectification (GAID Art. 36 — cannot require affidavit if aligning with NIN), portability (Art. 37 — applies where consent/contract basis), erasure/right to be forgotten (Art. 38), and lodging complaints with NDPC (Art. 39). GAID Schedule 9 provides a Standard Notice to Address Grievance (SNAG) template. Controllers must design systems for seamless data requests.",
+      "risk_factors": ["no_data_subject_rights_mechanism"],
+      "penalty_info": "Failure to facilitate data subject rights is an enforceable violation."
     },
     {
       "id": "12",
-      "title": "Third Party Processing",
-      "article_ref": "Art. 2.7",
+      "title": "Third Party Processing & DPA",
+      "article_ref": "NDP Act s.29, GAID Art.34",
       "category": "third_party",
-      "keywords": [
-        "third party",
-        "processor",
-        "vendor",
-        "contract",
-        "disclosure"
-      ],
-      "summary": "Data Controllers must publish lists of third parties receiving personal data, including: categories (credit agencies, payment processors), jurisdiction, purpose of disclosure, and data types shared. Third-party processors must comply with NDPR and have written agreements specifying data protection roles.",
-      "risk_factors": [
-        "undisclosed_third_parties",
-        "no_processor_agreements",
-        "third_party_non_compliant"
-      ],
-      "penalty_info": "Controller liable for third-party processor violations without proper agreements."
+      "keywords": ["third party", "processor", "vendor", "contract", "disclosure", "DPA", "data processing agreement"],
+      "summary": "Per GAID Art. 34, Data Processing Agreements must include: party details, purpose, location, lawful bases, scope, technical/organisational measures, DPIA outcomes, confidentiality, tenure, indemnity, insurance, and dispute resolution. Controllers are liable for processor violations. Processors of major importance must register with NDPC. Sub-processor compliance must be verified.",
+      "risk_factors": ["undisclosed_third_parties", "no_processor_agreements", "third_party_non_compliant"],
+      "penalty_info": "Controller liable for third-party processor violations without proper DPA."
     },
     {
       "id": "13",
-      "title": "Data Protection in MDAs",
-      "article_ref": "Art. 4.1(1)",
-      "category": "public_sector",
-      "keywords": [
-        "government",
-        "MDA",
-        "public institution",
-        "privacy policy",
-        "DPO"
-      ],
-      "summary": "All public institutions must comply with the Guidelines for Management of Personal Data by Public Institutions (May 2020). Every PI must publish a privacy policy and designate a DPO responsible for compliance, monitoring, staff training, and NITDA liaison.",
-      "risk_factors": [
-        "government_non_compliance"
-      ],
-      "penalty_info": "Public institutions subject to same enforcement framework."
+      "title": "DPO Designation & Credential Assessment",
+      "article_ref": "NDP Act s.32, GAID Art.11-14",
+      "category": "governance",
+      "keywords": ["DPO", "data protection officer", "certification", "credential", "semi-annual report", "SADPR"],
+      "summary": "DPO designation is mandatory for data controllers/processors of major importance. Per GAID Art. 12, DPOs must: be actively engaged in all data processing issues, receive adequate resources and training, report directly to management, and not face dismissal for performing duties. GAID Art. 13 requires DPOs to prepare semi-annual data protection reports. Annual Credential Assessment (ACA) per GAID Art. 14 and Schedule 3 scores DPOs on certification, training hours, examination, and CPD credits.",
+      "risk_factors": ["no_dpo_appointed", "dpo_not_certified"],
+      "penalty_info": "Failure to designate a qualified DPO is an enforceable violation."
     },
     {
       "id": "14",
-      "title": "Relationship with the Attorney-General",
-      "article_ref": "Art. 2.11",
+      "title": "Cross-Border Transfer Instruments",
+      "article_ref": "NDP Act s.41-43, GAID Sch.5",
       "category": "cross_border",
-      "keywords": [
-        "attorney general",
-        "adequacy",
-        "white list",
-        "cross-border"
-      ],
-      "summary": "NITDA coordinates cross-border data transfer decisions with the Attorney-General of the Federation. The AGF may prohibit transfers to countries with inadequate data protection. White List transfers are permitted with NDPR compliance.",
-      "risk_factors": [
-        "unauthorized_cross_border_transfer"
-      ],
-      "penalty_info": "AGF can prohibit transfers and initiate prosecution."
+      "keywords": ["attorney general", "adequacy", "CBDTI", "cross-border", "standard contractual clauses"],
+      "summary": "For non-adequacy countries, NDPC may approve Cross-Border Data Transfer Instruments (CBDTI): codes of conduct, certifications, binding corporate rules, or standard contractual clauses. Special circumstances (jural/fiduciary) allow transfers for: defence of legal claims, vital interest, public interest, and data subject consent with proper risk communication. Data sovereignty is a key consideration.",
+      "risk_factors": ["unauthorized_cross_border_transfer"],
+      "penalty_info": "NDPC can prohibit transfers and initiate prosecution."
     },
     {
       "id": "15",
-      "title": "Public Awareness and Capacity Building",
-      "article_ref": "Art. 2.6, 4.1(3)",
-      "category": "general",
-      "keywords": [
-        "awareness",
-        "training",
-        "capacity building",
-        "seminars"
-      ],
-      "summary": "NITDA promotes data protection awareness through seminars, workshops, and conferences in cooperation with industry groups and civil society.",
-      "risk_factors": [
-        "no_staff_training"
-      ],
-      "penalty_info": "Lack of staff training can be cited as aggravating factor in enforcement."
+      "title": "Capacity Building & Training",
+      "article_ref": "NDP Act s.5(e-f), GAID Art.30,46",
+      "category": "training",
+      "keywords": ["awareness", "training", "capacity building", "sensitisation", "SToP"],
+      "summary": "Per GAID Art. 30, data controllers must prepare and follow schedules for internal sensitisation and training on privacy (SToP). All employees must be trained within 6 months of business commencement and at least annually thereafter. GAID Art. 46 makes capacity building mandatory as an organisational measure. A Basic Privacy Checklist (BPC) must be developed for all staff.",
+      "risk_factors": ["no_staff_training"],
+      "penalty_info": "Lack of staff training cited as aggravating factor in enforcement."
     },
     {
       "id": "16",
-      "title": "Application of International Laws",
-      "article_ref": "Art. 16",
-      "category": "general",
-      "keywords": [
-        "international",
-        "GDPR",
-        "Malabo Convention",
-        "EU",
-        "African Union"
-      ],
-      "summary": "Where NDPR does not provide for a principle, the AU Malabo Convention 2014 and EU GDPR and its judicial interpretations have persuasive effect in Nigeria.",
-      "risk_factors": [],
-      "penalty_info": "International standards may be applied in enforcement decisions."
+      "title": "Data Ethics & Emerging Technologies",
+      "article_ref": "GAID Art.41-44",
+      "category": "ethics",
+      "keywords": ["ethics", "AI", "artificial intelligence", "blockchain", "IoT", "emerging technologies", "profiling", "automated", "DSVI"],
+      "summary": "GAID Art. 41-44 address data ethics and emerging technologies (AI, IoT, Blockchain). Key requirements: DPIA mandatory before deploying ETs, automated profiling must not lead to prejudiced outcomes, third-party data sharing requires explicit consent, data subjects have the right not to be subject to solely automated decisions. Data Subject Vulnerability Indexes (DSVI in Schedule 6) must be considered: age, health, financial difficulty, disability, and digital literacy.",
+      "risk_factors": ["automated_profiling_no_safeguards", "no_et_compliance"],
+      "penalty_info": "Non-compliant use of emerging technologies triggers enforcement under the NDP Act."
+    },
+    {
+      "id": "17",
+      "title": "Software Deployment & Privacy by Design",
+      "article_ref": "GAID Art.31",
+      "category": "technology",
+      "keywords": ["software", "mobile app", "privacy by design", "deployment", "tracking", "DPIA"],
+      "summary": "Per GAID Art. 31, deploying data processing software (mobile apps, operating systems, firmware, etc.) requires: DPIA before deployment, privacy by design and by default, privacy policy within the software, privacy statement before installation detailing data types, purposes, encryption, and self-service uninstall options. Existing software must be updated within 6 months of GAID issuance.",
+      "risk_factors": ["no_privacy_by_design", "no_pre_install_notice"],
+      "penalty_info": "Non-compliant software deployment is an enforceable violation."
+    },
+    {
+      "id": "18",
+      "title": "Data Security & Monitoring",
+      "article_ref": "NDP Act s.24,39, GAID Art.29",
+      "category": "security",
+      "keywords": ["security", "encryption", "CIA", "confidentiality", "integrity", "availability", "MEM", "monitoring"],
+      "summary": "Per GAID Art. 29, data controllers must prepare Monitoring, Evaluation and Maintenance (MEM) schedules for data security systems. Security must address: Volume, Value, Veracity, Velocity and Variety of data. Technical measures include: encryption at rest/in transit, multi-factor authentication, anti-ransomware/malware, access controls. GAID Schedule 2 Part 2 rates security from Poor to Industry Grade (ISO 27000, NIST, CIS, COBIT).",
+      "risk_factors": ["weak_security", "no_encryption", "no_access_controls"],
+      "penalty_info": "Inadequate security measures trigger enforcement proceedings."
     }
   ],
   "risk_scanner_questions": [
     {
       "id": "q1",
       "question": "Does your app collect personal data (names, emails, phone numbers)?",
-      "clause_ids": [
-        "3",
-        "5"
-      ],
+      "clause_ids": ["3", "5"],
       "risk_weight": 3,
-      "explanation": "Collecting personal data triggers NDPR compliance requirements including privacy policies, consent mechanisms, and data protection audits."
+      "explanation": "Collecting personal data triggers NDP Act compliance requirements including registration with NDPC, privacy policies, consent mechanisms, and annual compliance audits."
     },
     {
       "id": "q2",
       "question": "Do you store health, biometric, or other sensitive personal data?",
-      "clause_ids": [
-        "5",
-        "4"
-      ],
+      "clause_ids": ["5", "4"],
       "risk_weight": 5,
-      "explanation": "Sensitive personal data requires explicit consent and heightened security measures under NDPR. Health apps are high-risk."
+      "explanation": "Sensitive personal data requires explicit consent and a mandatory DPIA under GAID Art. 28. Health apps and fintech are classified as high-risk sectors."
     },
     {
       "id": "q3",
       "question": "Do you have a published privacy policy on your app/website?",
-      "clause_ids": [
-        "3"
-      ],
+      "clause_ids": ["3"],
       "risk_weight": -2,
-      "explanation": "A published privacy policy is mandatory within 3 months of business commencement per NDPR Art. 2.5."
+      "explanation": "Per GAID Art. 7(j-k), you must publish a compliant privacy policy on all platforms where data processing occurs. Cookie/privacy notices must be conspicuous."
     },
     {
       "id": "q4",
       "question": "Do you transfer user data outside Nigeria (e.g., cloud hosting abroad)?",
-      "clause_ids": [
-        "7",
-        "14"
-      ],
+      "clause_ids": ["7", "14"],
       "risk_weight": 4,
-      "explanation": "Cross-border data transfers require adequacy verification, encryption details, and may need AGF coordination."
+      "explanation": "Cross-border transfers require NDPC adequacy decision or approved CBDTI per NDP Act Part VIII and GAID Art. 45."
     },
     {
       "id": "q5",
       "question": "Do you have a process to obtain explicit user consent before data collection?",
-      "clause_ids": [
-        "5"
-      ],
+      "clause_ids": ["5"],
       "risk_weight": -2,
-      "explanation": "Valid consent must be freely given, specific, informed and unambiguous. Pre-ticked boxes and bundled consent are prohibited."
+      "explanation": "Per GAID Art. 17, consent must be freely given, specific, informed and unambiguous. Pre-ticked boxes and bundled consent are prohibited."
     },
     {
       "id": "q6",
       "question": "Does your app target users under 13 years old?",
-      "clause_ids": [
-        "5"
-      ],
+      "clause_ids": ["5"],
       "risk_weight": 4,
-      "explanation": "Processing children's data requires child-friendly privacy notices and guardian consent under NDPR Art. 3.1."
+      "explanation": "Processing children's data requires guardian consent and child-friendly privacy notices. GAID Art. 43 requires DSVI consideration for minors."
     },
     {
       "id": "q7",
       "question": "Do you share user data with third-party services (analytics, payment processors)?",
-      "clause_ids": [
-        "12"
-      ],
+      "clause_ids": ["12"],
       "risk_weight": 3,
-      "explanation": "All third-party data recipients must be disclosed, with written agreements specifying data protection obligations."
+      "explanation": "Per GAID Art. 34, all third-party processors need Data Processing Agreements covering purpose, security measures, and DPIA outcomes."
     },
     {
       "id": "q8",
-      "question": "Do you have a data breach notification process (72-hour reporting to NITDA)?",
-      "clause_ids": [
-        "9"
-      ],
+      "question": "Do you have a data breach notification process (72-hour reporting to NDPC)?",
+      "clause_ids": ["9"],
       "risk_weight": -3,
-      "explanation": "NDPR requires self-reporting of data breaches to NITDA within 72 hours with detailed incident information."
+      "explanation": "Per NDP Act s.40 and GAID Art. 33, breaches must be reported to NDPC within 72 hours with detailed incident information."
+    },
+    {
+      "id": "q9",
+      "question": "Are you registered with NDPC as a data controller or processor of major importance?",
+      "clause_ids": ["3", "6"],
+      "risk_weight": -2,
+      "explanation": "Per GAID Art. 8-9, organisations processing 200+ data subjects in 6 months must register with NDPC. Classification: UHL, EHL, or OHL."
+    },
+    {
+      "id": "q10",
+      "question": "Does your app use AI, automated decision-making, or profiling?",
+      "clause_ids": ["4", "16"],
+      "risk_weight": 4,
+      "explanation": "Per GAID Art. 43, deploying emerging technologies requires DPIA, DSVI assessment, safeguards against discriminatory profiling, and privacy by design."
     }
   ],
   "audit_template": [
     {
       "section": "Accountability and Governance",
       "questions": [
-        {
-          "ref": "1.1",
-          "article": "4.1(6)(7)",
-          "text": "Did you process the personal data of more than 1,000 Data Subjects in the last 6 months or more than 2,000 in the last 12 months?"
-        },
-        {
-          "ref": "1.2",
-          "article": "1.1, 1.2",
-          "text": "Is your top-management aware of the NDPR and the potential implication on your organisation?"
-        },
-        {
-          "ref": "1.3",
-          "article": "2.6",
-          "text": "Have you implemented any information security standard in your organisation?"
-        },
-        {
-          "ref": "1.4",
-          "article": "2.1(d)",
-          "text": "Do you have a documented data breach incident management procedure?"
-        },
-        {
-          "ref": "1.5",
-          "article": "1.2",
-          "text": "Do you collect and process personal information through digital mediums?"
-        },
-        {
-          "ref": "1.6",
-          "article": "2.6",
-          "text": "Have you organised any NDPR awareness seminar for your members of staff or suppliers?"
-        },
-        {
-          "ref": "1.7",
-          "article": "4.1(5)",
-          "text": "Have you conducted a detailed audit of your privacy and data protection practices?"
-        },
-        {
-          "ref": "1.8",
-          "article": "2.5",
-          "text": "Have you set out the management support and direction for data protection compliance?"
-        },
-        {
-          "ref": "1.9",
-          "article": "2.1",
-          "text": "Do you have a Data Protection compliance and review mechanism?"
-        },
-        {
-          "ref": "1.10",
-          "article": "2.6",
-          "text": "Have you developed a capacity building plan for compliance with data protection for all members of staff?"
-        },
-        {
-          "ref": "1.11",
-          "article": "3.1(1)",
-          "text": "Do you know the types of personal data you hold?"
-        },
-        {
-          "ref": "1.12",
-          "article": "4.1(5)",
-          "text": "Do you know the sources of the personal data you hold?"
-        },
-        {
-          "ref": "1.13",
-          "article": "4.1(5)",
-          "text": "Who do you share personal data with?"
-        },
-        {
-          "ref": "1.14",
-          "article": "4.1(2)",
-          "text": "Who is responsible for your compliance with data protection laws and processes?"
-        },
-        {
-          "ref": "1.15",
-          "article": "1.3",
-          "text": "Have you assessed whether you are a Data Controller or Data Processor?"
-        },
-        {
-          "ref": "1.16",
-          "article": "4.1(5)",
-          "text": "Have you reviewed your HR policy to ensure personal data of employees are handled in compliance with the NDPR?"
-        },
-        {
-          "ref": "1.17",
-          "article": "2.5(d)",
-          "text": "Have appropriate technical and organisational measures been implemented to integrate data protection into your processing activities?"
-        },
-        {
-          "ref": "1.18",
-          "article": "4.1(5)",
-          "text": "Do you have a policy for conducting Data Protection Impact Assessment (DPIA)?"
-        }
+        { "ref": "1.1", "article": "NDP Act s.44-45, GAID Art.9", "text": "Is the organisation currently registered with NDPC as a data controller/processor of major importance?" },
+        { "ref": "1.2", "article": "NDP Act s.32, GAID Art.11", "text": "Is there a designated Data Protection Officer (DPO) for the organisation?" },
+        { "ref": "1.3", "article": "GAID Art.14, Sch.3", "text": "Is the DPO certified and enrolled on the NDPC database with valid credentials?" },
+        { "ref": "1.4", "article": "GAID Art.13", "text": "Does the DPO prepare and submit Semi-Annual Data Protection Reports to management?" },
+        { "ref": "1.5", "article": "GAID Art.30", "text": "Does the organisation have a schedule for capacity building on data protection for all employees?" },
+        { "ref": "1.6", "article": "GAID Art.30(7)", "text": "Has the organisation developed a Basic Privacy Checklist (BPC) for all staff?" },
+        { "ref": "1.7", "article": "NDP Act s.24(2)(3), GAID Art.29", "text": "Does the organisation have a Monitoring, Evaluation and Maintenance (MEM) schedule for data security?" },
+        { "ref": "1.8", "article": "GAID Art.7(j-k)", "text": "Is the organisational privacy policy published on all platforms where data processing occurs?" },
+        { "ref": "1.9", "article": "GAID Art.7(l)", "text": "Is a conspicuous cookie notice displayed on the homepage (not at the bottom)?" },
+        { "ref": "1.10", "article": "NDP Act s.6(d), GAID Art.10", "text": "Has the organisation filed its annual Compliance Audit Returns (CAR) by March 31st?" }
       ]
     },
     {
       "section": "DPO/DPCO",
       "questions": [
-        {
-          "ref": "2.1",
-          "article": "4.1(2)",
-          "text": "Has a Data Protection Officer been appointed and given responsibility for NDPR compliance?"
-        },
-        {
-          "ref": "2.2",
-          "article": "4.1(3)",
-          "text": "Have you trained your Data Protection Officer in the last one year?"
-        },
-        {
-          "ref": "2.3",
-          "article": "2.5",
-          "text": "Is there a clearly available mechanism for data subjects to contact your organisation about personal data issues?"
-        }
+        { "ref": "2.1", "article": "GAID Art.12", "text": "Does the DPO report directly to management and have adequate resources?" },
+        { "ref": "2.2", "article": "GAID Art.14", "text": "Has the DPO obtained required Continuous Professional Development Credits within 12 months?" },
+        { "ref": "2.3", "article": "GAID Art.10(14)", "text": "For UHL/EHL organisations, is CAR filed through a licensed DPCO?" }
       ]
     },
     {
-      "section": "Documentation",
+      "section": "Lawful Bases & Consent",
       "questions": [
-        {
-          "ref": "3.1",
-          "article": "3.1",
-          "text": "Have you documented your data processing activities?"
-        },
-        {
-          "ref": "3.2",
-          "article": "2.5",
-          "text": "Have you included an appropriate privacy notice in each data collection process?"
-        },
-        {
-          "ref": "3.3",
-          "article": "2.2",
-          "text": "Has your organisation recorded legal grounds on which it processes employee data?"
-        },
-        {
-          "ref": "3.4",
-          "article": "4.1(5)",
-          "text": "Have you identified what personal data is collected and its sources?"
-        },
-        {
-          "ref": "3.5",
-          "article": "1.3",
-          "text": "Do you have a register of data breaches and security incidents?"
-        }
+        { "ref": "3.1", "article": "GAID Art.16-17", "text": "Has the organisation carefully assessed and documented its lawful bases for all processing activities?" },
+        { "ref": "3.2", "article": "GAID Art.17-18", "text": "Is consent obtained through clear, specific, freely given mechanisms (no pre-ticked boxes)?" },
+        { "ref": "3.3", "article": "GAID Art.19", "text": "Is the cookie consent banner conspicuous and not placed at the bottom of the page?" },
+        { "ref": "3.4", "article": "GAID Art.26, Sch.8", "text": "If relying on legitimate interest, has a Legitimate Interest Assessment been conducted?" }
       ]
     },
     {
-      "section": "Processing Activities",
+      "section": "DPIA & Security",
       "questions": [
-        {
-          "ref": "4.1",
-          "article": "2.2",
-          "text": "Have you carried out a comprehensive review of your processing activities?"
-        },
-        {
-          "ref": "4.2",
-          "article": "2.5",
-          "text": "Have you reviewed how you seek, record and manage consent?"
-        },
-        {
-          "ref": "4.3",
-          "article": "2.4",
-          "text": "If your organisation offers services to children, have you communicated privacy information in a clear way a child will understand?"
-        },
-        {
-          "ref": "4.12",
-          "article": "4.1(5)",
-          "text": "Has your organisation implemented appropriate procedures to detect, report and investigate data breaches?"
-        },
-        {
-          "ref": "4.16",
-          "article": "2.7",
-          "text": "Have you contracted with any third-party data processors?"
-        },
-        {
-          "ref": "4.19",
-          "article": "2.10",
-          "text": "Do you transfer personal data to organisations outside Nigeria?"
-        },
-        {
-          "ref": "4.23",
-          "article": "4.1(5)f",
-          "text": "Do you have adequate information systems security (e.g. ISO/IEC 27001)?"
-        }
+        { "ref": "4.1", "article": "GAID Art.28, Sch.4", "text": "Has a DPIA been conducted for high-risk processing (profiling, sensitive data, new tech, etc.)?" },
+        { "ref": "4.2", "article": "GAID Art.31", "text": "For deployed software, was a DPIA conducted before deployment with privacy by design?" },
+        { "ref": "4.3", "article": "NDP Act s.39, GAID Art.29", "text": "Are data security measures regularly evaluated using MEM schedules?" },
+        { "ref": "4.4", "article": "NDP Act s.40, GAID Art.33", "text": "Is there a documented breach notification process with 72-hour NDPC reporting?" }
+      ]
+    },
+    {
+      "section": "Cross-Border & Third Parties",
+      "questions": [
+        { "ref": "5.1", "article": "GAID Art.45, Sch.5", "text": "Are cross-border transfers based on NDPC adequacy decisions or approved CBDTI?" },
+        { "ref": "5.2", "article": "GAID Art.34", "text": "Do all third-party processors have compliant Data Processing Agreements?" },
+        { "ref": "5.3", "article": "GAID Art.34(3)", "text": "Has the organisation verified that third-party processors are registered with NDPC?" }
+      ]
+    },
+    {
+      "section": "Emerging Technologies",
+      "questions": [
+        { "ref": "6.1", "article": "GAID Art.43", "text": "If using AI/IoT/Blockchain, has a DPIA been conducted with DSVI assessment?" },
+        { "ref": "6.2", "article": "GAID Art.43(4)", "text": "Has testing been conducted in low-risk environments before full deployment?" },
+        { "ref": "6.3", "article": "GAID Art.44", "text": "Are there safeguards against discriminatory profiling and disparate outcomes?" }
       ]
     }
   ],
   "whitelist_countries": [
     "All AU Malabo Convention signatories",
     "All EU/EEA Countries",
-    "Algeria",
-    "Argentina",
-    "Bahrain",
-    "Benin",
-    "Brazil",
-    "Ghana",
-    "Mauritius",
-    "South Africa",
-    "Togo",
-    "Tunisia",
-    "Canada",
-    "Cape Verde",
-    "China",
-    "Cyprus",
-    "Israel",
-    "Japan",
-    "Philippines",
-    "Singapore",
-    "South Korea",
-    "Faeroe Islands",
-    "Isle of Man",
-    "Jersey",
-    "Liechtenstein",
-    "Switzerland",
-    "Kenya",
-    "United States of America",
-    "Guernsey",
-    "Hong Kong",
-    "Malaysia"
+    "Algeria", "Argentina", "Bahrain", "Benin", "Brazil", "Ghana",
+    "Mauritius", "South Africa", "Togo", "Tunisia", "Canada", "Cape Verde",
+    "China", "Cyprus", "Israel", "Japan", "Philippines", "Singapore",
+    "South Korea", "Faeroe Islands", "Isle of Man", "Jersey", "Liechtenstein",
+    "Switzerland", "Kenya", "United States of America", "Guernsey",
+    "Hong Kong", "Malaysia"
   ],
   "penalty_framework": {
-    "max_fine_fixed": "\u20a610,000,000",
+    "max_fine_fixed": "₦10,000,000",
     "max_fine_percentage": "2% of annual gross revenue",
     "applies": "whichever is greater",
     "breach_reporting_deadline": "72 hours",
-    "audit_filing_fees": {
-      "under_2000_subjects": "\u20a610,000",
-      "over_2000_subjects": "\u20a620,000"
+    "registration_fees": {
+      "UHL": "₦250,000",
+      "EHL": "₦100,000",
+      "OHL": "₦10,000"
     },
-    "criminal_prosecution": "Possible under NITDA Act 2007 Section 17(1)(3)"
-  }
+    "late_car_penalty": "50% of stipulated filing fee",
+    "data_processing_fee_UHL": "₦5,000 per processor per 12 months",
+    "criminal_prosecution": "Possible under NDP Act 2023"
+  },
+  "classification_thresholds": {
+    "UHL": "5,000+ data subjects in 6 months or specific sectors (banks, telecoms, fintechs, oil & gas, etc.)",
+    "EHL": "1,000-5,000 data subjects in 6 months or MDAs, micro-finance banks, higher institutions, hospitals",
+    "OHL": "200-1,000 data subjects in 6 months or primary schools, primary health centres, small hotels"
+  },
+  "mandatory_sectors": [
+    "Aviation", "Communication", "Education", "Electric Power", "Export and Import",
+    "Financial", "Health", "Hospitality", "Insurance", "Oil and Gas", "Tourism",
+    "E-Commerce", "Public Service"
+  ]
 }

@@ -62,10 +62,10 @@ const RiskScanner = () => {
         normalizedScore <= 75 ? "high" : "critical";
 
       const explanations: Record<string, string> = {
-        low: `"${appName || "Your app"}" has a low NDPR compliance risk. Basic protections appear to be in place. Continue monitoring your data practices.`,
-        medium: `"${appName || "Your app"}" has moderate NDPR risks. Several areas need attention to avoid potential NITDA enforcement.`,
-        high: `"${appName || "Your app"}" has significant NDPR risks. Without remediation, you could face fines up to ₦10M or 2% of annual gross revenue.`,
-        critical: `"${appName || "Your app"}" is at critical risk! Multiple high-risk factors detected. Immediate action required to avoid severe penalties.`,
+        low: `"${appName || "Your app"}" has a low compliance risk under the NDP Act 2023 and GAID 2025. Basic protections appear to be in place. Continue monitoring your data practices.`,
+        medium: `"${appName || "Your app"}" has moderate compliance risks. Several areas need attention to avoid potential NDPC enforcement action.`,
+        high: `"${appName || "Your app"}" has significant compliance risks under the NDP Act. Without remediation, you could face fines up to ₦10M or 2% of annual gross revenue.`,
+        critical: `"${appName || "Your app"}" is at critical risk! Multiple high-risk factors detected under the NDP Act 2023. Immediate action required to avoid severe NDPC penalties.`,
       };
 
       setResult({ riskScore: normalizedScore, riskLevel, triggeredClauses, explanation: explanations[riskLevel], appName, sector, answers });

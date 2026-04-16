@@ -3,7 +3,6 @@ import { AlertTriangle, TrendingDown } from "lucide-react";
 const ProblemSection = () => {
   return (
     <section id="problem" className="py-24 bg-card relative overflow-hidden">
-      {/* Subtle gradient accent */}
       <div className="absolute top-0 left-0 right-0 h-px bg-brand-gradient opacity-30" />
       
       <div className="container mx-auto px-4">
@@ -27,7 +26,7 @@ const ProblemSection = () => {
               </div>
               <div className="space-y-3">
                 <p className="text-foreground leading-relaxed">
-                  <span className="font-semibold">A Lagos founder launches a health app.</span> Users love it — 5,000 signups in the first week. Two weeks later, NITDA sends an enforcement notice.
+                  <span className="font-semibold">A Nigerian founder launches a health app.</span> Users love it — 5,000 signups in the first week. Two weeks later, NDPC sends an enforcement notice.
                 </p>
                 <p className="text-foreground leading-relaxed">
                   The fine? <span className="text-destructive font-bold text-lg">₦10,000,000</span> — or 2% of annual gross revenue, whichever is greater. No privacy policy. No consent mechanism. No data audit.
