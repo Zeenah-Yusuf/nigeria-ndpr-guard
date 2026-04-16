@@ -17,7 +17,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-              Bridging Nigerian innovation and regulation. AI-powered NDPR compliance for the builders shaping Africa's future.
+              Bridging Nigerian innovation and regulation. AI-powered NDP Act & NDPR compliance for the builders shaping Africa's future.
             </p>
           </div>
 
@@ -26,7 +26,7 @@ const Footer = () => {
               <h4 className="font-heading font-semibold text-foreground text-xs uppercase tracking-wider mb-3">Quick Links</h4>
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <button onClick={() => document.getElementById("problem")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-foreground transition-colors">About</button>
-                <a href="https://ndpr.nitda.gov.ng" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">NDPR Resources</a>
+                <a href="https://ndpc.gov.ng" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">NDPC Resources</a>
                 <button onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })} className="text-left hover:text-primary transition-colors font-medium">Join Waitlist</button>
               </div>
             </div>
@@ -51,17 +51,17 @@ const Footer = () => {
         <div className="rounded-xl border border-border bg-card p-5 mb-8">
           <h4 className="font-heading font-semibold text-foreground text-sm mb-2">🇳🇬 Why We Built This for Nigeria</h4>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Built in Lagos by Nigerian founders, for Nigerian regulations. We believe every Naija startup deserves to launch with confidence — knowing their data practices protect both their users and their business. RegTrack exists because compliance shouldn't be a barrier to innovation in Africa's largest tech ecosystem.
+            Built in Abuja by Nigerian founders, for Nigerian regulations. We believe every Naija startup deserves to launch with confidence — knowing their data practices protect both their users and their business. RegTrack exists because compliance shouldn't be a barrier to innovation in Africa's largest tech ecosystem. Powered by the NDP Act 2023, NDPR Implementation Framework, and the GAID 2025.
           </p>
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-            Built for Naija 🇳🇬 with <Heart className="w-3 h-3 text-destructive inline" /> • Made in Lagos • Powered by AI
+            Built for Naija 🇳🇬 with <Heart className="w-3 h-3 text-destructive inline" /> • Made in Abuja • Powered by AI
           </p>
           <p className="text-[11px] text-muted-foreground">
-            © 2026 RegTrack by NSS. AI Skills Week Abuja Hackathon.
+            © 2026 RegTrack by NSS.
           </p>
         </div>
       </div>

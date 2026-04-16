@@ -152,9 +152,10 @@ const RiskResults = ({ result, onReset }: Props) => {
               </h4>
               <ul className="text-xs text-muted-foreground space-y-1.5">
                 <li>• Fines up to <strong className="text-destructive">₦10,000,000</strong> or 2% of annual gross revenue</li>
-                <li>• NITDA enforcement notice and investigation</li>
+                <li>• NDPC enforcement notice and investigation</li>
                 <li>• Service suspension and public warning</li>
-                {result.riskLevel === "critical" && <li>• Criminal prosecution under NITDA Act 2007</li>}
+                <li>• Late CAR filing: 50% administrative penalty on filing fee (GAID Art. 10)</li>
+                {result.riskLevel === "critical" && <li>• Criminal prosecution under the NDP Act 2023</li>}
               </ul>
             </div>
 
@@ -174,7 +175,7 @@ const RiskResults = ({ result, onReset }: Props) => {
             {result.triggeredClauses.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-heading font-semibold text-foreground text-sm">
-                  Triggered NDPR Clauses ({result.triggeredClauses.length})
+                  Triggered Clauses ({result.triggeredClauses.length})
                 </h4>
                 {result.triggeredClauses.map((clause, i) => (
                   <div
