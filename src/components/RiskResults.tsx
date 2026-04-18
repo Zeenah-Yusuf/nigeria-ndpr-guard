@@ -98,39 +98,86 @@ const RiskResults = ({ result, onReset }: Props) => {
       <div key={activeStep} className="animate-fade-in">
         {activeStep === "analyze" && (
           <div className="space-y-5">
-            {/* Score display */}
-            <div className="text-center py-6">
-              <div className={`inline-flex items-center justify-center w-28 h-28 rounded-full ${cfg.bg} ring-8 ${cfg.ring} mb-5`}>
-                <span className="text-4xl font-heading font-bold text-primary-foreground">{result.riskScore}%</span>
+            {/* Animated score gauge */}
+            <div className="relative text-center py-8 rounded-2xl bg-gradient-to-br from-card via-card to-muted/40 border border-border shadow-card overflow-hidden">
+              <div className="absolute inset-0 bg-brand-gradient opacity-[0.04] pointer-events-none" />
+              <div className="absolute -top-12 -right-12 w-40 h-40 bg-brand-gradient opacity-10 rounded-full blur-3xl" />
+
+              {/* SVG circular progress */}
+              <div className="relative inline-flex items-center justify-center mb-4">
+                <svg className="w-36 h-36 -rotate-90" viewBox="0 0 144 144">
+                  <circle cx="72" cy="72" r="62" strokeWidth="10" className="fill-none stroke-muted" />
+                  <circle
+                    cx="72" cy="72" r="62" strokeWidth="10" strokeLinecap="round"
+                    className={`fill-none ${cfg.color} transition-all duration-1000 ease-out`}
+                    stroke="currentColor"
+                    strokeDasharray={`${(result.riskScore / 100) * 389.56} 389.56`}
+                    style={{ filter: "drop-shadow(0 0 8px currentColor)" }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className={`text-4xl font-heading font-bold ${cfg.color} tabular-nums`}>{result.riskScore}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mt-0.5">/ 100</span>
+                </div>
               </div>
-              <h3 className={`text-2xl font-heading font-bold ${cfg.color} capitalize`}>{cfg.label}</h3>
-              <div className="flex items-center justify-center gap-3 mt-3 text-xs text-muted-foreground">
-                <span>📱 {result.appName || "Your App"}</span>
-                {sectorProfile && <span>• {sectorProfile.emoji} {sectorProfile.name}</span>}
-                <span>• {new Date().toLocaleDateString("en-NG")}</span>
+
+              <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold ${cfg.bg} text-primary-foreground ring-4 ${cfg.ring} animate-fade-in`}>
+                {cfg.label}
+              </span>
+              <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground flex-wrap px-4">
+                <span className="font-medium">📱 {result.appName || "Your App"}</span>
+                {sectorProfile && <><span>•</span><span>{sectorProfile.emoji} {sectorProfile.name}</span></>}
+                <span>•</span><span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
             </div>
 
-            {/* Quick stats */}
+            {/* Quick stats with hover */}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Clauses Triggered", value: result.triggeredClauses.length, icon: "⚖️" },
                 { label: "Actions Needed", value: remediationItems.length, icon: "🔧" },
                 { label: "Max Fine", value: "₦10M", icon: "💰" },
-              ].map(s => (
-                <div key={s.label} className="rounded-xl border border-border bg-card p-3 text-center">
+              ].map((s, i) => (
+                <div
+                  key={s.label}
+                  className="rounded-xl border border-border bg-card p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated hover:border-primary/30 cursor-default animate-fade-in-up"
+                  style={{ animationDelay: `${i * 0.08}s` }}
+                >
                   <span className="text-lg">{s.icon}</span>
-                  <p className="text-lg font-heading font-bold text-foreground mt-1">{s.value}</p>
+                  <p className="text-lg font-heading font-bold text-foreground mt-1 tabular-nums">{s.value}</p>
                   <p className="text-[10px] text-muted-foreground">{s.label}</p>
                 </div>
               ))}
             </div>
 
+            {/* Answer breakdown summary */}
+            <div className="rounded-xl border border-border bg-card p-4">
+              <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">Answer Breakdown</h4>
+              <div className="space-y-2">
+                {questions.map((q) => {
+                  const a = result.answers[q.id];
+                  const isSafeguard = q.risk_weight < 0;
+                  const goodAnswer = isSafeguard ? true : false;
+                  const isGood = a === goodAnswer;
+                  if (a === null || a === undefined) return null;
+                  return (
+                    <div key={q.id} className="flex items-start gap-2 text-xs group">
+                      <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${isGood ? "bg-secondary" : "bg-destructive"} group-hover:scale-150 transition-transform`} />
+                      <span className="text-muted-foreground flex-1 leading-snug">{q.question}</span>
+                      <span className={`font-bold flex-shrink-0 ${isGood ? "text-secondary" : "text-destructive"}`}>
+                        {a ? "Yes" : "No"} {isGood ? "↓" : "↑"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <button
               onClick={() => setActiveStep("understand")}
-              className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl bg-brand-gradient text-primary-foreground font-semibold hover:opacity-90 hover:shadow-elevated active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
             >
-              Understand Impact <ChevronRight className="w-4 h-4" />
+              Understand Impact <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         )}
