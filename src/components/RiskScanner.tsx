@@ -31,29 +31,48 @@ const RiskScanner = () => {
   const calculateRisk = () => {
     setCalculating(true);
     setTimeout(() => {
-      let score = 0;
+      // Human-AI risk logic: baseline 35, each answer either adds penalty or rewards safeguard.
+      // Risky YES (e.g. collects sensitive data) -> +penalty; Risky NO (e.g. no privacy policy) -> +penalty.
+      // Safeguard YES (e.g. has consent) -> -reward; Safe NO (e.g. doesn't target under 13) -> -reward.
+      let score = 35;
       const triggeredClauseIds = new Set<string>();
 
       questions.forEach(q => {
         const answer = answers[q.id];
         if (answer === null || answer === undefined) return;
-        if (q.risk_weight > 0 && answer) {
-          score += q.risk_weight;
-          q.clause_ids.forEach(id => triggeredClauseIds.add(id));
-        } else if (q.risk_weight < 0 && !answer) {
-          score += Math.abs(q.risk_weight);
-          q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+        const w = q.risk_weight;
+
+        if (w > 0) {
+          // YES = risky exposure (e.g. collects data, targets minors, AI profiling)
+          if (answer) {
+            score += w * 4;
+            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+          } else {
+            // NO to a risky activity = lowers risk
+            score -= Math.ceil(w * 1.5);
+          }
+        } else if (w < 0) {
+          // Negative weight = safeguard question (privacy policy, consent, breach plan, registered)
+          if (answer) {
+            // YES = has the safeguard -> meaningful reduction
+            score -= Math.abs(w) * 4;
+          } else {
+            // NO = missing safeguard -> add penalty + flag clause
+            score += Math.abs(w) * 4;
+            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+          }
         }
       });
 
-      // Add sector-specific risk boost
+      // Sector context: apply small modifier for high-risk sectors and surface their recommended clauses
       const sectorProfile = getSectorById(sector);
+      const highRiskSectors = ["health", "fintech"];
       if (sectorProfile) {
         sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
+        if (highRiskSectors.includes(sector)) score += 6;
       }
 
-      const maxScore = questions.reduce((sum, q) => sum + Math.abs(q.risk_weight), 0);
-      const normalizedScore = Math.round((score / maxScore) * 100);
+      const normalizedScore = Math.max(0, Math.min(100, Math.round(score)));
       const triggeredClauses = ndprData.clauses.filter(c => triggeredClauseIds.has(c.id));
 
       const riskLevel: ScanResult["riskLevel"] =
