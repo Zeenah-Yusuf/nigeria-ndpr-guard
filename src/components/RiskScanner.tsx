@@ -31,29 +31,48 @@ const RiskScanner = () => {
   const calculateRisk = () => {
     setCalculating(true);
     setTimeout(() => {
-      let score = 0;
+      // Human-AI risk logic: baseline 35, each answer either adds penalty or rewards safeguard.
+      // Risky YES (e.g. collects sensitive data) -> +penalty; Risky NO (e.g. no privacy policy) -> +penalty.
+      // Safeguard YES (e.g. has consent) -> -reward; Safe NO (e.g. doesn't target under 13) -> -reward.
+      let score = 35;
       const triggeredClauseIds = new Set<string>();
 
       questions.forEach(q => {
         const answer = answers[q.id];
         if (answer === null || answer === undefined) return;
-        if (q.risk_weight > 0 && answer) {
-          score += q.risk_weight;
-          q.clause_ids.forEach(id => triggeredClauseIds.add(id));
-        } else if (q.risk_weight < 0 && !answer) {
-          score += Math.abs(q.risk_weight);
-          q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+        const w = q.risk_weight;
+
+        if (w > 0) {
+          // YES = risky exposure (e.g. collects data, targets minors, AI profiling)
+          if (answer) {
+            score += w * 4;
+            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+          } else {
+            // NO to a risky activity = lowers risk
+            score -= Math.ceil(w * 1.5);
+          }
+        } else if (w < 0) {
+          // Negative weight = safeguard question (privacy policy, consent, breach plan, registered)
+          if (answer) {
+            // YES = has the safeguard -> meaningful reduction
+            score -= Math.abs(w) * 4;
+          } else {
+            // NO = missing safeguard -> add penalty + flag clause
+            score += Math.abs(w) * 4;
+            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
+          }
         }
       });
 
-      // Add sector-specific risk boost
+      // Sector context: apply small modifier for high-risk sectors and surface their recommended clauses
       const sectorProfile = getSectorById(sector);
+      const highRiskSectors = ["health", "fintech"];
       if (sectorProfile) {
         sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
+        if (highRiskSectors.includes(sector)) score += 6;
       }
 
-      const maxScore = questions.reduce((sum, q) => sum + Math.abs(q.risk_weight), 0);
-      const normalizedScore = Math.round((score / maxScore) * 100);
+      const normalizedScore = Math.max(0, Math.min(100, Math.round(score)));
       const triggeredClauses = ndprData.clauses.filter(c => triggeredClauseIds.has(c.id));
 
       const riskLevel: ScanResult["riskLevel"] =
@@ -138,22 +157,39 @@ const RiskScanner = () => {
 
       {/* Questions */}
       <div className="space-y-3">
-        {questions.map((q) => {
+        {questions.map((q, idx) => {
           const isAnswered = answers[q.id] !== undefined && answers[q.id] !== null;
+          const isSafeguard = q.risk_weight < 0;
+          const goodAnswer = isSafeguard ? true : false;
+          const userAnswer = answers[q.id];
+          const isGood = isAnswered && userAnswer === goodAnswer;
+
           return (
             <div
               key={q.id}
-              className={`rounded-xl border bg-card p-4 transition-all duration-300 ${
-                isAnswered ? "border-primary/20 shadow-card" : "border-border"
+              className={`group rounded-xl border bg-card p-4 transition-all duration-300 hover:shadow-elevated hover:-translate-y-0.5 animate-fade-in-up ${
+                isAnswered
+                  ? isGood
+                    ? "border-secondary/40 shadow-card"
+                    : "border-destructive/30 shadow-card"
+                  : "border-border hover:border-primary/30"
               }`}
+              style={{ animationDelay: `${idx * 0.04}s` }}
             >
-              <p className="text-sm font-medium text-foreground mb-3 leading-relaxed">{q.question}</p>
+              <div className="flex items-start gap-2 mb-3">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-muted-foreground text-[11px] font-bold flex items-center justify-center group-hover:bg-brand-gradient group-hover:text-primary-foreground transition-all duration-300">
+                  {idx + 1}
+                </span>
+                <p className="text-sm font-medium text-foreground leading-relaxed flex-1">{q.question}</p>
+              </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => handleAnswer(q.id, true)}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] ${
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] hover:scale-[1.02] ${
                     answers[q.id] === true
-                      ? "bg-brand-gradient text-primary-foreground shadow-sm"
+                      ? isSafeguard
+                        ? "bg-secondary text-secondary-foreground shadow-sm ring-2 ring-secondary/40"
+                        : "bg-destructive/90 text-destructive-foreground shadow-sm ring-2 ring-destructive/30"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
@@ -161,9 +197,11 @@ const RiskScanner = () => {
                 </button>
                 <button
                   onClick={() => handleAnswer(q.id, false)}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] ${
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] hover:scale-[1.02] ${
                     answers[q.id] === false
-                      ? "bg-secondary text-secondary-foreground shadow-sm"
+                      ? isSafeguard
+                        ? "bg-destructive/90 text-destructive-foreground shadow-sm ring-2 ring-destructive/30"
+                        : "bg-secondary text-secondary-foreground shadow-sm ring-2 ring-secondary/40"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
@@ -171,9 +209,12 @@ const RiskScanner = () => {
                 </button>
               </div>
               {isAnswered && (
-                <p className="text-xs text-muted-foreground mt-2.5 leading-relaxed animate-fade-in border-t border-border pt-2.5">
-                  💡 {q.explanation}
-                </p>
+                <div className="mt-2.5 border-t border-border pt-2.5 animate-fade-in space-y-1.5">
+                  <p className={`text-[11px] font-semibold flex items-center gap-1 ${isGood ? "text-secondary" : "text-destructive"}`}>
+                    {isGood ? "↓ Lowers your risk score" : "↑ Increases your risk score"}
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">💡 {q.explanation}</p>
+                </div>
               )}
             </div>
           );
