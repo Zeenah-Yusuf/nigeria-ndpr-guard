@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import nssLogo from "@/assets/nss-logo.png";
 import { Shield, Menu, X } from "lucide-react";
 import { LanguageSelector } from "./layout/LanguageSelector";
+import { NigeriaFlag } from "./NigeriaFlag";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -33,11 +34,13 @@ const Navbar = () => {
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
           {/* Logo Section */}
           <div className="flex items-center gap-2.5">
-            <span className="text-lg">🇳🇬</span>
             <img src={nssLogo} alt="Nexus SafeSphere Logo" className="h-9 w-auto" />
             <div className="hidden sm:block">
               <span className="font-heading font-bold text-foreground text-base leading-none">RegTrack</span>
-              <span className="block text-[10px] text-muted-foreground leading-none mt-0.5">NDP Act Compliance for Naija Startups</span>
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-muted-foreground">Built for Naija</span>
+                <NigeriaFlag className="w-4 h-3" />
+              </div>
             </div>
           </div>
 
@@ -53,7 +56,6 @@ const Navbar = () => {
               </button>
             ))}
             
-            {/* Language Selector - NEW */}
             <LanguageSelector />
             
             <button
@@ -65,9 +67,8 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile Burger */}
+          {/* Mobile Controls */}
           <div className="flex items-center gap-2 md:hidden">
-            {/* Mobile Language Selector - NEW */}
             <LanguageSelector />
             
             <button

@@ -1,6 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import nssLogo from "@/assets/nss-logo.png";
 import { Mail, Heart, ExternalLink } from "lucide-react";
+import { NigeriaFlag } from "./NigeriaFlag";
 
 const Footer = () => {
   const { t } = useLanguage();
@@ -12,7 +13,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-start justify-between gap-8 mb-8">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <span className="text-lg">🇳🇬</span>
+              <NigeriaFlag className="w-5 h-4" />
               <img src={nssLogo} alt="Nexus SafeSphere Logo" className="h-8 w-auto" loading="lazy" />
               <div>
                 <span className="font-heading font-bold text-foreground text-sm">{t('app.name')}</span>
@@ -73,8 +74,9 @@ const Footer = () => {
 
         {/* Why We Built This */}
         <div className="rounded-xl border border-border bg-card p-5 mb-8">
-          <h4 className="font-heading font-semibold text-foreground text-sm mb-2">
-            🇳🇬 {t('footer.whyBuilt.title')}
+          <h4 className="font-heading font-semibold text-foreground text-sm mb-2 flex items-center gap-1">
+            <NigeriaFlag className="w-4 h-3" />
+            {t('footer.whyBuilt.title')}
           </h4>
           <p className="text-xs text-muted-foreground leading-relaxed">
             {t('footer.whyBuilt.description')}
@@ -88,6 +90,9 @@ const Footer = () => {
           </p>
           <p className="text-[11px] text-muted-foreground">
             {t('footer.copyright')}
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            {t('footer.hackathon')}
           </p>
         </div>
       </div>

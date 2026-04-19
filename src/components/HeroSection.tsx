@@ -1,6 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
 import { ShieldCheck, ArrowDown, Zap, BadgeCheck } from "lucide-react";
+import { NigeriaFlag } from "./NigeriaFlag";
 
 const HeroSection = () => {
   const { t } = useLanguage();
@@ -30,10 +31,12 @@ const HeroSection = () => {
           </span>
         </div>
 
-        {/* Trusted badge */}
+        {/* Trusted badge with Flag */}
         <div className="animate-fade-in-up mb-6" style={{ animationDelay: "0.05s" }}>
           <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full" style={{ background: "hsl(152, 50%, 35%, 0.2)", color: "hsl(152, 60%, 65%)" }}>
-            <BadgeCheck className="w-3.5 h-3.5" /> {t('hero.trusted')}
+            <BadgeCheck className="w-3.5 h-3.5" /> 
+            {t('hero.trusted')}
+            <NigeriaFlag className="w-3.5 h-3 ml-0.5" />
           </span>
         </div>
 
