@@ -7,14 +7,42 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
 dist
 dist-ssr
 *.local
 
+# ============================================
+# 🔒 SECURITY CRITICAL - NEVER COMMIT THESE
+# ============================================
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Supabase local configuration
+supabase/.branches/
+supabase/.temp/
+supabase/config.toml
+
+# Backend local settings (if you had Azure Functions)
+backend/local.settings.json
+local.settings.json
+
+# Keep templates (safe to commit)
+!.env.example
+!backend/local.settings.json.example
+
+# ============================================
 # Editor directories and files
+# ============================================
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 .DS_Store
 *.suo
@@ -22,3 +50,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ============================================
+# Build outputs
+# ============================================
+build/
+out/
+*.tsbuildinfo
+
+# ============================================
+# Temporary files
+# ============================================
+*.tmp
+*.temp
+.cache/
+.vercel
