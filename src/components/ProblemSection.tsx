@@ -1,6 +1,9 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { AlertTriangle, TrendingDown } from "lucide-react";
 
 const ProblemSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="problem" className="py-24 bg-card relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-brand-gradient opacity-30" />
@@ -10,11 +13,11 @@ const ProblemSection = () => {
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 bg-destructive/10 text-destructive rounded-full px-4 py-1.5 mb-5">
               <AlertTriangle className="w-4 h-4" />
-              <span className="text-sm font-medium">The Problem</span>
+              <span className="text-sm font-medium">{t('problem.badge')}</span>
             </div>
             <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
-              Launching without compliance<br />
-              <span className="text-destructive">can cost you everything</span>
+              {t('problem.title.part1')}<br />
+              <span className="text-destructive">{t('problem.title.part2')}</span>
             </h2>
           </div>
 
@@ -26,17 +29,19 @@ const ProblemSection = () => {
               </div>
               <div className="space-y-3">
                 <p className="text-foreground leading-relaxed">
-                  <span className="font-semibold">A Nigerian founder launches a health app.</span> Users love it — 5,000 signups in the first week. Two weeks later, NDPC sends an enforcement notice.
+                  <span className="font-semibold">{t('problem.story.part1')}</span> {t('problem.story.part2')}
                 </p>
                 <p className="text-foreground leading-relaxed">
-                  The fine? <span className="text-destructive font-bold text-lg">₦10,000,000</span> — or 2% of annual gross revenue, whichever is greater. No privacy policy. No consent mechanism. No data audit.
+                  {t('problem.fine.part1')}{" "}
+                  <span className="text-destructive font-bold text-lg">₦10,000,000</span>{" "}
+                  {t('problem.fine.part2')}
                 </p>
                 <div className="flex items-center gap-3 pt-2 border-t border-border mt-4">
                   <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center">
                     <TrendingDown className="w-5 h-5 text-secondary" />
                   </div>
                   <p className="text-secondary font-semibold text-lg">
-                    RegTrack prevents this. In minutes, not months.
+                    {t('problem.solution')}
                   </p>
                 </div>
               </div>

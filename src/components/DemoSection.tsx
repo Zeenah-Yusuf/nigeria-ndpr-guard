@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import RiskScanner from "./RiskScanner";
 import ClauseFinder from "./ClauseFinder";
 import ResourcesSidebar from "./ResourcesSidebar";
 import { Shield, Search, BookOpen } from "lucide-react";
 
 const DemoSection = () => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<"scanner" | "finder">("scanner");
 
   return (
@@ -13,10 +15,11 @@ const DemoSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Try it <span className="text-brand-gradient">now</span>
+            {t('demo.title.part1')}{" "}
+            <span className="text-brand-gradient">{t('demo.title.part2')}</span>
           </h2>
           <p className="text-muted-foreground">
-            Test your app's NDPR compliance risk in under 2 minutes.
+            {t('demo.subtitle')}
           </p>
         </div>
 
@@ -32,7 +35,7 @@ const DemoSection = () => {
               }`}
             >
               <Shield className="w-4 h-4" />
-              Risk Scanner
+              {t('demo.tabs.scanner')}
             </button>
             <button
               onClick={() => setActiveTab("finder")}
@@ -43,7 +46,7 @@ const DemoSection = () => {
               }`}
             >
               <Search className="w-4 h-4" />
-              Clause Finder
+              {t('demo.tabs.finder')}
             </button>
           </div>
 

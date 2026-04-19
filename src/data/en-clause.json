@@ -1,0 +1,202 @@
+[
+  {
+    "section_id": "24",
+    "title": "Principles of Processing Personal Data",
+    "content": "Data controllers and processors shall ensure that personal data is processed lawfully, fairly, and transparently. Processing shall be for specified, explicit, and legitimate purposes. Data shall be adequate, relevant, and limited to what is necessary. Data shall be accurate and kept up to date. Data shall be kept for no longer than necessary. Data shall be processed with appropriate security measures.",
+    "plain_summary": "Personal data must be processed according to legal principles of lawfulness, fairness, transparency, purpose limitation, data minimization, accuracy, storage limitation, and security.",
+    "keywords": ["principles", "lawful", "fair", "transparent", "purpose limitation", "data minimization", "accuracy", "storage limitation", "integrity", "confidentiality"],
+    "language": "en"
+  },
+  {
+    "section_id": "25",
+    "title": "Lawful Basis for Processing Personal Data",
+    "content": "Processing of personal data shall be lawful only if at least one of the following applies: consent of the data subject, performance of a contract, compliance with a legal obligation, protection of vital interests, performance of a task in the public interest, or legitimate interests pursued by the controller or a third party.",
+    "plain_summary": "Data processing requires a valid legal basis such as consent, contract, legal obligation, vital interests, public interest, or legitimate interests.",
+    "keywords": ["lawful basis", "consent", "contract", "legal obligation", "vital interests", "public interest", "legitimate interest"],
+    "language": "en"
+  },
+  {
+    "section_id": "26",
+    "title": "Consent",
+    "content": "Consent of the data subject means any freely given, specific, informed, and unambiguous indication of the data subject's wishes. Silence, pre-ticked boxes, or inactivity shall not constitute consent. The data subject shall have the right to withdraw consent at any time. Withdrawal shall not affect the lawfulness of processing based on consent before withdrawal.",
+    "plain_summary": "Consent must be freely given, specific, informed, and unambiguous through clear affirmative action. It can be withdrawn at any time.",
+    "keywords": ["consent", "withdrawal", "affirmative action", "informed", "freely given", "specific", "unambiguous"],
+    "language": "en"
+  },
+  {
+    "section_id": "27",
+    "title": "Transparency and Information Obligations",
+    "content": "The controller shall take appropriate measures to provide information relating to processing to the data subject in a concise, transparent, intelligible, and easily accessible form, using clear and plain language. Information shall be provided in writing or by other means including electronic means.",
+    "plain_summary": "Organizations must clearly inform individuals about how their personal data is processed, in clear and simple language.",
+    "keywords": ["transparency", "privacy policy", "information", "notice", "plain language", "accessible"],
+    "language": "en"
+  },
+  {
+    "section_id": "28",
+    "title": "Data Protection Impact Assessment",
+    "content": "Where a type of processing is likely to result in a high risk to the rights and freedoms of natural persons, the controller shall carry out an assessment of the impact of the envisaged processing operations. A single assessment may address a set of similar processing operations.",
+    "plain_summary": "Organizations must assess privacy risks before conducting high-risk data processing activities.",
+    "keywords": ["DPIA", "impact assessment", "risk", "high risk", "privacy", "assessment"],
+    "language": "en"
+  },
+  {
+    "section_id": "29",
+    "title": "Data Processor Obligations",
+    "content": "The processor shall process personal data only on documented instructions from the controller. The processor shall implement appropriate technical and organizational measures to ensure security of processing. The processor shall assist the controller in ensuring compliance with data subject rights and breach notification obligations.",
+    "plain_summary": "Third-party data processors must follow controller instructions, maintain security, and assist with compliance obligations.",
+    "keywords": ["processor", "vendor", "third party", "contract", "instructions", "security"],
+    "language": "en"
+  },
+  {
+    "section_id": "30",
+    "title": "Sensitive Personal Data",
+    "content": "Processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, trade union membership, genetic data, biometric data, health data, or data concerning sex life or sexual orientation shall be prohibited unless specific conditions apply.",
+    "plain_summary": "Special restrictions apply to sensitive data including health information, biometrics, religious beliefs, political opinions, and sexual orientation.",
+    "keywords": ["sensitive data", "health", "biometric", "genetic", "special categories", "racial", "ethnic", "religious", "political"],
+    "language": "en"
+  },
+  {
+    "section_id": "31",
+    "title": "Processing of Children's Personal Data",
+    "content": "A child is any person under 18 years. Where processing relates to the offering of information society services directly to a child, consent shall be given or authorized by the holder of parental responsibility. The controller shall make reasonable efforts to verify that consent is given by the holder of parental responsibility.",
+    "plain_summary": "Children under 18 require parental consent for data processing. Organizations must verify parental consent.",
+    "keywords": ["children", "minor", "parental consent", "under 18", "verification"],
+    "language": "en"
+  },
+  {
+    "section_id": "32",
+    "title": "Data Protection Officer",
+    "content": "A data controller of major importance shall designate a Data Protection Officer. The DPO shall have expert knowledge of data protection law and practices. The DPO may be a staff member or fulfill tasks on a service contract. The DPO shall inform and advise on compliance, monitor compliance, and cooperate with the Commission.",
+    "plain_summary": "Organizations meeting certain thresholds must appoint a Data Protection Officer with expert knowledge.",
+    "keywords": ["DPO", "data protection officer", "appointment", "governance", "compliance", "expert"],
+    "language": "en"
+  },
+  {
+    "section_id": "33",
+    "title": "Compliance Services",
+    "content": "The Commission may license persons with requisite expertise in data protection to monitor, audit, and report on compliance by data controllers and processors with the NDP Act and regulations.",
+    "plain_summary": "NDPC licenses Data Protection Compliance Organizations to audit and report on compliance.",
+    "keywords": ["DPCO", "compliance", "audit", "license", "monitoring"],
+    "language": "en"
+  },
+  {
+    "section_id": "34",
+    "title": "Rights of Data Subjects",
+    "content": "A data subject has the right to obtain confirmation as to whether personal data concerning them is being processed. Rights include access to data, rectification, erasure, restriction of processing, data portability, and objection to processing.",
+    "plain_summary": "Individuals have rights to access, correct, delete, restrict, transfer, and object to processing of their personal data.",
+    "keywords": ["data subject rights", "access", "rectification", "erasure", "restriction", "portability", "objection"],
+    "language": "en"
+  },
+  {
+    "section_id": "35",
+    "title": "Right to Withdraw Consent",
+    "content": "The data subject shall have the right to withdraw consent at any time. It shall be as easy to withdraw as to give consent. Withdrawal shall not affect the lawfulness of processing based on consent before its withdrawal.",
+    "plain_summary": "Individuals can withdraw consent at any time, and it should be as easy as giving consent.",
+    "keywords": ["withdraw consent", "withdrawal", "consent", "easy withdrawal"],
+    "language": "en"
+  },
+  {
+    "section_id": "36",
+    "title": "Right to Object",
+    "content": "The data subject shall have the right to object to processing of personal data. Where personal data is processed for direct marketing, the data subject shall have the right to object at any time.",
+    "plain_summary": "Individuals can object to processing of their data, especially for direct marketing purposes.",
+    "keywords": ["object", "objection", "direct marketing", "opt-out"],
+    "language": "en"
+  },
+  {
+    "section_id": "37",
+    "title": "Automated Individual Decision-Making",
+    "content": "The data subject shall have the right not to be subject to a decision based solely on automated processing, including profiling, which produces legal effects or similarly significantly affects them.",
+    "plain_summary": "Individuals can challenge decisions made purely by algorithms or AI that significantly affect them.",
+    "keywords": ["AI", "automated decision", "profiling", "algorithm", "machine learning"],
+    "language": "en"
+  },
+  {
+    "section_id": "38",
+    "title": "Right to Data Portability",
+    "content": "The data subject shall have the right to receive personal data concerning them in a structured, commonly used, and machine-readable format, and have the right to transmit that data to another controller.",
+    "plain_summary": "Individuals can obtain and reuse their personal data across different services.",
+    "keywords": ["portability", "transfer", "machine-readable", "structured format"],
+    "language": "en"
+  },
+  {
+    "section_id": "39",
+    "title": "Security of Processing",
+    "content": "The controller and processor shall implement appropriate technical and organizational measures to ensure a level of security appropriate to the risk. Measures may include pseudonymization, encryption, ensuring confidentiality, integrity, availability, and resilience of processing systems.",
+    "plain_summary": "Organizations must protect personal data with encryption, access controls, and security policies appropriate to the risk.",
+    "keywords": ["security", "encryption", "pseudonymization", "confidentiality", "integrity", "availability", "resilience"],
+    "language": "en"
+  },
+  {
+    "section_id": "40",
+    "title": "Personal Data Breach Notification",
+    "content": "In the case of a personal data breach, the controller shall notify the Commission without undue delay and, where feasible, not later than 72 hours after becoming aware of it. Where the breach is likely to result in high risk to data subjects, the controller shall also communicate the breach to the data subject.",
+    "plain_summary": "Report data breaches to NDPC within 72 hours. Notify affected individuals if breach poses high risk.",
+    "keywords": ["breach", "notification", "72 hours", "NDPC", "reporting", "incident response"],
+    "language": "en"
+  },
+  {
+    "section_id": "41",
+    "title": "Transfers of Personal Data to Foreign Countries",
+    "content": "A controller or processor shall not transfer personal data from Nigeria to another country unless the recipient is subject to a law, binding corporate rules, contractual clauses, or certification mechanism that affords an adequate level of protection.",
+    "plain_summary": "International data transfers require adequate legal safeguards such as binding corporate rules or standard contractual clauses.",
+    "keywords": ["cross-border", "international", "transfer", "foreign", "adequate protection"],
+    "language": "en"
+  },
+  {
+    "section_id": "42",
+    "title": "Adequacy Decision",
+    "content": "The Commission may determine whether a country, region, or sector provides an adequate level of data protection. The Commission shall publish a list of countries deemed to have adequate data protection laws.",
+    "plain_summary": "NDPC publishes a whitelist of countries with adequate data protection laws.",
+    "keywords": ["adequacy", "whitelist", "international", "transfer", "adequate level"],
+    "language": "en"
+  },
+  {
+    "section_id": "43",
+    "title": "Derogations for Specific Situations",
+    "content": "In the absence of an adequacy decision, a transfer may take place if the data subject has explicitly consented, the transfer is necessary for contract performance, or the transfer is necessary for important reasons of public interest.",
+    "plain_summary": "Exceptions allow data transfers even without adequacy decisions, such as explicit consent or contract necessity.",
+    "keywords": ["derogation", "exception", "consent", "transfer", "public interest"],
+    "language": "en"
+  },
+  {
+    "section_id": "44",
+    "title": "Registration of Data Controllers and Processors",
+    "content": "Data controllers and processors of major importance shall register with the Commission within six months of the Act's commencement or upon attaining that status. Registration shall include details of processing activities, data subjects, purposes, recipients, and security measures.",
+    "plain_summary": "Organizations classified as Data Controllers or Processors of Major Importance must register with NDPC and provide details of their data processing.",
+    "keywords": ["registration", "DCPMI", "NDPC", "filing", "compliance"],
+    "language": "en"
+  },
+  {
+    "section_id": "45",
+    "title": "Fees and Levies",
+    "content": "The Commission may prescribe and demand payment of fees or levies by data controllers and processors of major importance.",
+    "plain_summary": "NDPC may charge fees to registered data controllers and processors.",
+    "keywords": ["fees", "levies", "payment", "registration"],
+    "language": "en"
+  },
+  {
+    "section_id": "46",
+    "title": "Enforcement",
+    "content": "A data subject who believes a violation has occurred may lodge a complaint with the Commission. The Commission may investigate complaints and initiate investigations on its own motion.",
+    "plain_summary": "Individuals can file complaints with NDPC about data protection violations. NDPC can investigate.",
+    "keywords": ["enforcement", "complaint", "investigation", "violation"],
+    "language": "en"
+  },
+  {
+    "section_id": "47",
+    "title": "Compliance Orders",
+    "content": "The Commission may issue compliance orders requiring a person to take specified steps to comply with the Act or remedy a contravention. Orders shall be in writing and specify the provision contravened and required action.",
+    "plain_summary": "NDPC can issue orders requiring organizations to comply with the NDP Act.",
+    "keywords": ["compliance order", "enforcement", "remedy", "contravention"],
+    "language": "en"
+  },
+  {
+    "section_id": "48",
+    "title": "Enforcement Orders and Penalties",
+    "content": "After investigation, the Commission may issue enforcement orders requiring remediation, payment of compensation, or payment of fines. Maximum penalty for major importance controllers: N10,000,000 or 2% of annual gross revenue, whichever is greater.",
+    "plain_summary": "Violations can result in fines up to N10 million or 2% of annual revenue for major importance entities.",
+    "keywords": ["penalties", "fines", "enforcement", "compensation", "sanctions"],
+    "language": "en"
+  }
+]

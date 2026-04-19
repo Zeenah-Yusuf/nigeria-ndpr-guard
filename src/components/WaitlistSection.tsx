@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Mail, Check, Rocket } from "lucide-react";
 
 const WaitlistSection = () => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -26,13 +28,15 @@ const WaitlistSection = () => {
       <div className="relative container mx-auto px-4 text-center">
         <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 border" style={{ background: "hsl(180, 40%, 30%, 0.15)", borderColor: "hsl(180, 40%, 40%, 0.25)" }}>
           <Rocket className="w-4 h-4" style={{ color: "hsl(165, 60%, 55%)" }} />
-          <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 65%)" }}>Early Access</span>
+          <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 65%)" }}>
+            {t('waitlist.badge')}
+          </span>
         </div>
         <h2 className="font-heading text-3xl md:text-4xl font-bold mb-4" style={{ color: "hsl(0, 0%, 100%)" }}>
-          Get early access to RegTrack
+          {t('waitlist.title')}
         </h2>
         <p className="text-base max-w-lg mx-auto mb-8 leading-relaxed" style={{ color: "hsl(215, 15%, 60%)" }}>
-          Join the waitlist for the full platform with AI-powered compliance automation, real-time monitoring, and team collaboration.
+          {t('waitlist.subtitle')}
         </p>
 
         {submitted ? (
@@ -41,8 +45,12 @@ const WaitlistSection = () => {
               <Check className="w-5 h-5 text-secondary-foreground" />
             </div>
             <div className="text-left">
-              <p className="font-semibold" style={{ color: "hsl(152, 60%, 65%)" }}>You're on the list!</p>
-              <p className="text-sm" style={{ color: "hsl(215, 15%, 55%)" }}>We'll notify you when RegTrack launches.</p>
+              <p className="font-semibold" style={{ color: "hsl(152, 60%, 65%)" }}>
+                {t('waitlist.success.title')}
+              </p>
+              <p className="text-sm" style={{ color: "hsl(215, 15%, 55%)" }}>
+                {t('waitlist.success.message')}
+              </p>
             </div>
           </div>
         ) : (
@@ -51,7 +59,7 @@ const WaitlistSection = () => {
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "hsl(215, 15%, 40%)" }} />
               <input
                 type="email"
-                placeholder="your@email.com"
+                placeholder={t('waitlist.placeholder')}
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
@@ -67,7 +75,7 @@ const WaitlistSection = () => {
               {submitting ? (
                 <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
               ) : (
-                "Join Waitlist"
+                t('waitlist.button')
               )}
             </button>
           </form>

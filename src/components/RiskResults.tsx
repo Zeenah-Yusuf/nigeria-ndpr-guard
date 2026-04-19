@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { ScanResult } from "./RiskScanner";
 import { getRemediationItems } from "@/lib/remediationData";
 import { generateReport } from "@/lib/generateReport";
@@ -14,24 +15,24 @@ interface Props {
   onReset: () => void;
 }
 
-const steps = [
-  { id: "analyze", label: "Analyze", icon: BarChart3 },
-  { id: "understand", label: "Understand", icon: Brain },
-  { id: "fix", label: "Fix It", icon: Wrench },
-] as const;
-
-type StepId = typeof steps[number]["id"];
-
-const riskConfig = {
-  low: { color: "text-secondary", bg: "bg-secondary", ring: "ring-secondary/30", label: "Low Risk" },
-  medium: { color: "text-accent", bg: "bg-accent", ring: "ring-accent/30", label: "Medium Risk" },
-  high: { color: "text-destructive/80", bg: "bg-destructive/80", ring: "ring-destructive/30", label: "High Risk" },
-  critical: { color: "text-destructive", bg: "bg-destructive", ring: "ring-destructive/40", label: "Critical Risk" },
-};
-
 const RiskResults = ({ result, onReset }: Props) => {
-  const [activeStep, setActiveStep] = useState<StepId>("analyze");
+  const { t } = useLanguage();
+  const [activeStep, setActiveStep] = useState<"analyze" | "understand" | "fix">("analyze");
   const { toast } = useToast();
+  
+  const steps = [
+    { id: "analyze" as const, labelKey: "results.steps.analyze", icon: BarChart3 },
+    { id: "understand" as const, labelKey: "results.steps.understand", icon: Brain },
+    { id: "fix" as const, labelKey: "results.steps.fix", icon: Wrench },
+  ];
+
+  const riskConfig = {
+    low: { color: "text-secondary", bg: "bg-secondary", ring: "ring-secondary/30", labelKey: "risk.low" },
+    medium: { color: "text-accent", bg: "bg-accent", ring: "ring-accent/30", labelKey: "risk.medium" },
+    high: { color: "text-destructive/80", bg: "bg-destructive/80", ring: "ring-destructive/30", labelKey: "risk.high" },
+    critical: { color: "text-destructive", bg: "bg-destructive", ring: "ring-destructive/40", labelKey: "risk.critical" },
+  };
+  
   const cfg = riskConfig[result.riskLevel];
   const triggeredClauseIds = result.triggeredClauses.map(c => c.id);
   const remediationItems = getRemediationItems(triggeredClauseIds);
@@ -52,24 +53,37 @@ const RiskResults = ({ result, onReset }: Props) => {
         checkedItems: JSON.parse(checkedRaw),
         sector: sectorProfile?.name,
       });
-      toast({ title: "📄 Report downloaded!", description: `RegTrack_Report_${new Date().toISOString().split("T")[0]}.pdf` });
+      toast({ 
+        title: t('results.toast.downloaded.title'), 
+        description: t('results.toast.downloaded.description').replace('{{date}}', new Date().toISOString().split("T")[0])
+      });
     } catch {
-      toast({ title: "Error", description: "Failed to generate PDF. Please try again.", variant: "destructive" });
+      toast({ 
+        title: t('results.toast.error.title'), 
+        description: t('results.toast.error.description'), 
+        variant: "destructive" 
+      });
     }
   };
+
+  const stats = [
+    { labelKey: "results.stats.clauses", value: result.triggeredClauses.length, icon: "⚖️" },
+    { labelKey: "results.stats.actions", value: remediationItems.length, icon: "🔧" },
+    { labelKey: "results.stats.maxFine", value: "₦10M", icon: "💰" },
+  ];
 
   return (
     <div className="animate-fade-in-up space-y-5">
       {/* Header with download */}
       <div className="flex items-center justify-between">
         <button onClick={onReset} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> New Scan
+          <ArrowLeft className="w-4 h-4" /> {t('results.newScan')}
         </button>
         <button
           onClick={handleDownloadPDF}
           className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-gradient text-primary-foreground text-xs font-semibold hover:opacity-90 active:scale-[0.97] transition-all"
         >
-          <Download className="w-3.5 h-3.5" /> Download PDF
+          <Download className="w-3.5 h-3.5" /> {t('results.downloadPDF')}
         </button>
       </div>
 
@@ -87,7 +101,7 @@ const RiskResults = ({ result, onReset }: Props) => {
               }`}
             >
               <StepIcon className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{s.label}</span>
+              <span className="hidden sm:inline">{t(s.labelKey)}</span>
               <span className="sm:hidden">{i + 1}</span>
             </button>
           );
@@ -103,7 +117,6 @@ const RiskResults = ({ result, onReset }: Props) => {
               <div className="absolute inset-0 bg-brand-gradient opacity-[0.04] pointer-events-none" />
               <div className="absolute -top-12 -right-12 w-40 h-40 bg-brand-gradient opacity-10 rounded-full blur-3xl" />
 
-              {/* SVG circular progress */}
               <div className="relative inline-flex items-center justify-center mb-4">
                 <svg className="w-36 h-36 -rotate-90" viewBox="0 0 144 144">
                   <circle cx="72" cy="72" r="62" strokeWidth="10" className="fill-none stroke-muted" />
@@ -122,37 +135,35 @@ const RiskResults = ({ result, onReset }: Props) => {
               </div>
 
               <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold ${cfg.bg} text-primary-foreground ring-4 ${cfg.ring} animate-fade-in`}>
-                {cfg.label}
+                {t(cfg.labelKey)}
               </span>
               <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground flex-wrap px-4">
-                <span className="font-medium">📱 {result.appName || "Your App"}</span>
-                {sectorProfile && <><span>•</span><span>{sectorProfile.emoji} {sectorProfile.name}</span></>}
+                <span className="font-medium">📱 {result.appName || t('results.yourApp')}</span>
+                {sectorProfile && <><span>•</span><span>{sectorProfile.emoji} {t(`sectors.${result.sector}.name`)}</span></>}
                 <span>•</span><span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
             </div>
 
-            {/* Quick stats with hover */}
+            {/* Quick stats */}
             <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: "Clauses Triggered", value: result.triggeredClauses.length, icon: "⚖️" },
-                { label: "Actions Needed", value: remediationItems.length, icon: "🔧" },
-                { label: "Max Fine", value: "₦10M", icon: "💰" },
-              ].map((s, i) => (
+              {stats.map((s, i) => (
                 <div
-                  key={s.label}
+                  key={s.labelKey}
                   className="rounded-xl border border-border bg-card p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated hover:border-primary/30 cursor-default animate-fade-in-up"
                   style={{ animationDelay: `${i * 0.08}s` }}
                 >
                   <span className="text-lg">{s.icon}</span>
                   <p className="text-lg font-heading font-bold text-foreground mt-1 tabular-nums">{s.value}</p>
-                  <p className="text-[10px] text-muted-foreground">{s.label}</p>
+                  <p className="text-[10px] text-muted-foreground">{t(s.labelKey)}</p>
                 </div>
               ))}
             </div>
 
-            {/* Answer breakdown summary */}
+            {/* Answer breakdown */}
             <div className="rounded-xl border border-border bg-card p-4">
-              <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">Answer Breakdown</h4>
+              <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
+                {t('results.answerBreakdown')}
+              </h4>
               <div className="space-y-2">
                 {questions.map((q) => {
                   const a = result.answers[q.id];
@@ -163,9 +174,11 @@ const RiskResults = ({ result, onReset }: Props) => {
                   return (
                     <div key={q.id} className="flex items-start gap-2 text-xs group">
                       <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${isGood ? "bg-secondary" : "bg-destructive"} group-hover:scale-150 transition-transform`} />
-                      <span className="text-muted-foreground flex-1 leading-snug">{q.question}</span>
+                      <span className="text-muted-foreground flex-1 leading-snug">
+                        {t(`scanner.questions.${q.id}`)}
+                      </span>
                       <span className={`font-bold flex-shrink-0 ${isGood ? "text-secondary" : "text-destructive"}`}>
-                        {a ? "Yes" : "No"} {isGood ? "↓" : "↑"}
+                        {a ? t('common.yes') : t('common.no')} {isGood ? "↓" : "↑"}
                       </span>
                     </div>
                   );
@@ -177,7 +190,7 @@ const RiskResults = ({ result, onReset }: Props) => {
               onClick={() => setActiveStep("understand")}
               className="w-full py-3.5 rounded-xl bg-brand-gradient text-primary-foreground font-semibold hover:opacity-90 hover:shadow-elevated active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
             >
-              Understand Impact <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {t('results.understandImpact')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         )}
@@ -187,7 +200,7 @@ const RiskResults = ({ result, onReset }: Props) => {
             {/* Explanation */}
             <div className="rounded-xl border border-border bg-card p-5">
               <h4 className="font-heading font-semibold text-foreground text-sm mb-2 flex items-center gap-2">
-                <Brain className="w-4 h-4 text-primary" /> Plain-English Explanation
+                <Brain className="w-4 h-4 text-primary" /> {t('results.plainEnglish')}
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">{result.explanation}</p>
             </div>
@@ -195,14 +208,14 @@ const RiskResults = ({ result, onReset }: Props) => {
             {/* Consequences */}
             <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
               <h4 className="font-heading font-semibold text-destructive text-sm mb-2 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" /> Potential Consequences
+                <AlertTriangle className="w-4 h-4" /> {t('results.consequences.title')}
               </h4>
               <ul className="text-xs text-muted-foreground space-y-1.5">
-                <li>• Fines up to <strong className="text-destructive">₦10,000,000</strong> or 2% of annual gross revenue</li>
-                <li>• NDPC enforcement notice and investigation</li>
-                <li>• Service suspension and public warning</li>
-                <li>• Late CAR filing: 50% administrative penalty on filing fee (GAID Art. 10)</li>
-                {result.riskLevel === "critical" && <li>• Criminal prosecution under the NDP Act 2023</li>}
+                <li>{t('results.consequences.fine')}</li>
+                <li>{t('results.consequences.enforcement')}</li>
+                <li>{t('results.consequences.suspension')}</li>
+                <li>{t('results.consequences.carPenalty')}</li>
+                {result.riskLevel === "critical" && <li>{t('results.consequences.prosecution')}</li>}
               </ul>
             </div>
 
@@ -210,7 +223,7 @@ const RiskResults = ({ result, onReset }: Props) => {
             {sectorProfile && (
               <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
                 <h4 className="font-heading font-semibold text-primary text-sm mb-2">
-                  {sectorProfile.emoji} {sectorProfile.name} Tips
+                  {sectorProfile.emoji} {t(`sectors.${result.sector}.name`)} {t('results.sectorTips')}
                 </h4>
                 <ul className="text-xs text-muted-foreground space-y-1.5">
                   {sectorProfile.tips.map((t, i) => <li key={i}>• {t}</li>)}
@@ -222,7 +235,7 @@ const RiskResults = ({ result, onReset }: Props) => {
             {result.triggeredClauses.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-heading font-semibold text-foreground text-sm">
-                  Triggered Clauses ({result.triggeredClauses.length})
+                  {t('results.triggeredClauses')} ({result.triggeredClauses.length})
                 </h4>
                 {result.triggeredClauses.map((clause, i) => (
                   <div
@@ -248,10 +261,10 @@ const RiskResults = ({ result, onReset }: Props) => {
 
             <div className="flex gap-3">
               <button onClick={() => setActiveStep("analyze")} className="flex-1 py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
-                ← Analyze
+                ← {t('results.backToAnalyze')}
               </button>
               <button onClick={() => setActiveStep("fix")} className="flex-1 py-3 rounded-xl bg-brand-gradient-vivid text-primary-foreground font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 text-sm">
-                Fix It <ChevronRight className="w-4 h-4" />
+                {t('results.fixIt')} <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -264,21 +277,19 @@ const RiskResults = ({ result, onReset }: Props) => {
               storageKey={`regtrack-checklist-${result.appName || "app"}`}
             />
 
-            {/* Resources */}
             <div className="border-t border-border pt-5">
               <ResourcesSidebar />
             </div>
 
-            {/* Download */}
             <button
               onClick={handleDownloadPDF}
               className="w-full py-3.5 rounded-xl bg-brand-gradient text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
-              <Download className="w-4 h-4" /> Download Full Report (PDF)
+              <Download className="w-4 h-4" /> {t('results.downloadFullReport')}
             </button>
 
             <button onClick={() => setActiveStep("understand")} className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
-              ← Back to Impact
+              ← {t('results.backToImpact')}
             </button>
           </div>
         )}
@@ -289,7 +300,7 @@ const RiskResults = ({ result, onReset }: Props) => {
         onClick={onReset}
         className="w-full py-3 rounded-xl border border-border text-muted-foreground font-medium hover:bg-muted/60 active:scale-[0.98] transition-all text-sm"
       >
-        🔄 Scan Another App
+        🔄 {t('results.scanAnother')}
       </button>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import nssLogo from "@/assets/nss-logo.png";
 import { Shield, Menu, X } from "lucide-react";
+import { LanguageSelector } from "./layout/LanguageSelector";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -30,6 +31,7 @@ const Navbar = () => {
         scrolled ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-card" : "bg-transparent"
       }`}>
         <div className="container mx-auto flex items-center justify-between h-16 px-4">
+          {/* Logo Section */}
           <div className="flex items-center gap-2.5">
             <span className="text-lg">🇳🇬</span>
             <img src={nssLogo} alt="Nexus SafeSphere Logo" className="h-9 w-auto" />
@@ -39,7 +41,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop nav */}
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {links.map(l => (
               <button
@@ -50,6 +52,10 @@ const Navbar = () => {
                 {l.label}
               </button>
             ))}
+            
+            {/* Language Selector - NEW */}
+            <LanguageSelector />
+            
             <button
               onClick={() => scrollTo("waitlist")}
               className="ml-2 px-5 py-2.5 rounded-xl bg-brand-gradient text-primary-foreground text-sm font-semibold hover:opacity-90 transition-all duration-200 flex items-center gap-1.5 shadow-glow"
@@ -59,18 +65,23 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile burger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-muted/60 transition-colors text-foreground"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          {/* Mobile Burger */}
+          <div className="flex items-center gap-2 md:hidden">
+            {/* Mobile Language Selector - NEW */}
+            <LanguageSelector />
+            
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 rounded-lg hover:bg-muted/60 transition-colors text-foreground"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </nav>
 
-      {/* Mobile drawer */}
+      {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
         mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       }`}>

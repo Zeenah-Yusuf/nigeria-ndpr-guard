@@ -1,7 +1,16 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
 import { ShieldCheck, ArrowDown, Zap, BadgeCheck } from "lucide-react";
 
 const HeroSection = () => {
+  const { t } = useLanguage();
+
+  const stats = [
+    { value: "52", labelKey: "hero.stats.articles" },
+    { value: "₦10M", labelKey: "hero.stats.maxFine" },
+    { value: "72hrs", labelKey: "hero.stats.breachDeadline" },
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background layers */}
@@ -16,25 +25,27 @@ const HeroSection = () => {
         {/* Badge */}
         <div className="animate-fade-in-up inline-flex items-center gap-2 rounded-full px-5 py-2 mb-4 border" style={{ background: "hsl(180, 40%, 30%, 0.15)", borderColor: "hsl(180, 40%, 40%, 0.3)" }}>
           <ShieldCheck className="w-4 h-4" style={{ color: "hsl(165, 60%, 55%)" }} />
-          <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 70%)" }}>AI-Powered Compliance for Nigerian Startups</span>
+          <span className="text-sm font-medium" style={{ color: "hsl(165, 50%, 70%)" }}>
+            {t('hero.badge')}
+          </span>
         </div>
 
         {/* Trusted badge */}
         <div className="animate-fade-in-up mb-6" style={{ animationDelay: "0.05s" }}>
           <span className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full" style={{ background: "hsl(152, 50%, 35%, 0.2)", color: "hsl(152, 60%, 65%)" }}>
-            <BadgeCheck className="w-3.5 h-3.5" /> Trusted by Nigerian Startups 🇳🇬
+            <BadgeCheck className="w-3.5 h-3.5" /> {t('hero.trusted')}
           </span>
         </div>
 
         {/* Headline */}
         <h1 className="animate-fade-in-up font-heading text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl mx-auto leading-[1.1]" style={{ animationDelay: "0.1s", color: "hsl(0, 0%, 100%)" }}>
-          Avoid NDP Act fines{" "}
-          <span className="text-brand-gradient">before you launch.</span>
+          {t('hero.title.part1')}{" "}
+          <span className="text-brand-gradient">{t('hero.title.part2')}</span>
         </h1>
 
         {/* Subtext */}
         <p className="animate-fade-in-up text-lg md:text-xl max-w-2xl mx-auto mt-6 leading-relaxed" style={{ animationDelay: "0.2s", color: "hsl(215, 15%, 65%)" }}>
-          RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI, the NDP Act 2023, and the GAID 2025 framework.
+          {t('hero.subtitle')}
         </p>
 
         {/* CTAs */}
@@ -44,27 +55,23 @@ const HeroSection = () => {
             className="group px-8 py-4 rounded-2xl bg-brand-gradient-vivid text-primary-foreground font-semibold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 animate-pulse-glow flex items-center gap-2"
           >
             <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            Try the Risk Scanner
+            {t('hero.scanner')}
           </button>
           <button
             onClick={() => document.getElementById("solution")?.scrollIntoView({ behavior: "smooth" })}
             className="px-8 py-4 rounded-2xl border font-semibold text-lg hover:bg-primary/5 transition-all duration-200"
             style={{ borderColor: "hsl(215, 15%, 25%)", color: "hsl(215, 15%, 75%)" }}
           >
-            Learn More
+            {t('hero.learnMore')}
           </button>
         </div>
 
         {/* Stats row */}
         <div className="animate-fade-in-up mt-16 flex flex-wrap items-center justify-center gap-8 md:gap-12" style={{ animationDelay: "0.5s" }}>
-          {[
-            { value: "52", label: "NDP Act GAID Articles" },
-            { value: "₦10M", label: "Max Fine per Breach" },
-            { value: "72hrs", label: "Breach Report Deadline" },
-          ].map(stat => (
-            <div key={stat.label} className="text-center">
+          {stats.map(stat => (
+            <div key={stat.labelKey} className="text-center">
               <p className="text-2xl md:text-3xl font-heading font-bold text-brand-gradient">{stat.value}</p>
-              <p className="text-xs mt-1" style={{ color: "hsl(215, 12%, 50%)" }}>{stat.label}</p>
+              <p className="text-xs mt-1" style={{ color: "hsl(215, 12%, 50%)" }}>{t(stat.labelKey)}</p>
             </div>
           ))}
         </div>
