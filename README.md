@@ -2,7 +2,7 @@
 
 **Built by Nexus SafeSphere for the RegTech Hackathon at AI Skills Week Abuja 2026**
 
-[Live Demo: regtrack.vercel.app](https://regtrack.vercel.app)
+[Live Demo: regtrack.vercel.app](https://nigeria-ndpr-guard.vercel.app)
 
 
 ## About The Project
