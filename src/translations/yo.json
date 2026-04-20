@@ -5,6 +5,10 @@
   
   "nav.home": "Ilé",
   "nav.about": "Nípa Wa",
+  "nav.compliance": "Ìṣòro",
+  "nav.solution": "Ọ̀nà Àbáyọ",
+  "nav.demo": "Àfihàn",
+  "nav.resources": "Àwọn Ohun Èlò",
   
   "hero.title": "Yẹra fún ìtanràn Òfin NDP kí o tó ṣe ìfilọ́lẹ̀.",
   "hero.badge": "Ìbámu Agbára AI fún Àwọn Olùdásílẹ̀ Nàìjíríà",
@@ -220,6 +224,8 @@
   "footer.builtFor": "Ti a Kọ́ fún Nàìjíríà 🇳🇬 pẹ̀lú",
   "footer.madeIn": "Ti a Ṣe ní Abuja",
   "footer.poweredBy": "Agbára AI",
+  "footer.privacy": "Ìlànà Àṣírí",
+  "footer.terms": "Àwọn Ìlànà Iṣẹ́",
   "footer.copyright": "© 2026 RegTrack láti ọwọ́ NSS.",
   "footer.hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
 

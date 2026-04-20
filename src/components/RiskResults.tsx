@@ -7,7 +7,20 @@ import { getSectorById } from "@/lib/sectorRecommendations";
 import RemediationChecklist from "./RemediationChecklist";
 import ResourcesSidebar from "./ResourcesSidebar";
 import ndprData from "@/data/ndpr_dataset.json";
-import { BarChart3, Brain, Wrench, Download, ChevronRight, AlertTriangle, ArrowLeft } from "lucide-react";
+import { 
+  BarChart3, 
+  Brain, 
+  Wrench, 
+  Download, 
+  ChevronRight, 
+  AlertTriangle, 
+  ArrowLeft,
+  Scale,
+  Banknote,
+  RotateCcw,
+  FileText,
+  Shield
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Props {
@@ -18,6 +31,7 @@ interface Props {
 const RiskResults = ({ result, onReset }: Props) => {
   const { t } = useLanguage();
   const [activeStep, setActiveStep] = useState<"analyze" | "understand" | "fix">("analyze");
+  const [currentRiskScore, setCurrentRiskScore] = useState(result.riskScore);
   const { toast } = useToast();
   
   const steps = [
@@ -39,12 +53,16 @@ const RiskResults = ({ result, onReset }: Props) => {
   const sectorProfile = getSectorById(result.sector);
   const questions = ndprData.risk_scanner_questions;
 
+  const handleRiskScoreUpdate = (newScore: number) => {
+    setCurrentRiskScore(newScore);
+  };
+
   const handleDownloadPDF = () => {
     try {
       const checkedRaw = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`) || "{}";
       generateReport({
         appName: result.appName,
-        riskScore: result.riskScore,
+        riskScore: currentRiskScore,
         riskLevel: result.riskLevel,
         explanation: result.explanation,
         questions: questions.map(q => ({ question: q.question, answer: result.answers[q.id] ?? null })),
@@ -67,10 +85,16 @@ const RiskResults = ({ result, onReset }: Props) => {
   };
 
   const stats = [
-    { labelKey: "results.stats.clauses", value: result.triggeredClauses.length, icon: "⚖️" },
-    { labelKey: "results.stats.actions", value: remediationItems.length, icon: "🔧" },
-    { labelKey: "results.stats.maxFine", value: "₦10M", icon: "💰" },
+    { labelKey: "results.stats.clauses", value: result.triggeredClauses.length, icon: Scale },
+    { labelKey: "results.stats.actions", value: remediationItems.length, icon: Wrench },
+    { labelKey: "results.stats.maxFine", value: "₦10M", icon: Banknote },
   ];
+
+  const getScoreDisplayColor = (score: number) => {
+    if (score <= 30) return "text-secondary";
+    if (score <= 60) return "text-accent";
+    return "text-destructive";
+  };
 
   return (
     <div className="animate-fade-in-up space-y-5">
@@ -81,7 +105,7 @@ const RiskResults = ({ result, onReset }: Props) => {
         </button>
         <button
           onClick={handleDownloadPDF}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-gradient text-primary-foreground text-xs font-semibold hover:opacity-90 active:scale-[0.97] transition-all"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 active:scale-[0.97] transition-all"
         >
           <Download className="w-3.5 h-3.5" /> {t('results.downloadPDF')}
         </button>
@@ -97,7 +121,7 @@ const RiskResults = ({ result, onReset }: Props) => {
               key={s.id}
               onClick={() => setActiveStep(s.id)}
               className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                isActive ? "bg-brand-gradient text-primary-foreground shadow-card" : "text-muted-foreground hover:text-foreground"
+                isActive ? "bg-primary text-primary-foreground shadow-card" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <StepIcon className="w-3.5 h-3.5" />
@@ -114,8 +138,8 @@ const RiskResults = ({ result, onReset }: Props) => {
           <div className="space-y-5">
             {/* Animated score gauge */}
             <div className="relative text-center py-8 rounded-2xl bg-gradient-to-br from-card via-card to-muted/40 border border-border shadow-card overflow-hidden">
-              <div className="absolute inset-0 bg-brand-gradient opacity-[0.04] pointer-events-none" />
-              <div className="absolute -top-12 -right-12 w-40 h-40 bg-brand-gradient opacity-10 rounded-full blur-3xl" />
+              <div className="absolute inset-0 bg-primary opacity-[0.04] pointer-events-none" />
+              <div className="absolute -top-12 -right-12 w-40 h-40 bg-primary opacity-10 rounded-full blur-3xl" />
 
               <div className="relative inline-flex items-center justify-center mb-4">
                 <svg className="w-36 h-36 -rotate-90" viewBox="0 0 144 144">
@@ -124,12 +148,14 @@ const RiskResults = ({ result, onReset }: Props) => {
                     cx="72" cy="72" r="62" strokeWidth="10" strokeLinecap="round"
                     className={`fill-none ${cfg.color} transition-all duration-1000 ease-out`}
                     stroke="currentColor"
-                    strokeDasharray={`${(result.riskScore / 100) * 389.56} 389.56`}
+                    strokeDasharray={`${(currentRiskScore / 100) * 389.56} 389.56`}
                     style={{ filter: "drop-shadow(0 0 8px currentColor)" }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className={`text-4xl font-heading font-bold ${cfg.color} tabular-nums`}>{result.riskScore}</span>
+                  <span className={`text-4xl font-heading font-bold ${getScoreDisplayColor(currentRiskScore)} tabular-nums`}>
+                    {currentRiskScore}
+                  </span>
                   <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mt-0.5">/ 100</span>
                 </div>
               </div>
@@ -138,25 +164,40 @@ const RiskResults = ({ result, onReset }: Props) => {
                 {t(cfg.labelKey)}
               </span>
               <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground flex-wrap px-4">
-                <span className="font-medium">📱 {result.appName || t('results.yourApp')}</span>
-                {sectorProfile && <><span>•</span><span>{sectorProfile.emoji} {t(`sectors.${result.sector}.name`)}</span></>}
-                <span>•</span><span>{new Date().toLocaleDateString("en-NG")}</span>
+                <span className="font-medium flex items-center gap-1">
+                  <FileText className="w-3 h-3" />
+                  {result.appName || t('results.yourApp')}
+                </span>
+                {sectorProfile && (
+                  <>
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <Shield className="w-3 h-3" />
+                      {t(`sectors.${result.sector}.name`)}
+                    </span>
+                  </>
+                )}
+                <span>•</span>
+                <span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
             </div>
 
             {/* Quick stats */}
             <div className="grid grid-cols-3 gap-3">
-              {stats.map((s, i) => (
-                <div
-                  key={s.labelKey}
-                  className="rounded-xl border border-border bg-card p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated hover:border-primary/30 cursor-default animate-fade-in-up"
-                  style={{ animationDelay: `${i * 0.08}s` }}
-                >
-                  <span className="text-lg">{s.icon}</span>
-                  <p className="text-lg font-heading font-bold text-foreground mt-1 tabular-nums">{s.value}</p>
-                  <p className="text-[10px] text-muted-foreground">{t(s.labelKey)}</p>
-                </div>
-              ))}
+              {stats.map((s, i) => {
+                const StatIcon = s.icon;
+                return (
+                  <div
+                    key={s.labelKey}
+                    className="rounded-xl border border-border bg-card p-3 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated hover:border-primary/30 cursor-default animate-fade-in-up"
+                    style={{ animationDelay: `${i * 0.08}s` }}
+                  >
+                    <StatIcon className="w-5 h-5 mx-auto text-primary" />
+                    <p className="text-lg font-heading font-bold text-foreground mt-1 tabular-nums">{s.value}</p>
+                    <p className="text-[10px] text-muted-foreground">{t(s.labelKey)}</p>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Answer breakdown */}
@@ -188,7 +229,7 @@ const RiskResults = ({ result, onReset }: Props) => {
 
             <button
               onClick={() => setActiveStep("understand")}
-              className="w-full py-3.5 rounded-xl bg-brand-gradient text-primary-foreground font-semibold hover:opacity-90 hover:shadow-elevated active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+              className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 hover:shadow-elevated active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
             >
               {t('results.understandImpact')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
@@ -222,11 +263,12 @@ const RiskResults = ({ result, onReset }: Props) => {
             {/* Sector tips */}
             {sectorProfile && (
               <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
-                <h4 className="font-heading font-semibold text-primary text-sm mb-2">
-                  {sectorProfile.emoji} {t(`sectors.${result.sector}.name`)} {t('results.sectorTips')}
+                <h4 className="font-heading font-semibold text-primary text-sm mb-2 flex items-center gap-2">
+                  <Shield className="w-4 h-4" />
+                  {t(`sectors.${result.sector}.name`)} {t('results.sectorTips')}
                 </h4>
                 <ul className="text-xs text-muted-foreground space-y-1.5">
-                  {sectorProfile.tips.map((t, i) => <li key={i}>• {t}</li>)}
+                  {sectorProfile.tips.map((t, i) => <li key={i} className="flex items-start gap-1.5"><span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary flex-shrink-0" /> {t}</li>)}
                 </ul>
               </div>
             )}
@@ -244,14 +286,14 @@ const RiskResults = ({ result, onReset }: Props) => {
                     style={{ animationDelay: `${i * 0.06}s` }}
                   >
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-xs font-semibold bg-brand-gradient text-primary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref}</span>
+                      <span className="text-xs font-semibold bg-primary text-primary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref}</span>
                       <span className="text-[10px] text-muted-foreground capitalize">{clause.category.replace("_", " ")}</span>
                     </div>
                     <h5 className="font-heading font-semibold text-foreground text-sm">{clause.title}</h5>
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{clause.summary}</p>
                     {clause.penalty_info && (
                       <p className="text-xs text-destructive mt-1.5 font-medium flex items-center gap-1">
-                        <span>⚠</span> {clause.penalty_info}
+                        <AlertTriangle className="w-3 h-3" /> {clause.penalty_info}
                       </p>
                     )}
                   </div>
@@ -261,9 +303,9 @@ const RiskResults = ({ result, onReset }: Props) => {
 
             <div className="flex gap-3">
               <button onClick={() => setActiveStep("analyze")} className="flex-1 py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
-                ← {t('results.backToAnalyze')}
+                <ArrowLeft className="w-4 h-4 inline mr-1" /> {t('results.backToAnalyze')}
               </button>
-              <button onClick={() => setActiveStep("fix")} className="flex-1 py-3 rounded-xl bg-brand-gradient-vivid text-primary-foreground font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 text-sm">
+              <button onClick={() => setActiveStep("fix")} className="flex-1 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 text-sm">
                 {t('results.fixIt')} <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -275,6 +317,8 @@ const RiskResults = ({ result, onReset }: Props) => {
             <RemediationChecklist
               items={remediationItems}
               storageKey={`regtrack-checklist-${result.appName || "app"}`}
+              initialRiskScore={result.riskScore}
+              onRiskScoreUpdate={handleRiskScoreUpdate}
             />
 
             <div className="border-t border-border pt-5">
@@ -283,13 +327,13 @@ const RiskResults = ({ result, onReset }: Props) => {
 
             <button
               onClick={handleDownloadPDF}
-              className="w-full py-3.5 rounded-xl bg-brand-gradient text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" /> {t('results.downloadFullReport')}
             </button>
 
             <button onClick={() => setActiveStep("understand")} className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
-              ← {t('results.backToImpact')}
+              <ArrowLeft className="w-4 h-4 inline mr-1" /> {t('results.backToImpact')}
             </button>
           </div>
         )}
@@ -300,7 +344,7 @@ const RiskResults = ({ result, onReset }: Props) => {
         onClick={onReset}
         className="w-full py-3 rounded-xl border border-border text-muted-foreground font-medium hover:bg-muted/60 active:scale-[0.98] transition-all text-sm"
       >
-        🔄 {t('results.scanAnother')}
+        <RotateCcw className="w-4 h-4 inline mr-1" /> {t('results.scanAnother')}
       </button>
     </div>
   );

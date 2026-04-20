@@ -5,6 +5,10 @@
   
   "nav.home": "Ụlọ",
   "nav.about": "Banyere Anyị",
+  "nav.compliance": "Nsogbu",
+  "nav.solution": "Ngwọta",
+  "nav.demo": "Nnwale",
+  "nav.resources": "Akụrụngwa",
   
   "hero.title": "Zenarị ntaramahụhụ NDP Act tupu ị malite.",
   "hero.badge": "Nrubeisi Nke AI Maka Ndị Na-emepụta Ihe Na Naịjirịa",
@@ -220,6 +224,8 @@
   "footer.builtFor": "Ewubere Maka Naịjirịa 🇳🇬 na",
   "footer.madeIn": "Emebere na Abuja",
   "footer.poweredBy": "AI Kwadoro",
+  "footer.privacy": "Amụma Nzuzo",
+  "footer.terms": "Usoro Ọrụ",
   "footer.copyright": "© 2026 RegTrack nke NSS.",
   "footer.hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
 

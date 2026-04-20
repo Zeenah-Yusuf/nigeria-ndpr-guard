@@ -5,6 +5,10 @@
   
   "nav.home": "Home",
   "nav.about": "About",
+  "nav.compliance": "Compliance Gap",
+  "nav.solution": "Solution",
+  "nav.demo": "Demo",
+  "nav.resources": "Resources",
   
   "hero.title": "Avoid NDP Act fines before you launch.",
   "hero.badge": "AI-Powered Compliance for Nigerian Startups",
@@ -219,6 +223,8 @@
   "footer.whyBuilt.description": "Built in Abuja by Nigerian founders, for Nigerian regulations. We believe every Naija startup deserves to launch with confidence — knowing their data practices protect both their users and their business. RegTrack exists because compliance shouldn't be a barrier to innovation in Africa's largest tech ecosystem. Powered by the NDP Act 2023, NDPR Implementation Framework, and the GAID 2025.",
   "footer.builtFor": "Built for Naija 🇳🇬 with",
   "footer.madeIn": "Made in Abuja",
+  "footer.privacy": "Privacy Policy",
+  "footer.terms": "Terms of Service",
   "footer.poweredBy": "Powered by AI",
   "footer.hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
   "footer.copyright": "© 2026 RegTrack by NSS.",

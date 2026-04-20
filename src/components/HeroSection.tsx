@@ -1,16 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import heroBg from "@/assets/hero-bg.jpg";
-import { ShieldCheck, ArrowDown, Zap, BadgeCheck } from "lucide-react";
+import { ShieldCheck, ArrowDown, ArrowRight, BadgeCheck } from "lucide-react";
 import { NigeriaFlag } from "./NigeriaFlag";
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const stats = [
     { value: "52", labelKey: "hero.stats.articles" },
     { value: "₦10M", labelKey: "hero.stats.maxFine" },
     { value: "72hrs", labelKey: "hero.stats.breachDeadline" },
   ];
+
+  const scrollToTrust = () => {
+    document.getElementById("trust")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -54,14 +60,14 @@ const HeroSection = () => {
         {/* CTAs */}
         <div className="animate-fade-in-up mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: "0.3s" }}>
           <button
-            onClick={() => document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => navigate("/compliance-gap")}
             className="group px-8 py-4 rounded-2xl bg-brand-gradient-vivid text-primary-foreground font-semibold text-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 animate-pulse-glow flex items-center gap-2"
           >
-            <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
             {t('hero.scanner')}
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
-            onClick={() => document.getElementById("solution")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => navigate("/solution")}
             className="px-8 py-4 rounded-2xl border font-semibold text-lg hover:bg-primary/5 transition-all duration-200"
             style={{ borderColor: "hsl(215, 15%, 25%)", color: "hsl(215, 15%, 75%)" }}
           >
@@ -79,8 +85,15 @@ const HeroSection = () => {
           ))}
         </div>
 
+        {/* Scroll Indicator */}
         <div className="animate-fade-in mt-12" style={{ animationDelay: "0.7s" }}>
-          <ArrowDown className="w-5 h-5 mx-auto animate-bounce" style={{ color: "hsl(215, 12%, 40%)" }} />
+          <button
+            onClick={scrollToTrust}
+            className="group"
+            aria-label="Scroll to learn more"
+          >
+            <ArrowDown className="w-5 h-5 mx-auto animate-bounce" style={{ color: "hsl(215, 12%, 40%)" }} />
+          </button>
         </div>
       </div>
     </section>

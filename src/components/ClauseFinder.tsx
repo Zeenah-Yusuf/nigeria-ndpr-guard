@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ndprData from "@/data/ndpr_dataset.json";
-import { Search, BookOpen } from "lucide-react";
+import { Search, BookOpen, ExternalLink } from "lucide-react";
+import { OptimizedImage } from "./OptimizedImage";
+import clauseFinderImage from "@/assets/clause-finder.png";
 
 const ClauseFinder = () => {
   const { t, language } = useLanguage();
@@ -69,6 +71,15 @@ const ClauseFinder = () => {
 
   return (
     <div className="space-y-5">
+      {/* Header Image */}
+      <div className="rounded-xl overflow-hidden border border-border shadow-card">
+        <OptimizedImage 
+          src={clauseFinderImage} 
+          alt="Search NDP Act and GAID 2025 regulatory framework" 
+          className="w-full h-32 object-cover"
+        />
+      </div>
+
       {/* Search input */}
       <div className="relative">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -138,8 +149,9 @@ const ClauseFinder = () => {
               <h4 className="font-heading font-semibold text-foreground text-sm">{clause.title}</h4>
               <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{clause.summary}</p>
               {clause.penalty_info && (
-                <p className="text-xs text-destructive mt-2 font-medium">
-                  ⚠ {clause.penalty_info}
+                <p className="text-xs text-destructive mt-2 font-medium flex items-center gap-1">
+                  <span className="inline-block w-1 h-1 rounded-full bg-destructive" />
+                  {clause.penalty_info}
                 </p>
               )}
               <div className="flex flex-wrap gap-1 mt-2.5">
@@ -152,6 +164,17 @@ const ClauseFinder = () => {
                     {kw}
                   </span>
                 ))}
+              </div>
+              <div className="mt-3 pt-3 border-t border-border">
+                <a
+                  href={`https://ndpc.gov.ng`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline"
+                >
+                  View official NDPC guidance
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
           ))}

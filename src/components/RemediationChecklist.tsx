@@ -1,14 +1,117 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RemediationItem } from "@/lib/remediationData";
-import { CheckCircle2, Circle, Clock, ExternalLink, AlertTriangle, AlertCircle, Info } from "lucide-react";
+import { 
+  CheckCircle2, 
+  Circle, 
+  Clock, 
+  ExternalLink, 
+  AlertTriangle, 
+  AlertCircle, 
+  Info,
+  User,
+  Mail,
+  MapPin,
+  Shield,
+  Building2,
+  Globe,
+  ChevronRight,
+  Stethoscope,
+  Landmark,
+  GraduationCap,
+  ShoppingBag,
+  Users,
+  Truck,
+  Briefcase
+} from "lucide-react";
 
 interface Props {
   items: RemediationItem[];
   storageKey: string;
+  initialRiskScore: number;
+  userSector?: string;
+  onRiskScoreUpdate?: (newScore: number) => void;
 }
 
-const RemediationChecklist = ({ items, storageKey }: Props) => {
+// Sector-specific compliance officer mapping
+// Currently all map to Precious as placeholder for future scaling
+const getComplianceOfficer = (sector: string) => {
+  const officers: Record<string, {
+    name: string;
+    role: string;
+    email: string;
+    location: string;
+    specialization: string;
+    icon: React.ElementType;
+  }> = {
+    health: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Healthcare Data Protection & NDP Act Compliance",
+      icon: Stethoscope,
+    },
+    fintech: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Financial Services Compliance & DCPMI Registration",
+      icon: Landmark,
+    },
+    edtech: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Educational Data Privacy & Children's Data Protection",
+      icon: GraduationCap,
+    },
+    ecommerce: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Consumer Data Protection & Third-Party Processor Compliance",
+      icon: ShoppingBag,
+    },
+    social: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "User Data Privacy & Consent Management",
+      icon: Users,
+    },
+    logistics: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Operational Data Compliance & Supply Chain Privacy",
+      icon: Truck,
+    },
+    other: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "General NDP Act Compliance & DCPMI Advisory",
+      icon: Briefcase,
+    },
+  };
+  
+  return officers[sector] || officers.other;
+};
+
+const RemediationChecklist = ({ 
+  items, 
+  storageKey, 
+  initialRiskScore,
+  userSector = "other",
+  onRiskScoreUpdate 
+}: Props) => {
   const { t } = useLanguage();
   
   const [checked, setChecked] = useState<Record<string, boolean>>(() => {
@@ -20,14 +123,64 @@ const RemediationChecklist = ({ items, storageKey }: Props) => {
     }
   });
 
+  const [currentRiskScore, setCurrentRiskScore] = useState(initialRiskScore);
+  const [showContactDetails, setShowContactDetails] = useState(false);
+  const [showOfficialResources, setShowOfficialResources] = useState(false);
+
+  const complianceOfficer = getComplianceOfficer(userSector);
+  const OfficerIcon = complianceOfficer.icon;
+
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(checked));
-  }, [checked, storageKey]);
+    
+    const newScore = calculateRiskScore();
+    setCurrentRiskScore(newScore);
+    
+    if (onRiskScoreUpdate) {
+      onRiskScoreUpdate(newScore);
+    }
+  }, [checked, items]);
 
-  const toggle = (id: string) => setChecked(prev => ({ ...prev, [id]: !prev[id] }));
+  const calculateRiskScore = (): number => {
+    if (items.length === 0) return initialRiskScore;
+    
+    const priorityWeights: Record<string, number> = {
+      critical: 15,
+      high: 10,
+      medium: 5,
+    };
+    
+    let totalReduction = 0;
+    const maxPossibleReduction = items.reduce((sum, item) => {
+      return sum + (priorityWeights[item.priority] || 5);
+    }, 0);
+    
+    items.forEach(item => {
+      if (checked[item.id]) {
+        totalReduction += priorityWeights[item.priority] || 5;
+      }
+    });
+    
+    const reductionPercentage = maxPossibleReduction > 0 
+      ? totalReduction / maxPossibleReduction 
+      : 0;
+    const maxAllowedReduction = initialRiskScore * 0.7;
+    const actualReduction = Math.floor(maxAllowedReduction * reductionPercentage);
+    
+    return Math.max(0, Math.min(100, initialRiskScore - actualReduction));
+  };
+
+  const getScoreImprovement = (): number => {
+    return initialRiskScore - currentRiskScore;
+  };
+
+  const toggle = (id: string) => {
+    setChecked(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const completedCount = items.filter(i => checked[i.id]).length;
   const progress = items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0;
+  const scoreImprovement = getScoreImprovement();
 
   const priorityConfig = {
     critical: { 
@@ -71,23 +224,66 @@ const RemediationChecklist = ({ items, storageKey }: Props) => {
     medium: items.filter(i => i.priority === "medium"),
   };
 
+  const officialResources = [
+    {
+      title: "NDPC Official Website",
+      description: "Nigeria Data Protection Commission",
+      url: "https://ndpc.gov.ng",
+      icon: Globe,
+    },
+    {
+      title: "DPCO Directory",
+      description: "Find licensed Data Protection Compliance Organizations",
+      url: "https://ndpc.gov.ng/dpco-directory",
+      icon: Building2,
+    },
+    {
+      title: "NDP Act 2023 Full Text",
+      description: "Official regulatory document",
+      url: "https://ndpc.gov.ng/ndpa-2023",
+      icon: Shield,
+    },
+  ];
+
   return (
     <div className="space-y-5">
-      {/* Progress bar */}
-      <div className="rounded-xl border border-border bg-card p-4">
-        <div className="flex items-center justify-between mb-2">
+      {/* Progress and Score Card */}
+      <div className="rounded-xl border border-border bg-card p-5">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-semibold text-foreground">
             {t('checklist.progress.title')}
           </span>
-          <span className="text-sm font-bold text-brand-gradient">{progress}%</span>
+          <span className="text-sm font-bold text-primary">{progress}%</span>
         </div>
-        <div className="h-2.5 bg-muted rounded-full overflow-hidden">
+        <div className="h-2.5 bg-muted rounded-full overflow-hidden mb-4">
           <div
-            className="h-full bg-brand-gradient rounded-full transition-all duration-700 ease-out"
+            className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
+        
+        {/* Risk Score Tracker */}
+        <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+          <div className="flex items-center gap-2">
+            <Shield className="w-4 h-4 text-primary" />
+            <span className="text-xs font-medium text-foreground">Current Risk Score:</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className={`text-lg font-bold ${
+              currentRiskScore <= 30 ? "text-secondary" :
+              currentRiskScore <= 60 ? "text-accent" : "text-destructive"
+            }`}>
+              {currentRiskScore}
+            </span>
+            {scoreImprovement > 0 && (
+              <span className="text-xs text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
+                Reduced by {scoreImprovement} points
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <p className="text-xs text-muted-foreground mt-3">
           {t('checklist.progress.count')
             .replace('{{completed}}', completedCount.toString())
             .replace('{{total}}', items.length.toString())}
@@ -134,16 +330,16 @@ const RemediationChecklist = ({ items, storageKey }: Props) => {
                     </button>
                     <div className="flex-1 min-w-0">
                       <h5 className={`font-heading font-semibold text-sm ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>
-                        {t(`checklist.items.${item.id}.title`, item.title)}
+                        {t(`checklist.items.${item.id}.title`)}
                       </h5>
                       <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                        {t(`checklist.items.${item.id}.description`, item.description)}
+                        {t(`checklist.items.${item.id}.description`)}
                       </p>
 
                       {/* Meta */}
                       <div className="flex flex-wrap items-center gap-2 mt-2.5">
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${difficultyColors[item.difficulty]}`}>
-                          {t(difficultyConfig[item.difficulty]?.labelKey || item.difficulty)}
+                          {t(difficultyConfig[item.difficulty]?.labelKey)}
                         </span>
                         <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                           <Clock className="w-3 h-3" /> {item.timeEstimate}
@@ -153,9 +349,9 @@ const RemediationChecklist = ({ items, storageKey }: Props) => {
                       {/* Resources */}
                       {item.resources.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2.5">
-                          {item.resources.map(r => (
+                          {item.resources.map((r, idx) => (
                             <a
-                              key={r.url}
+                              key={idx}
                               href={r.url}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -174,6 +370,123 @@ const RemediationChecklist = ({ items, storageKey }: Props) => {
           </div>
         );
       })}
+
+      {/* Sector-Specific Compliance Officer */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <button
+          onClick={() => setShowContactDetails(!showContactDetails)}
+          className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              Your Compliance Specialist
+            </span>
+          </div>
+          <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${showContactDetails ? "rotate-90" : ""}`} />
+        </button>
+        
+        {showContactDetails && (
+          <div className="p-4 pt-0 border-t border-border">
+            <p className="text-xs text-muted-foreground mb-4">
+              Based on your sector, we recommend connecting with:
+            </p>
+            
+            <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <OfficerIcon className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h6 className="font-heading font-semibold text-foreground">
+                    {complianceOfficer.name}
+                  </h6>
+                  <p className="text-xs text-primary mb-1">
+                    {complianceOfficer.role}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground mb-3">
+                    Specialization: {complianceOfficer.specialization}
+                  </p>
+                  
+                  <div className="space-y-2">
+                    <a
+                      href={`mailto:${complianceOfficer.email}`}
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <Mail className="w-4 h-4" />
+                      {complianceOfficer.email}
+                    </a>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="w-4 h-4" />
+                      {complianceOfficer.location}
+                    </div>
+                  </div>
+                  
+                  <p className="text-[10px] text-muted-foreground mt-3 pt-3 border-t border-border">
+                    Part of Nexus SafeSphere — Building compliance tools for Nigerian founders.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <p className="text-[10px] text-muted-foreground mt-3 text-center">
+              As we scale, sector-specific compliance officers will be available. 
+              For now, Precious is your dedicated point of contact.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Official NDPC Resources */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <button
+          onClick={() => setShowOfficialResources(!showOfficialResources)}
+          className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              Official NDPC Resources
+            </span>
+          </div>
+          <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${showOfficialResources ? "rotate-90" : ""}`} />
+        </button>
+        
+        {showOfficialResources && (
+          <div className="p-4 pt-0 border-t border-border space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Access official resources from the Nigeria Data Protection Commission:
+            </p>
+            
+            {officialResources.map((resource, index) => (
+              <a
+                key={index}
+                href={resource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-3 rounded-lg bg-muted/30 border border-border hover:bg-muted/50 hover:border-primary/30 transition-all group"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <resource.icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h6 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {resource.title}
+                    </h6>
+                    <p className="text-xs text-muted-foreground">{resource.description}</p>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+              </a>
+            ))}
+            
+            <p className="text-[10px] text-muted-foreground text-center pt-2">
+              Always verify compliance requirements with official NDPC guidance.
+            </p>
+          </div>
+        )}
+      </div>
 
       {items.length === 0 && (
         <div className="text-center py-8">

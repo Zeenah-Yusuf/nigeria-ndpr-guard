@@ -5,6 +5,10 @@
   
   "nav.home": "Gida",
   "nav.about": "Game Da Mu",
+  "nav.compliance": "Matsalar",
+  "nav.solution": "Mafita",
+  "nav.demo": "Gwaji",
+  "nav.resources": "Albarkatu",
   
   "hero.title": "Ka guje wa tarar NDP Act kafin ka ƙaddamar.",
   "hero.badge": "Tsaro Mai Amfani da AI ga Masu Ƙirƙira a Najeriya",
@@ -220,6 +224,8 @@
   "footer.builtFor": "An Gina Don Najeriya 🇳🇬 da",
   "footer.madeIn": "An Yi a Abuja",
   "footer.poweredBy": "Ana Amfani da AI",
+  "footer.privacy": "Manufar Sirri",
+  "footer.terms": "Sharuddan Sabis",
   "footer.copyright": "© 2026 RegTrack ta NSS.",
   "footer.hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
 
