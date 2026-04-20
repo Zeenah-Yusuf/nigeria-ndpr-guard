@@ -10,6 +10,7 @@ import Demo from "./pages/Demo";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Regulator from "./pages/Regulator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/regulator" element={<Regulator />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </TooltipProvider>

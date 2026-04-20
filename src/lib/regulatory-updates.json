@@ -1,0 +1,152 @@
+{
+  "metadata": {
+    "last_synced": "2026-04-20T08:00:00Z",
+    "sync_frequency": "daily",
+    "total_updates": 4,
+    "sources": ["NDPC", "CBN", "NITDA"],
+    "version": "1.0",
+    "disclaimer": "This is a demonstration feed showing RegTrack's real-time regulatory monitoring capability. All updates reference actual regulatory developments."
+  },
+  "updates": [
+    {
+      "id": "gaid-2025-effective",
+      "title": "GAID 2025 Now Effective: New Compliance Obligations for DCPMIs",
+      "agency": "Nigeria Data Protection Commission",
+      "agency_code": "NDPC",
+      "date": "2025-09-19",
+      "effective_date": "2025-09-19",
+      "summary": "The General Application and Implementation Directive (GAID) 2025 is now in effect. It operationalizes the NDP Act 2023 with detailed requirements for DCPMI registration, compliance audit returns, data protection impact assessments, and breach notification procedures.",
+      "full_text_url": "https://ndpc.gov.ng/gaid-2025",
+      "impact_level": "high",
+      "categories": ["compliance", "registration", "dcpmi"],
+      "affected_frameworks": ["ndpa-2023"],
+      "affected_sections": ["44", "32", "28", "40"],
+      "changes": [
+        {
+          "type": "implementation",
+          "section": "GAID 2025",
+          "before": "NDP Act 2023 without operational directive",
+          "after": "Comprehensive implementation framework with specific compliance deadlines"
+        }
+      ],
+      "compliance_actions": [
+        "Review DCPMI classification thresholds (UHL: >10,000 data subjects or sensitive data)",
+        "Prepare for annual Compliance Audit Returns filing by March 31st",
+        "Engage licensed DPCO for compliance audit certification",
+        "Update breach response procedures per GAID specifications"
+      ],
+      "official_reference": "NDPC issued GAID 2025 on September 19, 2025, effective immediately"
+    },
+    {
+      "id": "cbn-aml-cft-2022",
+      "title": "CBN AML/CFT Regulations 2022 - Full Implementation Required",
+      "agency": "Central Bank of Nigeria",
+      "agency_code": "CBN",
+      "date": "2022-11-01",
+      "effective_date": "2022-11-01",
+      "summary": "The CBN AML/CFT Regulations for Banks and Other Financial Institutions in Nigeria, 2022, issued under the Money Laundering (Prevention and Prohibition) Act 2022, require enhanced customer due diligence, suspicious transaction reporting to NFIU within 24 hours, enterprise-wide risk assessments, and independent compliance audits.",
+      "full_text_url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf",
+      "impact_level": "high",
+      "categories": ["aml", "cft", "compliance"],
+      "affected_frameworks": ["cbn-aml-2022"],
+      "affected_sections": ["6", "7", "14", "4", "20", "18", "23", "19"],
+      "changes": [
+        {
+          "type": "new_regulation",
+          "section": "Multiple",
+          "before": "Previous AML/CFT Regulations 2013",
+          "after": "Enhanced AML/CFT Regulations 2022 with stricter requirements"
+        }
+      ],
+      "compliance_actions": [
+        "Implement Customer Due Diligence with BVN/NIN verification",
+        "Establish 24-hour STR reporting to NFIU",
+        "Conduct enterprise-wide AML/CFT risk assessment",
+        "Appoint designated AML/CFT Compliance Officer",
+        "Maintain transaction records for minimum 5 years"
+      ],
+      "official_reference": "CBN AML/CFT Regulations 2022, issued pursuant to Money Laundering (Prevention and Prohibition) Act 2022"
+    },
+    {
+      "id": "ndpc-ai-guidance",
+      "title": "NDPC Guidance on AI and Automated Decision-Making Under Development",
+      "agency": "Nigeria Data Protection Commission",
+      "agency_code": "NDPC",
+      "date": "2025-11-10",
+      "effective_date": "Pending",
+      "summary": "NDPC has announced it is developing comprehensive guidance on the application of Section 37 of the NDP Act 2023 regarding automated decision-making and AI systems. The guidance will address transparency, human intervention, and explainability requirements for AI-driven decisions affecting data subjects.",
+      "full_text_url": "https://ndpc.gov.ng",
+      "impact_level": "medium",
+      "categories": ["ai", "automation", "guidance"],
+      "affected_frameworks": ["ndpa-2023"],
+      "affected_sections": ["37", "28"],
+      "changes": [
+        {
+          "type": "anticipated",
+          "section": "Section 37",
+          "before": "General right not to be subject to automated decisions",
+          "after": "Specific guidance on meaningful human intervention and explainability expected"
+        }
+      ],
+      "compliance_actions": [
+        "Monitor NDPC website for published AI guidance",
+        "Document current AI decision-making processes",
+        "Prepare to implement human review options for automated decisions",
+        "Review privacy policies for AI disclosure requirements"
+      ],
+      "official_reference": "NDPC announced AI guidance development at stakeholder engagement on November 10, 2025"
+    },
+    {
+      "id": "ndpa-2023-effective",
+      "title": "NDP Act 2023 - Full Legal Framework for Nigerian Data Protection",
+      "agency": "Nigeria Data Protection Commission",
+      "agency_code": "NDPC",
+      "date": "2023-06-12",
+      "effective_date": "2023-06-12",
+      "summary": "The Nigeria Data Protection Act 2023 establishes the legal framework for data protection in Nigeria, creating the NDPC as the independent regulatory authority. Key provisions include lawful basis for processing, consent requirements, data subject rights, DPO appointment, breach notification, and DCPMI registration.",
+      "full_text_url": "https://ndpc.gov.ng/ndpa-2023",
+      "impact_level": "high",
+      "categories": ["legislation", "data-protection"],
+      "affected_frameworks": ["ndpa-2023"],
+      "affected_sections": ["All"],
+      "changes": [
+        {
+          "type": "new_legislation",
+          "section": "Entire Act",
+          "before": "NDPR 2019 (subsidiary regulation)",
+          "after": "NDP Act 2023 (primary legislation with enhanced enforcement powers)"
+        }
+      ],
+      "compliance_actions": [
+        "Understand lawful bases for processing (Section 25)",
+        "Implement consent mechanisms meeting Section 26 requirements",
+        "Publish privacy policy per Section 27",
+        "Determine DCPMI status and registration requirements",
+        "Establish 72-hour breach notification procedures"
+      ],
+      "official_reference": "NDP Act 2023 signed into law June 12, 2023"
+    }
+  ],
+  "affected_controls_summary": {
+    "total_affected": 14,
+    "by_priority": {
+      "critical": 6,
+      "high": 6,
+      "medium": 2
+    },
+    "by_status": {
+      "compliant": 0,
+      "at_risk": 6,
+      "non_compliant": 8
+    },
+    "note": "This summary reflects a typical Nigerian startup's compliance posture before implementing remediation measures"
+  },
+  "subscription_info": {
+    "available_via_api": true,
+    "api_endpoint": "/api/regulatory-updates",
+    "webhook_supported": true,
+    "rss_feed": "https://nigeria-ndpr-guard.vercel.app/updates.rss",
+    "email_digest": "weekly",
+    "demo_note": "This is a demonstration feed. In production, RegTrack would consume real-time updates from official NDPC, CBN, and NITDA sources."
+  }
+}

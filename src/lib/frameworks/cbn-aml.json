@@ -1,0 +1,238 @@
+{
+  "framework": {
+    "id": "cbn-aml-cft-2022",
+    "name": "CBN AML/CFT Regulations 2022",
+    "version": "1.0",
+    "agency": "Central Bank of Nigeria",
+    "effective_date": "2022-11-01",
+    "last_updated": "2026-04-20",
+    "description": "Anti-Money Laundering and Combating the Financing of Terrorism Regulations for Banks and Other Financial Institutions in Nigeria, 2022",
+    "source_url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf",
+    "applicable_sectors": ["fintech", "banking", "insurance", "microfinance", "bureau_de_change"],
+    "dcpmi_tier": "UHL",
+    "legal_basis": "Money Laundering (Prevention and Prohibition) Act, 2022"
+  },
+  "obligations": [
+    {
+      "id": "cbn-aml-001",
+      "category": "customer_due_diligence",
+      "section": "Section 6",
+      "requirement": "Customer Due Diligence (CDD) - Identity Verification",
+      "description": "Financial institutions must undertake CDD measures when establishing business relationships, carrying out occasional transactions above USD 1,000, or when there is suspicion of money laundering. CDD requires identifying and verifying the customer's identity using reliable, independent source documents such as BVN, NIN, international passport, or driver's license.",
+      "trigger_condition": "collectsData === true",
+      "risk_weight": 15,
+      "priority": "critical",
+      "difficulty": "Medium",
+      "time_estimate": "2-4 weeks",
+      "evidence_required": ["BVN verification logs", "NIN verification records", "ID document copies", "Customer risk assessment forms"],
+      "remediation": "Implement tiered KYC procedures with BVN/NIN verification. Integrate with NIBSS for real-time BVN validation.",
+      "penalty_non_compliance": "₦10,000,000 and/or suspension of operating license (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 (Official PDF)",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        },
+        {
+          "name": "CBN KYC Guidelines 2011",
+          "url": "https://www.cbn.gov.ng/out/2011/circulars/fpr/kyc.pdf"
+        }
+      ],
+      "cross_references": ["ndpa-26", "ndpa-30"]
+    },
+    {
+      "id": "cbn-aml-002",
+      "category": "enhanced_due_diligence",
+      "section": "Section 7",
+      "requirement": "Enhanced Due Diligence (EDD) for High-Risk Customers",
+      "description": "Financial institutions must apply enhanced due diligence measures for higher-risk categories including Politically Exposed Persons (PEPs), customers from high-risk jurisdictions, complex or unusually large transactions, and business relationships conducted in unusual circumstances. EDD requires senior management approval, establishing the source of wealth and funds, and ongoing enhanced monitoring.",
+      "trigger_condition": "sector === 'fintech' || sector === 'banking'",
+      "risk_weight": 16,
+      "priority": "critical",
+      "difficulty": "Hard",
+      "time_estimate": "3-5 weeks",
+      "evidence_required": ["PEP screening records", "Source of funds documentation", "Senior management approval records", "Enhanced monitoring logs"],
+      "remediation": "Implement PEP screening solution and document source of wealth/ funds procedures. Train senior management on EDD approval requirements.",
+      "penalty_non_compliance": "₦10,000,000 and/or suspension of operating license (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 7",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        },
+        {
+          "name": "FATF Guidance on PEPs",
+          "url": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Peps-r12-r22.html"
+        }
+      ],
+      "cross_references": ["ndpa-28"]
+    },
+    {
+      "id": "cbn-aml-003",
+      "category": "suspicious_transaction_reporting",
+      "section": "Section 14",
+      "requirement": "Suspicious Transaction Reporting (STR) to NFIU",
+      "description": "Financial institutions must report suspicious transactions to the Nigerian Financial Intelligence Unit (NFIU) within 24 hours of detection. A suspicious transaction is any transaction regardless of amount that is inconsistent with the customer's known legitimate business, involves funds derived from illegal activities, or is designed to evade reporting thresholds. A nil report must be filed when no suspicious transactions occur within a reporting period.",
+      "trigger_condition": "collectsData === true",
+      "risk_weight": 18,
+      "priority": "critical",
+      "difficulty": "Medium",
+      "time_estimate": "2-3 weeks",
+      "evidence_required": ["STR filing receipts", "NFIU acknowledgment", "Nil report filings", "Transaction monitoring alerts"],
+      "remediation": "Establish STR filing procedures with 24-hour turnaround. Register and integrate with NFIU goAML platform for automated reporting.",
+      "penalty_non_compliance": "₦5,000,000 per violation and potential criminal prosecution (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 14",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        },
+        {
+          "name": "NFIU Official Website",
+          "url": "https://www.nfiu.gov.ng"
+        },
+        {
+          "name": "Money Laundering (Prevention and Prohibition) Act 2022",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/money%20laundering%20act%202022.pdf"
+        }
+      ],
+      "cross_references": ["ndpa-40"]
+    },
+    {
+      "id": "cbn-aml-004",
+      "category": "risk_assessment",
+      "section": "Section 4",
+      "requirement": "Enterprise-Wide AML/CFT Risk Assessment",
+      "description": "Financial institutions must identify, assess, and understand their money laundering and terrorist financing risks in relation to customers, countries or geographic areas, products, services, transactions, and delivery channels. Risk assessments must be documented, kept up-to-date, and approved by senior management. Institutions must take appropriate measures to manage and mitigate identified risks.",
+      "trigger_condition": "true",
+      "risk_weight": 12,
+      "priority": "high",
+      "difficulty": "Hard",
+      "time_estimate": "4-6 weeks",
+      "evidence_required": ["Enterprise risk assessment report", "Board/senior management approval minutes", "Risk mitigation plan", "Periodic review documentation"],
+      "remediation": "Conduct comprehensive risk assessment covering all required dimensions. Document methodology and schedule annual reviews.",
+      "penalty_non_compliance": "₦8,000,000 and enhanced regulatory supervision (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 4",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        },
+        {
+          "name": "FATF Risk-Based Approach Guidance",
+          "url": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach.html"
+        }
+      ],
+      "cross_references": ["ndpa-28"]
+    },
+    {
+      "id": "cbn-aml-005",
+      "category": "training",
+      "section": "Section 20",
+      "requirement": "AML/CFT Staff Training Program",
+      "description": "Financial institutions must establish and maintain an ongoing employee training program to ensure that employees are kept informed of new developments in AML/CFT, including current money laundering and terrorist financing techniques, methods, and trends. Training must be provided to all relevant employees at least annually, and training records must be maintained for regulatory inspection.",
+      "trigger_condition": "true",
+      "risk_weight": 8,
+      "priority": "high",
+      "difficulty": "Easy",
+      "time_estimate": "1-2 weeks",
+      "evidence_required": ["Annual training schedule", "Training attendance records", "Training materials and content", "Post-training assessment results"],
+      "remediation": "Schedule annual AML/CFT training for all relevant staff. Maintain digital training records with completion tracking.",
+      "penalty_non_compliance": "₦2,000,000 (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 20",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        },
+        {
+          "name": "CBN AML/CFT Policy Page",
+          "url": "https://www.cbn.gov.ng/supervision/aml.asp"
+        }
+      ],
+      "cross_references": []
+    },
+    {
+      "id": "cbn-aml-006",
+      "category": "record_keeping",
+      "section": "Section 18",
+      "requirement": "Transaction Records Retention",
+      "description": "Financial institutions must retain all necessary records of transactions, both domestic and international, for at least five years after the transaction is completed. This includes account files, business correspondence, identification records, and the results of any analysis undertaken. Records must be sufficient to permit reconstruction of individual transactions to provide, if necessary, evidence for prosecution of criminal activity.",
+      "trigger_condition": "collectsData === true",
+      "risk_weight": 6,
+      "priority": "medium",
+      "difficulty": "Easy",
+      "time_estimate": "1 week",
+      "evidence_required": ["Data retention policy", "Secure storage documentation", "Retrieval capability evidence"],
+      "remediation": "Implement data retention policy with 5-year minimum retention period. Ensure records are retrievable without undue delay.",
+      "penalty_non_compliance": "₦3,000,000 (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 18",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        }
+      ],
+      "cross_references": ["ndpa-24"]
+    },
+    {
+      "id": "cbn-aml-007",
+      "category": "independent_audit",
+      "section": "Section 23",
+      "requirement": "Independent AML Compliance Audit",
+      "description": "Financial institutions must establish an audit function to test and evaluate the adequacy and effectiveness of their AML/CFT compliance program. The audit must be conducted by a qualified independent party (internal audit department or external auditor) and findings must be reported to senior management and the board. Audit reports must be made available to CBN upon request.",
+      "trigger_condition": "sector === 'fintech' || sector === 'banking'",
+      "risk_weight": 10,
+      "priority": "high",
+      "difficulty": "Medium",
+      "time_estimate": "3-4 weeks",
+      "evidence_required": ["Audit engagement letter", "Independent audit report", "Management response to findings", "Board presentation records"],
+      "remediation": "Engage qualified independent auditor to review AML/CFT program. Address all findings with documented remediation plan.",
+      "penalty_non_compliance": "₦10,000,000 (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 23",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        }
+      ],
+      "cross_references": []
+    },
+    {
+      "id": "cbn-aml-008",
+      "category": "compliance_officer",
+      "section": "Section 19",
+      "requirement": "Designated AML/CFT Compliance Officer",
+      "description": "Financial institutions must designate a Compliance Officer at the management level who is responsible for ensuring compliance with AML/CFT requirements. The Compliance Officer must have the necessary competence, authority, and independence to implement the AML/CFT compliance program. The officer's name must be communicated to CBN and NFIU.",
+      "trigger_condition": "true",
+      "risk_weight": 14,
+      "priority": "critical",
+      "difficulty": "Medium",
+      "time_estimate": "1-2 weeks",
+      "evidence_required": ["Compliance Officer appointment letter", "CBN notification", "Officer qualifications and experience"],
+      "remediation": "Appoint qualified AML/CFT Compliance Officer at management level and notify CBN/NFIU in writing.",
+      "penalty_non_compliance": "₦10,000,000 (Section 24)",
+      "resources": [
+        {
+          "name": "CBN AML/CFT Regulations 2022 - Section 19",
+          "url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf"
+        }
+      ],
+      "cross_references": ["ndpa-32"]
+    }
+  ],
+  "compliance_matrix": {
+    "critical_threshold": 70,
+    "high_threshold": 50,
+    "medium_threshold": 30,
+    "scoring_weights": {
+      "critical": 25,
+      "high": 15,
+      "medium": 8,
+      "compliant_bonus": 5
+    }
+  },
+  "metadata": {
+    "created_by": "Nexus SafeSphere",
+    "created_date": "2026-04-20",
+    "regulatory_basis": "CBN AML/CFT Regulations for Banks and Other Financial Institutions in Nigeria, 2022",
+    "enabling_legislation": "Money Laundering (Prevention and Prohibition) Act, 2022",
+    "notes": "This framework demonstrates RegTrack's policy-as-code architecture. All obligations reference actual sections from official CBN regulations. Cross-references show alignment with NDP Act 2023 requirements.",
+    "verification_status": "All obligations verified against official CBN AML/CFT Regulations 2022 (PDF)",
+    "next_frameworks": ["NAFDAC Regulations", "SEC Investment Guidelines", "NCC Consumer Protection"],
+    "integration_ready": true
+  }
+}

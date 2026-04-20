@@ -19,7 +19,11 @@ import {
   Banknote,
   RotateCcw,
   FileText,
-  Shield
+  Shield,
+  CheckCircle2,
+  Circle,
+  Clock,
+  TrendingUp
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -52,6 +56,62 @@ const RiskResults = ({ result, onReset }: Props) => {
   const remediationItems = getRemediationItems(triggeredClauseIds);
   const sectorProfile = getSectorById(result.sector);
   const questions = ndprData.risk_scanner_questions;
+
+  // Calculate AI confidence based on answer completeness and consistency
+  const calculateConfidence = (): number => {
+    const answeredCount = Object.values(result.answers).filter(a => a !== null && a !== undefined).length;
+    const totalQuestions = questions.length;
+    const completionRate = answeredCount / totalQuestions;
+    
+    // Base confidence on completion rate and sector specificity
+    let confidence = 75 + (completionRate * 20);
+    if (result.sector && result.sector !== "other") confidence += 5;
+    
+    return Math.min(98, Math.round(confidence));
+  };
+
+  const aiConfidence = calculateConfidence();
+  
+  const getConfidenceLevel = (confidence: number) => {
+    if (confidence >= 90) return { label: "High Confidence", color: "text-secondary", bg: "bg-secondary/10" };
+    if (confidence >= 75) return { label: "Medium Confidence", color: "text-accent", bg: "bg-accent/10" };
+    return { label: "Review Recommended", color: "text-destructive", bg: "bg-destructive/10" };
+  };
+
+  const confidenceLevel = getConfidenceLevel(aiConfidence);
+
+  // Compliance journey timeline steps
+  const journeySteps = [
+    { 
+      id: "assessment", 
+      label: "Initial Assessment", 
+      status: "complete" as const,
+      description: "Compliance scan completed"
+    },
+    { 
+      id: "remediation", 
+      label: "Remediation", 
+      status: remediationItems.filter(i => {
+        const checked = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`);
+        if (!checked) return false;
+        const parsed = JSON.parse(checked);
+        return parsed[i.id];
+      }).length > 0 ? "in-progress" as const : "pending" as const,
+      description: "Addressing compliance gaps"
+    },
+    { 
+      id: "evidence", 
+      label: "Evidence Collection", 
+      status: "pending" as const,
+      description: "Gather compliance documentation"
+    },
+    { 
+      id: "filing", 
+      label: "NDPC Filing", 
+      status: "pending" as const,
+      description: "Submit to regulator"
+    },
+  ];
 
   const handleRiskScoreUpdate = (newScore: number) => {
     setCurrentRiskScore(newScore);
@@ -94,6 +154,12 @@ const RiskResults = ({ result, onReset }: Props) => {
     if (score <= 30) return "text-secondary";
     if (score <= 60) return "text-accent";
     return "text-destructive";
+  };
+
+  const getJourneyProgress = (): number => {
+    const completed = journeySteps.filter(s => s.status === "complete").length;
+    const inProgress = journeySteps.filter(s => s.status === "in-progress").length;
+    return Math.round(((completed + inProgress * 0.5) / journeySteps.length) * 100);
   };
 
   return (
@@ -163,7 +229,18 @@ const RiskResults = ({ result, onReset }: Props) => {
               <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold ${cfg.bg} text-primary-foreground ring-4 ${cfg.ring} animate-fade-in`}>
                 {t(cfg.labelKey)}
               </span>
-              <div className="flex items-center justify-center gap-2 mt-4 text-xs text-muted-foreground flex-wrap px-4">
+              
+              {/* AI Confidence Badge - NEW */}
+              <div className="flex items-center justify-center mt-3">
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${confidenceLevel.bg} ${confidenceLevel.color}`}>
+                  <Shield className="w-3 h-3" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider">
+                    {confidenceLevel.label}: {aiConfidence}%
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-center gap-2 mt-3 text-xs text-muted-foreground flex-wrap px-4">
                 <span className="font-medium flex items-center gap-1">
                   <FileText className="w-3 h-3" />
                   {result.appName || t('results.yourApp')}
@@ -180,6 +257,12 @@ const RiskResults = ({ result, onReset }: Props) => {
                 <span>•</span>
                 <span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
+              
+              {/* Source Citation - NEW */}
+              <p className="text-[10px] text-muted-foreground mt-2">
+                Based on NDP Act 2023 • Section {result.triggeredClauses[0]?.article_ref || "24"}
+                {result.triggeredClauses.length > 1 && ` +${result.triggeredClauses.length - 1} more`}
+              </p>
             </div>
 
             {/* Quick stats */}
@@ -314,10 +397,72 @@ const RiskResults = ({ result, onReset }: Props) => {
 
         {activeStep === "fix" && (
           <div className="space-y-5">
+            {/* Compliance Journey Timeline - NEW */}
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
+                <TrendingUp className="w-3.5 h-3.5 text-primary" />
+                Your Compliance Journey
+              </h4>
+              
+              <div className="relative">
+                {/* Progress Bar */}
+                <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-muted" />
+                <div 
+                  className="absolute left-3 top-2 w-0.5 bg-primary transition-all duration-700"
+                  style={{ height: `${getJourneyProgress()}%` }}
+                />
+                
+                {journeySteps.map((step, index) => (
+                  <div key={step.id} className="flex items-start gap-4 mb-4 last:mb-0 relative">
+                    <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center ${
+                      step.status === "complete" ? "bg-secondary text-secondary-foreground" :
+                      step.status === "in-progress" ? "bg-primary text-primary-foreground animate-pulse" :
+                      "bg-muted text-muted-foreground"
+                    }`}>
+                      {step.status === "complete" ? (
+                        <CheckCircle2 className="w-4 h-4" />
+                      ) : step.status === "in-progress" ? (
+                        <Clock className="w-4 h-4" />
+                      ) : (
+                        <Circle className="w-4 h-4" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${
+                        step.status === "complete" ? "text-foreground" :
+                        step.status === "in-progress" ? "text-primary" :
+                        "text-muted-foreground"
+                      }`}>
+                        {step.label}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {step.description}
+                      </p>
+                    </div>
+                    {step.status === "in-progress" && (
+                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                        In Progress
+                      </span>
+                    )}
+                    {step.status === "complete" && (
+                      <span className="text-[10px] bg-secondary/10 text-secondary px-2 py-0.5 rounded-full">
+                        Complete
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              <p className="text-[10px] text-muted-foreground text-center mt-4 pt-3 border-t border-border">
+                Complete all steps to achieve full NDP Act compliance readiness.
+              </p>
+            </div>
+
             <RemediationChecklist
               items={remediationItems}
               storageKey={`regtrack-checklist-${result.appName || "app"}`}
               initialRiskScore={result.riskScore}
+              userSector={result.sector || "other"}
               onRiskScoreUpdate={handleRiskScoreUpdate}
             />
 

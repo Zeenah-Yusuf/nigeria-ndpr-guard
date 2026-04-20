@@ -26,6 +26,7 @@ const Navbar = () => {
     { label: "Solution", path: "/solution" },
     { label: "Demo", path: "/demo" },
     { label: "About", path: "/about" },
+    { label: "Regulator", path: "/regulator" },
   ];
 
   const handleWaitlistClick = () => {

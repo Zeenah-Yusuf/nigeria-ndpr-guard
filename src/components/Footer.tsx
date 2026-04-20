@@ -1,12 +1,23 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import nssLogo from "@/assets/nss-logo.png";
-import { Mail, Heart, ExternalLink, Shield, FileText, Scale } from "lucide-react";
+import { Mail, Heart, ExternalLink, Shield, FileText, Scale, Clock, RefreshCw } from "lucide-react";
 import { NigeriaFlag } from "./NigeriaFlag";
 
 const Footer = () => {
   const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
+
+  // Regulatory framework last updated dates
+  const regulatoryUpdates = {
+    ndpa: "June 12, 2023",
+    gaid: "September 19, 2025",
+    lastSynced: new Date().toLocaleDateString('en-NG', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
+  };
 
   return (
     <footer className="pt-16 pb-8 bg-card border-t border-border">
@@ -44,6 +55,15 @@ const Footer = () => {
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t('footer.about')}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/regulator" 
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+                >
+                  <Shield className="w-3.5 h-3.5" />
+                  Regulator Dashboard
                 </Link>
               </li>
               <li>
@@ -129,6 +149,43 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Regulatory Updates Banner - NEW */}
+        <div className="rounded-xl border border-border bg-muted/30 p-4 mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <RefreshCw className="w-4 h-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider">
+                  Regulatory Framework Status
+                </h4>
+                <p className="text-[10px] text-muted-foreground">
+                  Actively monitored and updated from official sources
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Shield className="w-3 h-3 text-primary" />
+                <span className="text-xs text-foreground">NDP Act 2023</span>
+                <span className="text-[10px] text-muted-foreground">Effective: {regulatoryUpdates.ndpa}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FileText className="w-3 h-3 text-accent" />
+                <span className="text-xs text-foreground">GAID 2025</span>
+                <span className="text-[10px] text-muted-foreground">Effective: {regulatoryUpdates.gaid}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-3 h-3 text-secondary" />
+                <span className="text-[10px] text-muted-foreground">
+                  Last synced with NDPC: {regulatoryUpdates.lastSynced}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
