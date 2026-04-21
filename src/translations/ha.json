@@ -31,16 +31,76 @@
   "scanner.progress.answered": "{{current}} cikin {{total}} an amsa",
   "scanner.appName.label": "Me kake ginawa?",
   "scanner.appName.placeholder": "misali, Manhajar bin al'ada",
+  "scanner.appName.cbnLabel": "Menene sabis ɗin kuɗin ku?",
+  "scanner.appName.cbnPlaceholder": "misali, Dandalin sarrafa biyan kuɗi",
   "scanner.sector.keyRisks": "Manyan Hadarurruka",
-  "scanner.feedback.lowers": "Yana rage makin hadarinka",
-  "scanner.feedback.increases": "Yana ƙara makin hadarinka",
-  "scanner.calculate": "Ƙididdige Makin Hadari",
+  "scanner.feedback.lowers": "↓ Yana rage makin hadarinka",
+  "scanner.feedback.increases": "↑ Yana ƙara makin hadarinka",
+  "scanner.calculate": "Ƙididdige Makin Hadarin NDP Act",
+  "scanner.calculateCbn": "Ƙididdige Makin Hadarin CBN AML",
   "scanner.analyzing": "Ana Nazari...",
-  "scanner.explanation.low": "\"{{appName}}\" yana da ƙaramin hadarin bin doka a ƙarƙashin NDP Act 2023 da GAID 2025. Kariya ta asali tana nan. Ci gaba da lura da ayyukan bayananka.",
-  "scanner.explanation.medium": "\"{{appName}}\" yana da matsakaicin hadarin bin doka. Wurare da yawa suna buƙatar kulawa don guje wa yiwuwar matakin tilastawa NDPC.",
-  "scanner.explanation.high": "\"{{appName}}\" yana da manyan hadarurrukan bin doka a ƙarƙashin NDP Act. Idan ba a gyara ba, za ka iya fuskantar tara har ₦10M ko 2% na kudaden shiga na shekara.",
-  "scanner.explanation.critical": "\"{{appName}}\" yana cikin babban hadari! An gano abubuwa masu yawa masu hadari a ƙarƙashin NDP Act 2023. Ana buƙatar matakin gaggawa don guje wa hukunci mai tsanani na NDPC.",
+  "scanner.framework.ndpa": "Tsarin Aiki: NDP Act 2023",
+  "scanner.framework.cbn": "Tsarin Aiki: CBN AML 2022",
   
+  "scanner.questions": {
+    "collectsData": "Shin manhajar ku tana tattara bayanan sirri (sunaye, imel, lambobin waya)?",
+    "sensitiveData": "Shin kuna adana bayanan lafiya, bayometrik, ko wasu bayanai masu mahimmanci?",
+    "hasPrivacyPolicy": "Shin kuna da manufar sirri da aka buga akan manhajar ku ko gidan yanar gizon ku?",
+    "crossBorderTransfer": "Shin kuna tura bayanan masu amfani zuwa wajen Najeriya?",
+    "hasConsentMechanism": "Shin kuna da tsari don samun izinin mai amfani kafin tattara bayanai?",
+    "targetsChildren": "Shin manhajar ku tana shafar masu amfani da basu kai shekara 18 ba?",
+    "thirdPartySharing": "Shin kuna raba bayanan masu amfani da wasu kamfanoni?",
+    "hasBreachProcess": "Shin kuna da tsarin sanar da ɓoyewar bayanai (sanarwa cikin awa 72 ga NDPC)?",
+    "registeredWithNDPC": "Shin kuna da rajista da NDPC a matsayin mai sarrafa bayanai mai mahimmanci?",
+    "usesAI": "Shin manhajar ku tana amfani da AI, yanke shawara ta atomatik, ko tsara bayanan martaba?"
+  },
+  
+  "scanner.explanations": {
+    "collectsData": "Dokar NDP ta shafi duk wani sarrafa bayanan sirri na 'yan Najeriya.",
+    "sensitiveData": "Sashe na 30 yana buƙatar kariya ta musamman ga bayanan sirri masu mahimmanci ciki har da bayanan lafiya da bayometrik.",
+    "hasPrivacyPolicy": "Sashe na 27 yana buƙatar manufar sirri mai gaskiya da sauƙin isa.",
+    "crossBorderTransfer": "Sassan 41-43 suna hana canja wurin bayanai zuwa ƙasashen da basu da isasshen matakan kariya.",
+    "hasConsentMechanism": "Sashe na 26 yana buƙatar izini na musamman, bayyananne, da kuma maras shakka.",
+    "targetsChildren": "Sashe na 31 yana buƙatar tabbatar da shekaru da izinin iyaye ga masu amfani da basu kai shekara 18 ba.",
+    "thirdPartySharing": "Sashe na 25 yana buƙatar yarjejeniyar sarrafa bayanai tare da masu sarrafa ɓangare na uku.",
+    "hasBreachProcess": "Sashe na 40 yana buƙatar bayar da rahoton ɓoyewar bayanai cikin awa 72 ga NDPC.",
+    "registeredWithNDPC": "Sashe na 44 yana buƙatar rajista a matsayin mai sarrafa bayanai mai mahimmanci.",
+    "usesAI": "GAID 2025 Mataki na 15 yana buƙatar bayyana gaskiya don tsarin yanke shawara ta atomatik."
+  },
+  
+  "scanner.explanation": {
+    "low": "\"{{appName}}\" yana da ƙaramin hadarin bin doka a ƙarƙashin {{framework}}. Kariya ta asali tana nan. Ci gaba da lura da ayyukan bayananka.",
+    "medium": "\"{{appName}}\" yana da matsakaicin hadarin bin doka a ƙarƙashin {{framework}}. Wurare da yawa suna buƙatar kulawa don guje wa yiwuwar matakin tilastawa.",
+    "high": "\"{{appName}}\" yana da manyan hadarurrukan bin doka a ƙarƙashin {{framework}}. Idan ba a gyara ba, za ka iya fuskantar hukuncin doka.",
+    "critical": "\"{{appName}}\" yana cikin babban hadari a ƙarƙashin {{framework}}! Ana buƙatar matakin gaggawa don guje wa hukunci mai tsanani."
+  },
+  
+  "scanner.cbnQuestions": {
+    "collectsData": "Shin kuna tattara bayanan abokin ciniki don ayyukan kuɗi?",
+    "kycVerification": "Shin kuna tabbatar da shaidar abokin ciniki ta amfani da BVN, NIN, ko fasfo na ƙasa?",
+    "pepScreening": "Shin kuna bincika abokan ciniki a jerin Mutanen Da Suka Shafi Siyasa (PEP)?",
+    "transactionMonitoring": "Shin kuna lura da ma'amaloli don ayyukan da ake tuhuma a ainihin lokacin?",
+    "strFiling": "Shin kuna bayar da rahoton ma'amaloli da ake tuhuma ga NFIU cikin awa 24?",
+    "amlTraining": "Shin kuna ba da horon AML/CFT na shekara ga duk ma'aikatan da abin ya shafa?",
+    "recordKeeping": "Shin kuna adana bayanan ma'amala na akalla shekaru 5?",
+    "complianceOfficer": "Shin kun nada Jami'in Amincewa da AML/CFT?",
+    "riskAssessment": "Shin kuna gudanar da kimanta hadarin AML na shekara-shekara?",
+    "independentAudit": "Shin kuna gudanar da binciken bin doka na AML mai zaman kansa kowace shekara?"
+  },
+  
+  "scanner.cbnExplanations": {
+    "collectsData": "Dokokin CBN AML suna buƙatar binciken abokin ciniki don duk ayyukan kuɗi.",
+    "kycVerification": "Sashe na 6 yana buƙatar shaidar abokin ciniki da za a iya tantancewa.",
+    "pepScreening": "Ana buƙatar ƙarin bincike mai zurfi don abokan ciniki masu haɗari.",
+    "transactionMonitoring": "Sashe na 7.1 yana buƙatar tantance ma'amaloli na ainihin lokacin.",
+    "strFiling": "Sashe na 8.3 yana buƙatar bayar da rahoton STR cikin awa 24.",
+    "amlTraining": "Sashe na 12.1 yana buƙatar horar da ma'aikata na shekara.",
+    "recordKeeping": "Sashe na 15.1 yana buƙatar adana bayanan shekaru 5.",
+    "complianceOfficer": "Sashe na 19 yana buƙatar Jami'in Amincewa da aka nada.",
+    "riskAssessment": "Sashe na 5.2 yana buƙatar kimanta hadarin shekara-shekara.",
+    "independentAudit": "Sashe na 18.4 yana buƙatar bincike mai zaman kansa."
+  },
+
   "question.collectsData": "Shin manhajar ka tana tattara bayanan sirri (sunaye, imel, lambobin waya)?",
   "question.sensitiveData": "Shin kana adana bayanan lafiya, bayometrik, ko wasu bayanai masu muhimmanci?",
   "question.hasPrivacyPolicy": "Shin kana da manufar sirri da aka buga a manhajar ka ko shafin yanar gizon ka?",

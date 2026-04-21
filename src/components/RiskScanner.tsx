@@ -13,9 +13,14 @@ export interface ScanResult {
   appName: string;
   sector: string;
   answers: Record<string, boolean | null>;
+  framework?: "ndpa" | "cbn";
 }
 
-const RiskScanner = () => {
+interface RiskScannerProps {
+  activeFramework?: "ndpa" | "cbn";
+}
+
+const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
   const { t } = useLanguage();
   const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [appName, setAppName] = useState("");
@@ -24,7 +29,83 @@ const RiskScanner = () => {
   const [step, setStep] = useState<"form" | "result">("form");
   const [calculating, setCalculating] = useState(false);
 
-  const questions = ndprData.risk_scanner_questions;
+  // Framework-specific questions
+  const ndpaQuestions = ndprData.risk_scanner_questions;
+  
+  const cbnQuestions = [
+    { 
+      id: "collectsData", 
+      question: t('scanner.cbnQuestions.collectsData'),
+      risk_weight: 15, 
+      clause_ids: ["cbn-aml-001"],
+      explanation: t('scanner.cbnExplanations.collectsData')
+    },
+    { 
+      id: "kycVerification", 
+      question: t('scanner.cbnQuestions.kycVerification'),
+      risk_weight: 15, 
+      clause_ids: ["cbn-aml-001"],
+      explanation: t('scanner.cbnExplanations.kycVerification')
+    },
+    { 
+      id: "pepScreening", 
+      question: t('scanner.cbnQuestions.pepScreening'),
+      risk_weight: 16, 
+      clause_ids: ["cbn-aml-002"],
+      explanation: t('scanner.cbnExplanations.pepScreening')
+    },
+    { 
+      id: "transactionMonitoring", 
+      question: t('scanner.cbnQuestions.transactionMonitoring'),
+      risk_weight: 18, 
+      clause_ids: ["cbn-aml-002"],
+      explanation: t('scanner.cbnExplanations.transactionMonitoring')
+    },
+    { 
+      id: "strFiling", 
+      question: t('scanner.cbnQuestions.strFiling'),
+      risk_weight: 14, 
+      clause_ids: ["cbn-aml-003"],
+      explanation: t('scanner.cbnExplanations.strFiling')
+    },
+    { 
+      id: "amlTraining", 
+      question: t('scanner.cbnQuestions.amlTraining'),
+      risk_weight: 8, 
+      clause_ids: ["cbn-aml-005"],
+      explanation: t('scanner.cbnExplanations.amlTraining')
+    },
+    { 
+      id: "recordKeeping", 
+      question: t('scanner.cbnQuestions.recordKeeping'),
+      risk_weight: 6, 
+      clause_ids: ["cbn-aml-006"],
+      explanation: t('scanner.cbnExplanations.recordKeeping')
+    },
+    { 
+      id: "complianceOfficer", 
+      question: t('scanner.cbnQuestions.complianceOfficer'),
+      risk_weight: 14, 
+      clause_ids: ["cbn-aml-008"],
+      explanation: t('scanner.cbnExplanations.complianceOfficer')
+    },
+    { 
+      id: "riskAssessment", 
+      question: t('scanner.cbnQuestions.riskAssessment'),
+      risk_weight: 12, 
+      clause_ids: ["cbn-aml-004"],
+      explanation: t('scanner.cbnExplanations.riskAssessment')
+    },
+    { 
+      id: "independentAudit", 
+      question: t('scanner.cbnQuestions.independentAudit'),
+      risk_weight: 10, 
+      clause_ids: ["cbn-aml-007"],
+      explanation: t('scanner.cbnExplanations.independentAudit')
+    },
+  ];
+
+  const questions = activeFramework === "ndpa" ? ndpaQuestions : cbnQuestions;
 
   const handleAnswer = (questionId: string, value: boolean) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
@@ -33,7 +114,7 @@ const RiskScanner = () => {
   const calculateRisk = () => {
     setCalculating(true);
     setTimeout(() => {
-      let score = 35;
+      let score = activeFramework === "ndpa" ? 35 : 40;
       const triggeredClauseIds = new Set<string>();
 
       questions.forEach(q => {
@@ -59,10 +140,16 @@ const RiskScanner = () => {
       });
 
       const sectorProfile = getSectorById(sector);
-      const highRiskSectors = ["health", "fintech"];
-      if (sectorProfile) {
-        sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
-        if (highRiskSectors.includes(sector)) score += 6;
+      if (activeFramework === "ndpa") {
+        const highRiskSectors = ["health", "fintech"];
+        if (sectorProfile) {
+          sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
+          if (highRiskSectors.includes(sector)) score += 6;
+        }
+      } else {
+        if (sector === "fintech" || sector === "banking") {
+          score += 10;
+        }
       }
 
       const normalizedScore = Math.max(0, Math.min(100, Math.round(score)));
@@ -74,12 +161,13 @@ const RiskScanner = () => {
         normalizedScore <= 75 ? "high" : "critical";
 
       const appDisplayName = appName || t('scanner.defaultAppName');
+      const frameworkName = activeFramework === "ndpa" ? "NDP Act 2023" : "CBN AML 2022";
 
       const explanations: Record<string, string> = {
-        low: t('scanner.explanation.low').replace('{{appName}}', appDisplayName),
-        medium: t('scanner.explanation.medium').replace('{{appName}}', appDisplayName),
-        high: t('scanner.explanation.high').replace('{{appName}}', appDisplayName),
-        critical: t('scanner.explanation.critical').replace('{{appName}}', appDisplayName),
+        low: t('scanner.explanation.low').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
+        medium: t('scanner.explanation.medium').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
+        high: t('scanner.explanation.high').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
+        critical: t('scanner.explanation.critical').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
       };
 
       setResult({ 
@@ -89,7 +177,8 @@ const RiskScanner = () => {
         explanation: explanations[riskLevel], 
         appName, 
         sector, 
-        answers 
+        answers,
+        framework: activeFramework
       });
       setStep("result");
       setCalculating(false);
@@ -113,12 +202,23 @@ const RiskScanner = () => {
 
   return (
     <div className="space-y-5">
+      {/* Framework Indicator */}
+      <div className={`text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 ${
+        activeFramework === "ndpa" 
+          ? "bg-primary/10 text-primary" 
+          : "bg-accent/10 text-accent"
+      }`}>
+        <span>{activeFramework === "ndpa" ? t('scanner.framework.ndpa') : t('scanner.framework.cbn')}</span>
+      </div>
+
       {/* Progress indicator */}
       <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-        <span>{t('scanner.progress.answered', { current: answeredCount, total: questions.length })}</span>
+        <span>{t('scanner.progress.answered').replace('{{current}}', String(answeredCount)).replace('{{total}}', String(questions.length))}</span>
         <div className="flex-1 mx-4 h-1.5 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-brand-gradient rounded-full transition-all duration-500"
+            className={`h-full rounded-full transition-all duration-500 ${
+              activeFramework === "ndpa" ? "bg-primary" : "bg-accent"
+            }`}
             style={{ width: `${(answeredCount / questions.length) * 100}%` }}
           />
         </div>
@@ -128,22 +228,24 @@ const RiskScanner = () => {
       {/* App name */}
       <div>
         <label className="block text-sm font-medium text-foreground mb-2">
-          {t('scanner.appName.label')}
+          {activeFramework === "ndpa" ? t('scanner.appName.label') : t('scanner.appName.cbnLabel')}
         </label>
         <input
           type="text"
-          placeholder={t('scanner.appName.placeholder')}
+          placeholder={activeFramework === "ndpa" ? t('scanner.appName.placeholder') : t('scanner.appName.cbnPlaceholder')}
           value={appName}
           onChange={e => setAppName(e.target.value)}
           className="w-full px-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
         />
       </div>
 
-      {/* Sector selector */}
-      <SectorSelector selected={sector} onSelect={setSector} />
+      {/* Sector selector - only show for NDPA */}
+      {activeFramework === "ndpa" && (
+        <SectorSelector selected={sector} onSelect={setSector} />
+      )}
 
-      {/* Sector tips */}
-      {sector && (() => {
+      {/* Sector tips - from Code 2 */}
+      {activeFramework === "ndpa" && sector && (() => {
         const sp = getSectorById(sector);
         if (!sp) return null;
         return (
@@ -184,11 +286,11 @@ const RiskScanner = () => {
               style={{ animationDelay: `${idx * 0.04}s` }}
             >
               <div className="flex items-start gap-2 mb-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-muted-foreground text-[11px] font-bold flex items-center justify-center group-hover:bg-brand-gradient group-hover:text-primary-foreground transition-all duration-300">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-muted-foreground text-[11px] font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                   {idx + 1}
                 </span>
                 <p className="text-sm font-medium text-foreground leading-relaxed flex-1">
-                  {t(`scanner.questions.${q.id}`)}
+                  {activeFramework === "ndpa" ? t(`scanner.questions.${q.id}`) : q.question}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -223,7 +325,7 @@ const RiskScanner = () => {
                     {isGood ? t('scanner.feedback.lowers') : t('scanner.feedback.increases')}
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    💡 {t(`scanner.explanations.${q.id}`)}
+                    💡 {activeFramework === "ndpa" ? t(`scanner.explanations.${q.id}`) : q.explanation}
                   </p>
                 </div>
               )}
@@ -235,7 +337,11 @@ const RiskScanner = () => {
       <button
         onClick={calculateRisk}
         disabled={!allAnswered || calculating}
-        className="w-full py-4 rounded-xl bg-brand-gradient-vivid text-primary-foreground font-bold text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2"
+        className={`w-full py-4 rounded-xl text-primary-foreground font-bold text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 ${
+          activeFramework === "ndpa" 
+            ? "bg-primary" 
+            : "bg-accent"
+        }`}
       >
         {calculating ? (
           <>
@@ -243,7 +349,7 @@ const RiskScanner = () => {
             {t('scanner.analyzing')}
           </>
         ) : (
-          <>🛡 {t('scanner.calculate')}</>
+          <>{activeFramework === "ndpa" ? "🛡 " : ""}{activeFramework === "ndpa" ? t('scanner.calculate') : t('scanner.calculateCbn')}</>
         )}
       </button>
     </div>

@@ -22,7 +22,8 @@ import {
   ShoppingBag,
   Users,
   Truck,
-  Briefcase
+  Briefcase,
+  FileText
 } from "lucide-react";
 
 interface Props {
@@ -34,7 +35,6 @@ interface Props {
 }
 
 // Sector-specific compliance officer mapping
-// Currently all map to Precious as placeholder for future scaling
 const getComplianceOfficer = (sector: string) => {
   const officers: Record<string, {
     name: string;
@@ -57,7 +57,7 @@ const getComplianceOfficer = (sector: string) => {
       role: "Product & Compliance Research Lead",
       email: "pkulutuye@gmail.com",
       location: "Abuja, Federal Capital Territory, Nigeria",
-      specialization: "Financial Services Compliance & DCPMI Registration",
+      specialization: "Financial Services Data Protection & DCPMI Registration",
       icon: Landmark,
     },
     edtech: {
@@ -105,6 +105,34 @@ const getComplianceOfficer = (sector: string) => {
   return officers[sector] || officers.other;
 };
 
+// Official NDPC Resources
+const officialResources = [
+  {
+    title: "NDPC Official Website",
+    description: "Nigeria Data Protection Commission",
+    url: "https://ndpc.gov.ng",
+    icon: Globe,
+  },
+  {
+    title: "DPCO Directory",
+    description: "Find licensed Data Protection Compliance Organizations",
+    url: "https://ndpc.gov.ng/dpco-directory",
+    icon: Building2,
+  },
+  {
+    title: "NDP Act 2023 Full Text",
+    description: "Official regulatory document",
+    url: "https://ndpc.gov.ng/ndpa-2023",
+    icon: Shield,
+  },
+  {
+    title: "Data Protection Compliance Audit Filing",
+    description: "Submit your annual CAR filing",
+    url: "https://ndpc.gov.ng/audit-filing",
+    icon: FileText,
+  },
+];
+
 const RemediationChecklist = ({ 
   items, 
   storageKey, 
@@ -148,6 +176,7 @@ const RemediationChecklist = ({
       critical: 15,
       high: 10,
       medium: 5,
+      low: 3,
     };
     
     let totalReduction = 0;
@@ -164,7 +193,9 @@ const RemediationChecklist = ({
     const reductionPercentage = maxPossibleReduction > 0 
       ? totalReduction / maxPossibleReduction 
       : 0;
-    const maxAllowedReduction = initialRiskScore * 0.7;
+    
+    // Allow full reduction to zero when all items completed
+    const maxAllowedReduction = initialRiskScore;
     const actualReduction = Math.floor(maxAllowedReduction * reductionPercentage);
     
     return Math.max(0, Math.min(100, initialRiskScore - actualReduction));
@@ -204,6 +235,13 @@ const RemediationChecklist = ({
       text: "text-primary", 
       border: "border-primary/20" 
     },
+    low: { 
+      labelKey: "checklist.priority.low", 
+      icon: Info, 
+      bg: "bg-secondary/10", 
+      text: "text-secondary", 
+      border: "border-secondary/20" 
+    },
   };
 
   const difficultyConfig: Record<string, { labelKey: string }> = {
@@ -222,28 +260,8 @@ const RemediationChecklist = ({
     critical: items.filter(i => i.priority === "critical"),
     high: items.filter(i => i.priority === "high"),
     medium: items.filter(i => i.priority === "medium"),
+    low: items.filter(i => i.priority === "low"),
   };
-
-  const officialResources = [
-    {
-      title: "NDPC Official Website",
-      description: "Nigeria Data Protection Commission",
-      url: "https://ndpc.gov.ng",
-      icon: Globe,
-    },
-    {
-      title: "DPCO Directory",
-      description: "Find licensed Data Protection Compliance Organizations",
-      url: "https://ndpc.gov.ng/dpco-directory",
-      icon: Building2,
-    },
-    {
-      title: "NDP Act 2023 Full Text",
-      description: "Official regulatory document",
-      url: "https://ndpc.gov.ng/ndpa-2023",
-      icon: Shield,
-    },
-  ];
 
   return (
     <div className="space-y-5">
@@ -291,7 +309,7 @@ const RemediationChecklist = ({
       </div>
 
       {/* Priority groups */}
-      {(["critical", "high", "medium"] as const).map(priority => {
+      {(["critical", "high", "medium", "low"] as const).map(priority => {
         const group = grouped[priority];
         if (group.length === 0) return null;
         const cfg = priorityConfig[priority];

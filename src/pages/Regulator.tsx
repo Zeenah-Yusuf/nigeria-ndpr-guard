@@ -122,8 +122,68 @@ const Regulator = () => {
     return <Activity className="w-3 h-3 text-muted-foreground" />;
   };
 
-  const handleExportData = () => {
-    alert("In production, this exports machine-readable OSCAL compliance data for NITDA/NDPC consumption. This demonstrates Problem 4: Enhanced Regulatory Visibility.");
+  const handleExportOSCAL = () => {
+    const oscalReport = {
+      "oscal-version": "1.1.2",
+      "metadata": {
+        "title": "NDPC Compliance Assessment Report",
+        "last-modified": new Date().toISOString(),
+        "version": "1.0",
+        "oscal-version": "1.1.2",
+        "published": new Date().toISOString(),
+        "publisher": "RegTrack by Nexus SafeSphere",
+        "document-id": `regtrack-${Date.now()}`
+      },
+      "assessment-plan": {
+        "uuid": `regtrack-${Date.now()}`,
+        "title": "NDP Act 2023 Compliance Assessment",
+        "assessment-subjects": sectorData.map(sector => ({
+          "type": "sector",
+          "title": sector.sector,
+          "description": `${sector.entities} regulated entities`,
+          "props": [
+            { "name": "avg_risk", "value": sector.avgRisk.toString() },
+            { "name": "high_risk_count", "value": sector.highRisk.toString() },
+            { "name": "compliant_count", "value": sector.compliant.toString() },
+            { "name": "trend", "value": sector.trend }
+          ]
+        })),
+        "assessments": recentScans.map(scan => ({
+          "title": `${scan.entity} - Compliance Scan`,
+          "description": `${scan.framework} assessment`,
+          "props": [
+            { "name": "entity", "value": scan.entity },
+            { "name": "sector", "value": scan.sector },
+            { "name": "framework", "value": scan.framework },
+            { "name": "risk_score", "value": scan.risk.toString() },
+            { "name": "status", "value": scan.status },
+            { "name": "date", "value": scan.date }
+          ]
+        })),
+        "summary": {
+          "total_entities": summaryStats.totalEntities,
+          "compliant": summaryStats.compliantEntities,
+          "at_risk": summaryStats.atRiskEntities,
+          "high_risk": summaryStats.highRiskEntities,
+          "avg_sector_risk": summaryStats.avgSectorRisk,
+          "pending_car_filings": summaryStats.pendingCARFilings,
+          "frameworks_monitored": summaryStats.frameworksMonitored,
+          "generated_at": new Date().toISOString(),
+          "generated_by": "RegTrack SupTech Dashboard"
+        }
+      }
+    };
+
+    const jsonString = JSON.stringify(oscalReport, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ndpc-compliance-report-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -144,7 +204,7 @@ const Regulator = () => {
                     NDPC Regulator Dashboard
                   </h1>
                   <p className="text-sm text-muted-foreground">
-                    Real-time compliance posture across all regulated entities • Problem 4 Demonstration
+                    Real-time compliance posture across all regulated entities
                   </p>
                 </div>
               </div>
@@ -160,11 +220,11 @@ const Regulator = () => {
                   View User Demo
                 </button>
                 <button
-                  onClick={handleExportData}
-                  className="px-4 py-2 rounded-xl border border-border hover:bg-muted/60 transition-colors text-sm flex items-center gap-2"
+                  onClick={handleExportOSCAL}
+                  className="px-4 py-2 rounded-xl border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors text-sm flex items-center gap-2"
                 >
-                  <FileJson className="w-4 h-4" />
-                  Export OSCAL
+                  <FileJson className="w-4 h-4 text-primary" />
+                  <span className="text-primary">Export OSCAL</span>
                 </button>
               </div>
             </div>
@@ -334,19 +394,19 @@ const Regulator = () => {
               </div>
             </div>
 
-            {/* Demo Notice - Enhanced for Hackathon */}
+            {/* OSCAL Export Confirmation */}
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 text-center">
               <p className="text-sm font-semibold text-primary mb-2">
                 Problem 4: Enhanced Regulatory Visibility (SupTech)
               </p>
               <p className="text-sm text-muted-foreground">
-                This dashboard demonstrates how NITDA/NDPC could monitor compliance posture across all regulated entities in real-time using RegTrack's API.
+                This dashboard demonstrates how NITDA and NDPC could monitor compliance posture across all regulated entities in real-time using RegTrack's API.
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 Organizations submit structured compliance evidence via API → NDPC sees real-time posture per organization → AI anomaly detection flags unusual patterns → Sector heatmaps show highest-risk industries → Early warnings enable proactive intervention.
               </p>
               <p className="text-xs text-primary mt-3">
-                This directly addresses the hackathon brief: "A SupTech layer where the regulator has AI-powered oversight of the entire sector."
+                Click Export OSCAL above to download machine-readable compliance data ready for regulator consumption.
               </p>
             </div>
             

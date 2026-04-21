@@ -23,7 +23,8 @@ import {
   CheckCircle2,
   Circle,
   Clock,
-  TrendingUp
+  TrendingUp,
+  FileJson
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -57,16 +58,12 @@ const RiskResults = ({ result, onReset }: Props) => {
   const sectorProfile = getSectorById(result.sector);
   const questions = ndprData.risk_scanner_questions;
 
-  // Calculate AI confidence based on answer completeness and consistency
   const calculateConfidence = (): number => {
     const answeredCount = Object.values(result.answers).filter(a => a !== null && a !== undefined).length;
     const totalQuestions = questions.length;
     const completionRate = answeredCount / totalQuestions;
-    
-    // Base confidence on completion rate and sector specificity
     let confidence = 75 + (completionRate * 20);
     if (result.sector && result.sector !== "other") confidence += 5;
-    
     return Math.min(98, Math.round(confidence));
   };
 
@@ -80,37 +77,16 @@ const RiskResults = ({ result, onReset }: Props) => {
 
   const confidenceLevel = getConfidenceLevel(aiConfidence);
 
-  // Compliance journey timeline steps
   const journeySteps = [
-    { 
-      id: "assessment", 
-      label: "Initial Assessment", 
-      status: "complete" as const,
-      description: "Compliance scan completed"
-    },
+    { id: "assessment", label: "Initial Assessment", status: "complete" as const, description: "Compliance scan completed" },
     { 
       id: "remediation", 
       label: "Remediation", 
-      status: remediationItems.filter(i => {
-        const checked = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`);
-        if (!checked) return false;
-        const parsed = JSON.parse(checked);
-        return parsed[i.id];
-      }).length > 0 ? "in-progress" as const : "pending" as const,
+      status: "in-progress" as const,
       description: "Addressing compliance gaps"
     },
-    { 
-      id: "evidence", 
-      label: "Evidence Collection", 
-      status: "pending" as const,
-      description: "Gather compliance documentation"
-    },
-    { 
-      id: "filing", 
-      label: "NDPC Filing", 
-      status: "pending" as const,
-      description: "Submit to regulator"
-    },
+    { id: "evidence", label: "Evidence Collection", status: "pending" as const, description: "Gather compliance documentation" },
+    { id: "filing", label: "NDPC Filing", status: "pending" as const, description: "Submit to regulator" },
   ];
 
   const handleRiskScoreUpdate = (newScore: number) => {
@@ -132,16 +108,87 @@ const RiskResults = ({ result, onReset }: Props) => {
         sector: sectorProfile?.name,
       });
       toast({ 
-        title: t('results.toast.downloaded.title'), 
-        description: t('results.toast.downloaded.description').replace('{{date}}', new Date().toISOString().split("T")[0])
+        title: "PDF Report Downloaded", 
+        description: `RegTrack_Report_${new Date().toISOString().split("T")[0]}.pdf`
       });
     } catch {
       toast({ 
-        title: t('results.toast.error.title'), 
-        description: t('results.toast.error.description'), 
+        title: "Error", 
+        description: "Failed to generate PDF. Please try again.", 
         variant: "destructive" 
       });
     }
+  };
+
+  const handleExportOSCAL = () => {
+    const checked = JSON.parse(localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`) || "{}");
+    
+    const oscalReport = {
+      "oscal-version": "1.1.2",
+      "metadata": {
+        "title": "NDP Act Compliance Assessment Report",
+        "last-modified": new Date().toISOString(),
+        "publisher": "RegTrack by Nexus SafeSphere",
+        "document-id": `regtrack-assessment-${Date.now()}`
+      },
+      "assessment-results": {
+        "uuid": `assessment-${Date.now()}`,
+        "title": `${result.appName || 'Organization'} - NDP Act Compliance Assessment`,
+        "description": result.explanation,
+        "start": new Date().toISOString(),
+        "props": [
+          { "name": "app_name", "value": result.appName || "Unnamed" },
+          { "name": "sector", "value": result.sector || "other" },
+          { "name": "risk_score", "value": currentRiskScore.toString() },
+          { "name": "risk_level", "value": result.riskLevel },
+          { "name": "ai_confidence", "value": aiConfidence.toString() }
+        ],
+        "findings": result.triggeredClauses.map(clause => ({
+          "title": clause.title,
+          "description": clause.summary,
+          "target": { "type": "statement", "target-id": clause.article_ref },
+          "status": "pending",
+          "props": [
+            { "name": "section", "value": clause.article_ref },
+            { "name": "category", "value": clause.category }
+          ]
+        })),
+        "remediation": remediationItems.map(item => ({
+          "title": item.title,
+          "description": item.description,
+          "priority": item.priority,
+          "difficulty": item.difficulty,
+          "time_estimate": item.timeEstimate,
+          "completed": !!checked[item.id],
+          "resources": item.resources
+        })),
+        "observations": questions.map(q => ({
+          "title": q.question,
+          "response": result.answers[q.id] ? "Yes" : "No",
+          "risk_weight": q.risk_weight,
+          "props": [
+            { "name": "question_id", "value": q.id },
+            { "name": "is_safeguard", "value": (q.risk_weight < 0).toString() }
+          ]
+        }))
+      }
+    };
+
+    const jsonString = JSON.stringify(oscalReport, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `regtrack-oscal-${result.appName || 'assessment'}-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({ 
+      title: "OSCAL Report Exported", 
+      description: "Machine-readable compliance data ready for NITDA and NDPC consumption."
+    });
   };
 
   const stats = [
@@ -164,17 +211,27 @@ const RiskResults = ({ result, onReset }: Props) => {
 
   return (
     <div className="animate-fade-in-up space-y-5">
-      {/* Header with download */}
-      <div className="flex items-center justify-between">
+      {/* Header with export buttons */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <button onClick={onReset} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
           <ArrowLeft className="w-4 h-4" /> {t('results.newScan')}
         </button>
-        <button
-          onClick={handleDownloadPDF}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 active:scale-[0.97] transition-all"
-        >
-          <Download className="w-3.5 h-3.5" /> {t('results.downloadPDF')}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExportOSCAL}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-card hover:bg-muted/60 text-xs font-semibold transition-all"
+          >
+            <FileJson className="w-3.5 h-3.5" />
+            Export OSCAL
+          </button>
+          <button
+            onClick={handleDownloadPDF}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 active:scale-[0.97] transition-all"
+          >
+            <Download className="w-3.5 h-3.5" /> 
+            PDF Report
+          </button>
+        </div>
       </div>
 
       {/* Step navigation */}
@@ -230,7 +287,7 @@ const RiskResults = ({ result, onReset }: Props) => {
                 {t(cfg.labelKey)}
               </span>
               
-              {/* AI Confidence Badge - NEW */}
+              {/* AI Confidence Badge */}
               <div className="flex items-center justify-center mt-3">
                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${confidenceLevel.bg} ${confidenceLevel.color}`}>
                   <Shield className="w-3 h-3" />
@@ -258,7 +315,7 @@ const RiskResults = ({ result, onReset }: Props) => {
                 <span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
               
-              {/* Source Citation - NEW */}
+              {/* Source Citation */}
               <p className="text-[10px] text-muted-foreground mt-2">
                 Based on NDP Act 2023 • Section {result.triggeredClauses[0]?.article_ref || "24"}
                 {result.triggeredClauses.length > 1 && ` +${result.triggeredClauses.length - 1} more`}
@@ -321,7 +378,6 @@ const RiskResults = ({ result, onReset }: Props) => {
 
         {activeStep === "understand" && (
           <div className="space-y-5">
-            {/* Explanation */}
             <div className="rounded-xl border border-border bg-card p-5">
               <h4 className="font-heading font-semibold text-foreground text-sm mb-2 flex items-center gap-2">
                 <Brain className="w-4 h-4 text-primary" /> {t('results.plainEnglish')}
@@ -329,7 +385,6 @@ const RiskResults = ({ result, onReset }: Props) => {
               <p className="text-sm text-muted-foreground leading-relaxed">{result.explanation}</p>
             </div>
 
-            {/* Consequences */}
             <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
               <h4 className="font-heading font-semibold text-destructive text-sm mb-2 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4" /> {t('results.consequences.title')}
@@ -343,7 +398,6 @@ const RiskResults = ({ result, onReset }: Props) => {
               </ul>
             </div>
 
-            {/* Sector tips */}
             {sectorProfile && (
               <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
                 <h4 className="font-heading font-semibold text-primary text-sm mb-2 flex items-center gap-2">
@@ -356,7 +410,6 @@ const RiskResults = ({ result, onReset }: Props) => {
               </div>
             )}
 
-            {/* Triggered clauses */}
             {result.triggeredClauses.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-heading font-semibold text-foreground text-sm">
@@ -397,7 +450,7 @@ const RiskResults = ({ result, onReset }: Props) => {
 
         {activeStep === "fix" && (
           <div className="space-y-5">
-            {/* Compliance Journey Timeline - NEW */}
+            {/* Compliance Journey Timeline */}
             <div className="rounded-xl border border-border bg-card p-5">
               <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
                 <TrendingUp className="w-3.5 h-3.5 text-primary" />
@@ -405,7 +458,6 @@ const RiskResults = ({ result, onReset }: Props) => {
               </h4>
               
               <div className="relative">
-                {/* Progress Bar */}
                 <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-muted" />
                 <div 
                   className="absolute left-3 top-2 w-0.5 bg-primary transition-all duration-700"
@@ -470,12 +522,22 @@ const RiskResults = ({ result, onReset }: Props) => {
               <ResourcesSidebar />
             </div>
 
-            <button
-              onClick={handleDownloadPDF}
-              className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-            >
-              <Download className="w-4 h-4" /> {t('results.downloadFullReport')}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={handleExportOSCAL}
+                className="flex-1 py-3.5 rounded-xl border border-primary/30 bg-primary/5 text-primary font-semibold hover:bg-primary/10 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                <FileJson className="w-4 h-4" />
+                Export OSCAL
+              </button>
+              <button
+                onClick={handleDownloadPDF}
+                className="flex-1 py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                PDF Report
+              </button>
+            </div>
 
             <button onClick={() => setActiveStep("understand")} className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
               <ArrowLeft className="w-4 h-4 inline mr-1" /> {t('results.backToImpact')}

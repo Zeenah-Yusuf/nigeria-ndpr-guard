@@ -100,9 +100,17 @@ export function RegulationUpdateBanner() {
   };
 
   const handleReassess = () => {
-    // In production, this would trigger a new compliance scan
-    alert("Reassessment triggered. In production, this would re-scan all affected controls against the updated regulation.");
+    // Update last checked time
     setLastChecked(new Date());
+    
+    // Show confirmation instead of error
+  const message = "Reassessment triggered. In production, this would re-scan all affected controls against the updated regulation and flag any new compliance gaps.";
+    
+    // Use console.log instead of alert for better UX
+    console.log(message);
+    
+    // Optionally show a toast notification if you have toast hook
+    // toast({ title: "Reassessment Started", description: "Scanning affected controls..." });
   };
 
   const handleDismiss = () => {

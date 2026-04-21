@@ -31,16 +31,78 @@
   "scanner.progress.answered": "{{current}} n'ime {{total}} azara",
   "scanner.appName.label": "Gịnị ka ị na-ewu?",
   "scanner.appName.placeholder": "dịka, Ngwa nlekota nsọ nwanyị",
+  "scanner.appName.cbnLabel": "Gịnị bụ ọrụ ego gị?",
+  "scanner.appName.cbnPlaceholder": "dịka, Ikpo okwu nhazi ịkwụ ụgwọ",
   "scanner.sector.keyRisks": "Ihe Ize Ndụ Dị Mkpa",
-  "scanner.feedback.lowers": "Na-ebelata akara ihe ize ndụ gị",
-  "scanner.feedback.increases": "Na-abawanye akara ihe ize ndụ gị",
-  "scanner.calculate": "Gbakọọ Akara Ihe Ize Ndụ",
+  "scanner.feedback.lowers": "↓ Na-ebelata akara ihe ize ndụ gị",
+  "scanner.feedback.increases": "↑ Na-abawanye akara ihe ize ndụ gị",
+  "scanner.calculate": "Gbakọọ Akara Ihe Ize Ndụ NDP Act",
+  "scanner.calculateCbn": "Gbakọọ Akara Ihe Ize Ndụ CBN AML",
   "scanner.analyzing": "Na-enyocha...",
-  "scanner.explanation.low": "\"{{appName}}\" nwere obere ihe ize ndụ nrubeisi n'okpuru NDP Act 2023 na GAID 2025. Nchebe ndị bụ isi dị ka ọ dị. Gaa n'ihu na-enyocha omume data gị.",
-  "scanner.explanation.medium": "\"{{appName}}\" nwere ihe ize ndụ nrubeisi na-agafeghị oke. Ọtụtụ ebe chọrọ nlebara anya iji zere mmanye NDPC nwere ike ime.",
-  "scanner.explanation.high": "\"{{appName}}\" nwere nnukwu ihe ize ndụ nrubeisi n'okpuru NDP Act. Na-enweghị ndozi, ị nwere ike ịta ntaramahụhụ ruru ₦10M ma ọ bụ 2% nke ego ị nwetara n'afọ.",
-  "scanner.explanation.critical": "\"{{appName}}\" nọ n'ihe ize ndụ dị oke egwu! Achọpụtala ọtụtụ ihe ndị nwere nnukwu ihe ize ndụ n'okpuru NDP Act 2023. Achọrọ ime ihe ozugbo iji zere ntaramahụhụ NDPC siri ike.",
+  "scanner.framework": {
+    "ndpa": "Usoro Ọrụ: NDP Act 2023",
+    "cbn": "Usoro Ọrụ: CBN AML 2022"
+  },
   
+  "scanner.questions": {
+    "collectsData": "Ngwa gị ọ na-anakọta data nkeonwe (aha, ozi-e, nọmba ekwentị)?",
+    "sensitiveData": "Ị na-echekwa ahụike, bayometrik, ma ọ bụ data nkeonwe ndị ọzọ dị nro?",
+    "hasPrivacyPolicy": "Ị nwere amụma nzuzo ebipụtara na ngwa gị ma ọ bụ weebụsaịtị gị?",
+    "crossBorderTransfer": "Ị na-ebufe data onye ọrụ na mpụga Naịjirịa?",
+    "hasConsentMechanism": "Ị nwere usoro iji nweta nkwenye doro anya nke onye ọrụ tupu ịnakọta data?",
+    "targetsChildren": "Ngwa gị ọ na-elekwasị anya na ndị ọrụ na-erubeghị afọ 18?",
+    "thirdPartySharing": "Ị na-eso ndị ọrụ ndị ọzọ na-ekerịta data onye ọrụ?",
+    "hasBreachProcess": "Ị nwere usoro mgbasa ozi mmebi data (ịkọrọ NDPC n'ime awa 72)?",
+    "registeredWithNDPC": "Ị debanyere aha na NDPC dị ka onye nchịkwa data ma ọ bụ onye mmebe data dị mkpa?",
+    "usesAI": "Ngwa gị ọ na-eji AI, mkpebi akpaaka, ma ọ bụ ịkọwapụta profaịlụ?"
+  },
+  
+  "scanner.explanations": {
+    "collectsData": "Iwu NDP na-emetụta nhazi ọ bụla nke data nkeonwe nke ụmụ amaala Naịjirịa.",
+    "sensitiveData": "Nkebi 30 chọrọ nchebe pụrụ iche maka data nkeonwe dị nro gụnyere ozi ahụike na bayometrik.",
+    "hasPrivacyPolicy": "Nkebi 27 chọrọ amụma nzuzo doro anya ma dị mfe ịnweta.",
+    "crossBorderTransfer": "Nkebi 41-43 na-amachibido mbufe data gaa mba ndị na-enweghị ọkwa nchebe zuru oke.",
+    "hasConsentMechanism": "Nkebi 26 chọrọ nkwenye akọwapụtara, doro anya, na enweghị obi abụọ.",
+    "targetsChildren": "Nkebi 31 chọrọ nkwenye nne na nna maka ndị ọrụ na-erubeghị afọ 18.",
+    "thirdPartySharing": "Nkebi 25 chọrọ nkwekọrịta nhazi data na ndị nhazi nke atọ.",
+    "hasBreachProcess": "Nkebi 40 chọrọ ịkọ akụkọ mmebi data n'ime awa 72 na NDPC.",
+    "registeredWithNDPC": "Nkebi 44 chọrọ ndebanye aha dị ka onye nchịkwa data ma ọ bụ onye mmebe data dị mkpa.",
+    "usesAI": "GAID 2025 Nkeji 15 chọrọ nghọta maka sistemu mkpebi akpaaka."
+  },
+  
+  "scanner.explanation": {
+    "low": "\"{{appName}}\" nwere obere ihe ize ndụ nrubeisi n'okpuru {{framework}}. Nchebe ndị bụ isi dị ka ọ dị. Gaa n'ihu na-enyocha omume data gị.",
+    "medium": "\"{{appName}}\" nwere ihe ize ndụ nrubeisi na-agafeghị oke n'okpuru {{framework}}. Ọtụtụ ebe chọrọ nlebara anya iji zere mmanye iwu nwere ike ime.",
+    "high": "\"{{appName}}\" nwere nnukwu ihe ize ndụ nrubeisi n'okpuru {{framework}}. Na-enweghị ndozi, ị nwere ike ịta ntaramahụhụ iwu.",
+    "critical": "\"{{appName}}\" nọ n'ihe ize ndụ dị oke egwu n'okpuru {{framework}}! Achọrọ ime ihe ozugbo iji zere ntaramahụhụ siri ike."
+  },
+  
+  "scanner.cbnQuestions": {
+    "collectsData": "Ị na-anakọta ozi ndị ahịa maka ọrụ ego?",
+    "kycVerification": "Ị na-enyocha njirimara ndị ahịa site na iji BVN, NIN, ma ọ bụ paspọtụ mba ụwa?",
+    "pepScreening": "Ị na-enyocha ndị ahịa megide ndepụta Ndị E Metụtara na ndọrọ ndọrọ ọchịchị (PEP)?",
+    "transactionMonitoring": "Ị na-enyocha azụmahịa maka ihe a na-enyo enyo na oge ngafe?",
+    "strFiling": "Ị na-akọ azụmahịa a na-enyo enyo na NFIU n'ime awa 24?",
+    "amlTraining": "Ị na-enye ọzụzụ AML/CFT kwa afọ maka ndị ọrụ niile emetụtara?",
+    "recordKeeping": "Ị na-edobe ndekọ azụmahịa ma ọ dịkarịa ala afọ 5?",
+    "complianceOfficer": "Ị họpụtala Onye Ọrụ Nrubeisi AML/CFT?",
+    "riskAssessment": "Ị na-eme ntụle ihe ize ndụ AML kwa afọ?",
+    "independentAudit": "Ị na-eme nyocha nrubeisi AML nọọrọ onwe ya kwa afọ?"
+  },
+  
+  "scanner.cbnExplanations": {
+    "collectsData": "Iwu CBN AML chọrọ nyocha ndị ahịa maka ọrụ ego niile.",
+    "kycVerification": "Nkebi 6 chọrọ njirimara ndị ahịa a pụrụ ịdabere na ya.",
+    "pepScreening": "Achọrọ nyocha miri emi maka ndị ahịa nwere nnukwu ihe ize ndụ.",
+    "transactionMonitoring": "Nkebi 7.1 chọrọ nyocha azụmahịa oge ngafe.",
+    "strFiling": "Nkebi 8.3 chọrọ ịkọ akụkọ STR n'ime awa 24.",
+    "amlTraining": "Nkebi 12.1 chọrọ ọzụzụ ndị ọrụ kwa afọ.",
+    "recordKeeping": "Nkebi 15.1 chọrọ idobe ndekọ afọ 5.",
+    "complianceOfficer": "Nkebi 19 chọrọ Onye Ọrụ Nrubeisi a họpụtara.",
+    "riskAssessment": "Nkebi 5.2 chọrọ ntụle ihe ize ndụ kwa afọ.",
+    "independentAudit": "Nkebi 18.4 chọrọ nyocha nọọrọ onwe ya."
+  },
+
   "question.collectsData": "Ngwa gị ọ na-anakọta data nkeonwe (aha, ozi-e, nọmba ekwentị)?",
   "question.sensitiveData": "Ị na-echekwa ahụike, bayometrik, ma ọ bụ data nkeonwe ndị ọzọ dị nro?",
   "question.hasPrivacyPolicy": "Ị nwere amụma nzuzo ebipụtara na ngwa gị ma ọ bụ weebụsaịtị gị?",
