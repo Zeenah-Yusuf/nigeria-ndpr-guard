@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScanResult } from "./RiskScanner";
 import { getRemediationItems } from "@/lib/remediationData";
@@ -7,6 +7,8 @@ import { getSectorById } from "@/lib/sectorRecommendations";
 import RemediationChecklist from "./RemediationChecklist";
 import ResourcesSidebar from "./ResourcesSidebar";
 import ndprData from "@/data/ndpr_dataset.json";
+import cbnData from "@/data/cbn_dataset.json";
+import { forceScrollToTop } from "@/components/ScrollToTop";
 import { 
   BarChart3, 
   Brain, 
@@ -24,7 +26,8 @@ import {
   Circle,
   Clock,
   TrendingUp,
-  FileJson
+  FileJson,
+  FileCheck
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -33,17 +36,39 @@ interface Props {
   onReset: () => void;
 }
 
+interface EvidenceData {
+  fileName: string;
+  fileUrl: string;
+  uploadDate: string;
+  fileSize: number;
+  fileType: string;
+}
+
 const RiskResults = ({ result, onReset }: Props) => {
   const { t } = useLanguage();
   const [activeStep, setActiveStep] = useState<"analyze" | "understand" | "fix">("analyze");
   const [currentRiskScore, setCurrentRiskScore] = useState(result.riskScore);
   const { toast } = useToast();
   
+  const isCbnFramework = result.framework === "cbn";
+  const frameworkName = isCbnFramework ? "CBN AML 2022" : "NDP Act 2023";
+  const regulatoryBody = isCbnFramework ? "Central Bank of Nigeria (CBN)" : "Nigeria Data Protection Commission (NDPC)";
+  
+  // Get framework-specific data
+  const questions = isCbnFramework 
+    ? cbnData.risk_scanner_questions 
+    : ndprData.risk_scanner_questions;
+  
   const steps = [
     { id: "analyze" as const, labelKey: "results.steps.analyze", icon: BarChart3 },
     { id: "understand" as const, labelKey: "results.steps.understand", icon: Brain },
     { id: "fix" as const, labelKey: "results.steps.fix", icon: Wrench },
   ];
+
+  // Scroll to top when activeStep changes
+  useEffect(() => {
+    forceScrollToTop();
+  }, [activeStep]);
 
   const riskConfig = {
     low: { color: "text-secondary", bg: "bg-secondary", ring: "ring-secondary/30", labelKey: "risk.low" },
@@ -54,9 +79,19 @@ const RiskResults = ({ result, onReset }: Props) => {
   
   const cfg = riskConfig[result.riskLevel];
   const triggeredClauseIds = result.triggeredClauses.map(c => c.id);
-  const remediationItems = getRemediationItems(triggeredClauseIds);
+  const remediationItems = getRemediationItems(triggeredClauseIds, result.framework || "ndpa");
   const sectorProfile = getSectorById(result.sector);
-  const questions = ndprData.risk_scanner_questions;
+
+  // Get evidence map from localStorage
+  const getEvidenceMap = (): Record<string, EvidenceData> => {
+    try {
+      const storageKey = `regtrack-checklist-${result.appName || "app"}_evidence_${result.framework || "ndpa"}`;
+      const saved = localStorage.getItem(storageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  };
 
   const calculateConfidence = (): number => {
     const answeredCount = Object.values(result.answers).filter(a => a !== null && a !== undefined).length;
@@ -77,14 +112,15 @@ const RiskResults = ({ result, onReset }: Props) => {
 
   const confidenceLevel = getConfidenceLevel(aiConfidence);
 
-  const journeySteps = [
+  // Framework-specific journey steps
+  const journeySteps = isCbnFramework ? [
     { id: "assessment", label: "Initial Assessment", status: "complete" as const, description: "Compliance scan completed" },
-    { 
-      id: "remediation", 
-      label: "Remediation", 
-      status: "in-progress" as const,
-      description: "Addressing compliance gaps"
-    },
+    { id: "remediation", label: "Remediation", status: "in-progress" as const, description: "Addressing compliance gaps" },
+    { id: "evidence", label: "Evidence Collection", status: "pending" as const, description: "Gather compliance documentation" },
+    { id: "filing", label: "CBN Filing", status: "pending" as const, description: "Submit to CBN/NFIU" },
+  ] : [
+    { id: "assessment", label: "Initial Assessment", status: "complete" as const, description: "Compliance scan completed" },
+    { id: "remediation", label: "Remediation", status: "in-progress" as const, description: "Addressing compliance gaps" },
     { id: "evidence", label: "Evidence Collection", status: "pending" as const, description: "Gather compliance documentation" },
     { id: "filing", label: "NDPC Filing", status: "pending" as const, description: "Submit to regulator" },
   ];
@@ -95,7 +131,9 @@ const RiskResults = ({ result, onReset }: Props) => {
 
   const handleDownloadPDF = () => {
     try {
-      const checkedRaw = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`) || "{}";
+      const checkedRaw = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}_${result.framework || "ndpa"}`) || "{}";
+      const evidenceMap = getEvidenceMap();
+      
       generateReport({
         appName: result.appName,
         riskScore: currentRiskScore,
@@ -105,13 +143,16 @@ const RiskResults = ({ result, onReset }: Props) => {
         triggeredClauses: result.triggeredClauses,
         remediationItems,
         checkedItems: JSON.parse(checkedRaw),
+        evidenceMap: evidenceMap,
         sector: sectorProfile?.name,
+        framework: result.framework
       });
       toast({ 
         title: "PDF Report Downloaded", 
         description: `RegTrack_Report_${new Date().toISOString().split("T")[0]}.pdf`
       });
-    } catch {
+    } catch (error) {
+      console.error("PDF Generation Error:", error);
       toast({ 
         title: "Error", 
         description: "Failed to generate PDF. Please try again.", 
@@ -121,19 +162,20 @@ const RiskResults = ({ result, onReset }: Props) => {
   };
 
   const handleExportOSCAL = () => {
-    const checked = JSON.parse(localStorage.getItem(`regtrack-checklist-${result.appName || "app"}`) || "{}");
+    const checked = JSON.parse(localStorage.getItem(`regtrack-checklist-${result.appName || "app"}_${result.framework || "ndpa"}`) || "{}");
+    const evidenceMap = getEvidenceMap();
     
     const oscalReport = {
       "oscal-version": "1.1.2",
       "metadata": {
-        "title": "NDP Act Compliance Assessment Report",
+        "title": `${frameworkName} Compliance Assessment Report`,
         "last-modified": new Date().toISOString(),
         "publisher": "RegTrack by Nexus SafeSphere",
         "document-id": `regtrack-assessment-${Date.now()}`
       },
       "assessment-results": {
         "uuid": `assessment-${Date.now()}`,
-        "title": `${result.appName || 'Organization'} - NDP Act Compliance Assessment`,
+        "title": `${result.appName || 'Organization'} - ${frameworkName} Compliance Assessment`,
         "description": result.explanation,
         "start": new Date().toISOString(),
         "props": [
@@ -141,15 +183,16 @@ const RiskResults = ({ result, onReset }: Props) => {
           { "name": "sector", "value": result.sector || "other" },
           { "name": "risk_score", "value": currentRiskScore.toString() },
           { "name": "risk_level", "value": result.riskLevel },
-          { "name": "ai_confidence", "value": aiConfidence.toString() }
+          { "name": "ai_confidence", "value": aiConfidence.toString() },
+          { "name": "framework", "value": result.framework || "ndpa" }
         ],
         "findings": result.triggeredClauses.map(clause => ({
           "title": clause.title,
           "description": clause.summary,
-          "target": { "type": "statement", "target-id": clause.article_ref },
-          "status": "pending",
+          "target": { "type": "statement", "target-id": clause.article_ref || clause.id },
+          "status": checked[clause.id] ? "completed" : "pending",
           "props": [
-            { "name": "section", "value": clause.article_ref },
+            { "name": "section", "value": clause.article_ref || clause.id },
             { "name": "category", "value": clause.category }
           ]
         })),
@@ -160,6 +203,8 @@ const RiskResults = ({ result, onReset }: Props) => {
           "difficulty": item.difficulty,
           "time_estimate": item.timeEstimate,
           "completed": !!checked[item.id],
+          "has_evidence": !!evidenceMap[item.id],
+          "evidence": evidenceMap[item.id] || null,
           "resources": item.resources
         })),
         "observations": questions.map(q => ({
@@ -187,14 +232,14 @@ const RiskResults = ({ result, onReset }: Props) => {
     
     toast({ 
       title: "OSCAL Report Exported", 
-      description: "Machine-readable compliance data ready for NITDA and NDPC consumption."
+      description: `Machine-readable compliance data ready for ${isCbnFramework ? "CBN/NFIU" : "NDPC"} consumption.`
     });
   };
 
   const stats = [
     { labelKey: "results.stats.clauses", value: result.triggeredClauses.length, icon: Scale },
     { labelKey: "results.stats.actions", value: remediationItems.length, icon: Wrench },
-    { labelKey: "results.stats.maxFine", value: "₦10M", icon: Banknote },
+    { labelKey: "results.stats.maxFine", value: isCbnFramework ? "₦10M+" : "₦10M", icon: Banknote },
   ];
 
   const getScoreDisplayColor = (score: number) => {
@@ -204,19 +249,57 @@ const RiskResults = ({ result, onReset }: Props) => {
   };
 
   const getJourneyProgress = (): number => {
-    const completed = journeySteps.filter(s => s.status === "complete").length;
-    const inProgress = journeySteps.filter(s => s.status === "in-progress").length;
-    return Math.round(((completed + inProgress * 0.5) / journeySteps.length) * 100);
+    const evidenceMap = getEvidenceMap();
+    const hasEvidence = Object.keys(evidenceMap).length > 0;
+    
+    const updatedSteps = journeySteps.map(step => {
+      if (step.id === "assessment") return { ...step, status: "complete" as const };
+      if (step.id === "remediation") {
+        const completedCount = remediationItems.filter(item => {
+          const checked = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}_${result.framework || "ndpa"}`);
+          const checkedData = checked ? JSON.parse(checked) : {};
+          return checkedData[item.id];
+        }).length;
+        return { ...step, status: completedCount > 0 ? "in-progress" as const : "pending" as const };
+      }
+      if (step.id === "evidence") {
+        return { ...step, status: hasEvidence ? "in-progress" as const : "pending" as const };
+      }
+      return step;
+    });
+    
+    const completed = updatedSteps.filter(s => s.status === "complete").length;
+    const inProgress = updatedSteps.filter(s => s.status === "in-progress").length;
+    return Math.round(((completed + inProgress * 0.5) / updatedSteps.length) * 100);
   };
+
+  const handleStepChange = (stepId: "analyze" | "understand" | "fix") => {
+    setActiveStep(stepId);
+  };
+
+  const handleReset = () => {
+    forceScrollToTop();
+    setTimeout(() => {
+      onReset();
+    }, 50);
+  };
+
+  const evidenceCount = Object.keys(getEvidenceMap()).length;
 
   return (
     <div className="animate-fade-in-up space-y-5">
       {/* Header with export buttons */}
       <div className="flex items-center justify-between flex-wrap gap-3">
-        <button onClick={onReset} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
+        <button onClick={handleReset} className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
           <ArrowLeft className="w-4 h-4" /> {t('results.newScan')}
         </button>
         <div className="flex items-center gap-2">
+          {evidenceCount > 0 && (
+            <div className="flex items-center gap-1 text-xs text-secondary bg-secondary/10 px-2 py-1 rounded-full">
+              <FileCheck className="w-3 h-3" />
+              {evidenceCount} evidence {evidenceCount === 1 ? "file" : "files"} uploaded
+            </div>
+          )}
           <button
             onClick={handleExportOSCAL}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-card hover:bg-muted/60 text-xs font-semibold transition-all"
@@ -242,7 +325,7 @@ const RiskResults = ({ result, onReset }: Props) => {
           return (
             <button
               key={s.id}
-              onClick={() => setActiveStep(s.id)}
+              onClick={() => handleStepChange(s.id)}
               className={`flex-1 py-2.5 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${
                 isActive ? "bg-primary text-primary-foreground shadow-card" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -255,9 +338,10 @@ const RiskResults = ({ result, onReset }: Props) => {
         })}
       </div>
 
-      {/* Step content */}
+      {/* Step content - unchanged from original */}
       <div key={activeStep} className="animate-fade-in">
         {activeStep === "analyze" && (
+          // ... your existing analyze section content (unchanged)
           <div className="space-y-5">
             {/* Animated score gauge */}
             <div className="relative text-center py-8 rounded-2xl bg-gradient-to-br from-card via-card to-muted/40 border border-border shadow-card overflow-hidden">
@@ -315,9 +399,9 @@ const RiskResults = ({ result, onReset }: Props) => {
                 <span>{new Date().toLocaleDateString("en-NG")}</span>
               </div>
               
-              {/* Source Citation */}
+              {/* Source Citation - Framework specific */}
               <p className="text-[10px] text-muted-foreground mt-2">
-                Based on NDP Act 2023 • Section {result.triggeredClauses[0]?.article_ref || "24"}
+                Based on {frameworkName} • {result.triggeredClauses[0]?.article_ref || (isCbnFramework ? "CBN AML Section" : "NDP Act Section")}
                 {result.triggeredClauses.length > 1 && ` +${result.triggeredClauses.length - 1} more`}
               </p>
             </div>
@@ -356,7 +440,7 @@ const RiskResults = ({ result, onReset }: Props) => {
                     <div key={q.id} className="flex items-start gap-2 text-xs group">
                       <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${isGood ? "bg-secondary" : "bg-destructive"} group-hover:scale-150 transition-transform`} />
                       <span className="text-muted-foreground flex-1 leading-snug">
-                        {t(`scanner.questions.${q.id}`)}
+                        {isCbnFramework ? q.question : t(`scanner.questions.${q.id}`)}
                       </span>
                       <span className={`font-bold flex-shrink-0 ${isGood ? "text-secondary" : "text-destructive"}`}>
                         {a ? t('common.yes') : t('common.no')} {isGood ? "↓" : "↑"}
@@ -368,7 +452,7 @@ const RiskResults = ({ result, onReset }: Props) => {
             </div>
 
             <button
-              onClick={() => setActiveStep("understand")}
+              onClick={() => handleStepChange("understand")}
               className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 hover:shadow-elevated active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
             >
               {t('results.understandImpact')} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -390,11 +474,11 @@ const RiskResults = ({ result, onReset }: Props) => {
                 <AlertTriangle className="w-4 h-4" /> {t('results.consequences.title')}
               </h4>
               <ul className="text-xs text-muted-foreground space-y-1.5">
-                <li>{t('results.consequences.fine')}</li>
-                <li>{t('results.consequences.enforcement')}</li>
-                <li>{t('results.consequences.suspension')}</li>
-                <li>{t('results.consequences.carPenalty')}</li>
-                {result.riskLevel === "critical" && <li>{t('results.consequences.prosecution')}</li>}
+                <li>{isCbnFramework ? "Fines up to ₦10,000,000 or license suspension" : t('results.consequences.fine')}</li>
+                <li>{isCbnFramework ? "CBN enforcement notice and investigation" : t('results.consequences.enforcement')}</li>
+                <li>{isCbnFramework ? "Service suspension and public warning" : t('results.consequences.suspension')}</li>
+                {!isCbnFramework && <li>{t('results.consequences.carPenalty')}</li>}
+                {result.riskLevel === "critical" && <li>{isCbnFramework ? "Criminal prosecution under AML/CFT Act" : t('results.consequences.prosecution')}</li>}
               </ul>
             </div>
 
@@ -405,7 +489,7 @@ const RiskResults = ({ result, onReset }: Props) => {
                   {t(`sectors.${result.sector}.name`)} {t('results.sectorTips')}
                 </h4>
                 <ul className="text-xs text-muted-foreground space-y-1.5">
-                  {sectorProfile.tips.map((t, i) => <li key={i} className="flex items-start gap-1.5"><span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary flex-shrink-0" /> {t}</li>)}
+                  {sectorProfile.tips.map((tip, i) => <li key={i} className="flex items-start gap-1.5"><span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary flex-shrink-0" /> {tip}</li>)}
                 </ul>
               </div>
             )}
@@ -422,8 +506,8 @@ const RiskResults = ({ result, onReset }: Props) => {
                     style={{ animationDelay: `${i * 0.06}s` }}
                   >
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-xs font-semibold bg-primary text-primary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref}</span>
-                      <span className="text-[10px] text-muted-foreground capitalize">{clause.category.replace("_", " ")}</span>
+                      <span className="text-xs font-semibold bg-primary text-primary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref || clause.id}</span>
+                      <span className="text-[10px] text-muted-foreground capitalize">{clause.category?.replace("_", " ") || "regulation"}</span>
                     </div>
                     <h5 className="font-heading font-semibold text-foreground text-sm">{clause.title}</h5>
                     <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{clause.summary}</p>
@@ -438,10 +522,10 @@ const RiskResults = ({ result, onReset }: Props) => {
             )}
 
             <div className="flex gap-3">
-              <button onClick={() => setActiveStep("analyze")} className="flex-1 py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
+              <button onClick={() => handleStepChange("analyze")} className="flex-1 py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
                 <ArrowLeft className="w-4 h-4 inline mr-1" /> {t('results.backToAnalyze')}
               </button>
-              <button onClick={() => setActiveStep("fix")} className="flex-1 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 text-sm">
+              <button onClick={() => handleStepChange("fix")} className="flex-1 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-1 text-sm">
                 {t('results.fixIt')} <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -464,49 +548,65 @@ const RiskResults = ({ result, onReset }: Props) => {
                   style={{ height: `${getJourneyProgress()}%` }}
                 />
                 
-                {journeySteps.map((step, index) => (
-                  <div key={step.id} className="flex items-start gap-4 mb-4 last:mb-0 relative">
-                    <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center ${
-                      step.status === "complete" ? "bg-secondary text-secondary-foreground" :
-                      step.status === "in-progress" ? "bg-primary text-primary-foreground animate-pulse" :
-                      "bg-muted text-muted-foreground"
-                    }`}>
-                      {step.status === "complete" ? (
-                        <CheckCircle2 className="w-4 h-4" />
-                      ) : step.status === "in-progress" ? (
-                        <Clock className="w-4 h-4" />
-                      ) : (
-                        <Circle className="w-4 h-4" />
+                {journeySteps.map((step, index) => {
+                  let stepStatus = step.status;
+                  if (step.id === "remediation") {
+                    const completedCount = remediationItems.filter(item => {
+                      const checked = localStorage.getItem(`regtrack-checklist-${result.appName || "app"}_${result.framework || "ndpa"}`);
+                      const checkedData = checked ? JSON.parse(checked) : {};
+                      return checkedData[item.id];
+                    }).length;
+                    stepStatus = completedCount > 0 ? "in-progress" : "pending";
+                  }
+                  if (step.id === "evidence") {
+                    const evidenceMap = getEvidenceMap();
+                    stepStatus = Object.keys(evidenceMap).length > 0 ? "in-progress" : "pending";
+                  }
+                  
+                  return (
+                    <div key={step.id} className="flex items-start gap-4 mb-4 last:mb-0 relative">
+                      <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center ${
+                        stepStatus === "complete" ? "bg-secondary text-secondary-foreground" :
+                        stepStatus === "in-progress" ? "bg-primary text-primary-foreground animate-pulse" :
+                        "bg-muted text-muted-foreground"
+                      }`}>
+                        {stepStatus === "complete" ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : stepStatus === "in-progress" ? (
+                          <Clock className="w-4 h-4" />
+                        ) : (
+                          <Circle className="w-4 h-4" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`text-sm font-medium ${
+                          stepStatus === "complete" ? "text-foreground" :
+                          stepStatus === "in-progress" ? "text-primary" :
+                          "text-muted-foreground"
+                        }`}>
+                          {step.label}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {step.description}
+                        </p>
+                      </div>
+                      {stepStatus === "in-progress" && (
+                        <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                          In Progress
+                        </span>
+                      )}
+                      {stepStatus === "complete" && (
+                        <span className="text-[10px] bg-secondary/10 text-secondary px-2 py-0.5 rounded-full">
+                          Complete
+                        </span>
                       )}
                     </div>
-                    <div className="flex-1">
-                      <p className={`text-sm font-medium ${
-                        step.status === "complete" ? "text-foreground" :
-                        step.status === "in-progress" ? "text-primary" :
-                        "text-muted-foreground"
-                      }`}>
-                        {step.label}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">
-                        {step.description}
-                      </p>
-                    </div>
-                    {step.status === "in-progress" && (
-                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                        In Progress
-                      </span>
-                    )}
-                    {step.status === "complete" && (
-                      <span className="text-[10px] bg-secondary/10 text-secondary px-2 py-0.5 rounded-full">
-                        Complete
-                      </span>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               
               <p className="text-[10px] text-muted-foreground text-center mt-4 pt-3 border-t border-border">
-                Complete all steps to achieve full NDP Act compliance readiness.
+                Complete all steps to achieve full {frameworkName} compliance readiness.
               </p>
             </div>
 
@@ -515,6 +615,7 @@ const RiskResults = ({ result, onReset }: Props) => {
               storageKey={`regtrack-checklist-${result.appName || "app"}`}
               initialRiskScore={result.riskScore}
               userSector={result.sector || "other"}
+              activeFramework={result.framework}
               onRiskScoreUpdate={handleRiskScoreUpdate}
             />
 
@@ -539,16 +640,16 @@ const RiskResults = ({ result, onReset }: Props) => {
               </button>
             </div>
 
-            <button onClick={() => setActiveStep("understand")} className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
+            <button onClick={() => handleStepChange("understand")} className="w-full py-3 rounded-xl border-2 border-border bg-card text-foreground font-semibold hover:bg-muted/60 transition-all text-sm">
               <ArrowLeft className="w-4 h-4 inline mr-1" /> {t('results.backToImpact')}
             </button>
           </div>
         )}
       </div>
 
-      {/* Reset */}
+      {/* Reset Button with scroll to top */}
       <button
-        onClick={onReset}
+        onClick={handleReset}
         className="w-full py-3 rounded-xl border border-border text-muted-foreground font-medium hover:bg-muted/60 active:scale-[0.98] transition-all text-sm"
       >
         <RotateCcw className="w-4 h-4 inline mr-1" /> {t('results.scanAnother')}

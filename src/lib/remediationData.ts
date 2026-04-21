@@ -7,10 +7,12 @@ export interface RemediationItem {
   difficulty: "Easy" | "Medium" | "Hard";
   timeEstimate: string;
   resources: { label: string; url: string }[];
-  framework: "ndpa" | "cbn"; // Add framework identifier
+  framework: "ndpa" | "cbn";
+  requiresEvidence?: boolean; // Whether evidence upload is required
+  evidenceRequired?: string; // Description of required evidence
 }
 
-// NDPA Remediation Items
+// ==================== NDPA REMEDIATION ITEMS ====================
 const ndpaRemediationMap: Record<string, RemediationItem[]> = {
   "3": [
     {
@@ -18,7 +20,7 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
       clauseId: "3",
       title: "Publish a Privacy Policy",
       priority: "critical",
-      description: "Your app collects personal data but has no privacy policy. Under the NDP Act 2023 and GAID 2025 Art. 7(j-k), you must publish a compliant privacy policy on all platforms where data processing occurs.",
+      description: "Your business collects personal data but has no privacy policy. Under the NDP Act 2023 and GAID 2025 Art. 7(j-k), you must publish a compliant privacy policy on all platforms where data processing occurs.",
       difficulty: "Easy",
       timeEstimate: "30 minutes",
       resources: [
@@ -26,6 +28,7 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Free Privacy Policy Generator", url: "https://www.freeprivacypolicy.com/" },
       ],
       framework: "ndpa",
+      requiresEvidence: false,
     },
     {
       id: "rem-appoint-dpo",
@@ -39,6 +42,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "DPCO Directory", url: "https://ndpc.gov.ng/dpco-directory" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload DPO appointment letter and certification documents",
     },
     {
       id: "rem-file-audit",
@@ -53,6 +58,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "DPCO Directory", url: "https://ndpc.gov.ng/dpco-directory" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload CAR filing confirmation or audit report",
     },
     {
       id: "rem-register-ndpc",
@@ -66,6 +73,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "NDPC Registration", url: "https://ndpc.gov.ng" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload NDPC registration certificate",
     },
   ],
   "4": [
@@ -81,6 +90,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Security Standards", url: "https://ndpc.gov.ng/guidelines/security-and-data-protection-standards" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload completed DPIA report",
     },
   ],
   "5": [
@@ -96,6 +107,7 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Consent Best Practices", url: "https://ndpc.gov.ng/guidelines/consent-management-best-practices" },
       ],
       framework: "ndpa",
+      requiresEvidence: false,
     },
     {
       id: "rem-cookie-consent",
@@ -109,19 +121,22 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Consent Best Practices", url: "https://ndpc.gov.ng/guidelines/consent-management-best-practices" },
       ],
       framework: "ndpa",
+      requiresEvidence: false,
     },
     {
       id: "rem-children",
       clauseId: "5",
       title: "Add Guardian Consent for Minors",
       priority: "critical",
-      description: "If your app targets users under 13, you must obtain verifiable parental/guardian consent. GAID Art. 43 requires special safeguards for child rights in emerging technologies.",
+      description: "If your business targets users under 13, you must obtain verifiable parental/guardian consent. GAID Art. 43 requires special safeguards for child rights in emerging technologies.",
       difficulty: "Hard",
       timeEstimate: "1-2 weeks",
       resources: [
         { label: "NDPC Children's Data Guide", url: "https://ndpc.gov.ng/guidelines/consent-management-best-practices" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload parental consent mechanism documentation",
     },
   ],
   "7": [
@@ -137,6 +152,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Whitelist Countries", url: "https://ndpc.gov.ng/resources/whitelist-countries" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload CBDTI or transfer documentation",
     },
   ],
   "9": [
@@ -145,13 +162,15 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
       clauseId: "9",
       title: "Create Breach Notification Process",
       priority: "critical",
-      description: "Per NDP Act s.40 and GAID Art. 33, you must notify NDPC within 72 hours of becoming aware of a breach. Data subjects must be notified immediately if the breach poses high risk. Include: breach description, timeline, affected data, risk assessment, and mitigation steps.",
+      description: "Per NDP Act s.40 and GAID Art. 33, you must notify NDPC within 72 hours of becoming aware of a breach. Data subjects must be notified immediately if the breach poses high risk.",
       difficulty: "Medium",
       timeEstimate: "3-4 hours",
       resources: [
         { label: "Breach Notification Template", url: "https://ndpc.gov.ng/resources/data-breach-response-template" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload breach response policy document",
     },
   ],
   "12": [
@@ -160,13 +179,15 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
       clauseId: "12",
       title: "Disclose Third-Party Data Sharing & Update DPAs",
       priority: "high",
-      description: "Per GAID Art. 34, Data Processing Agreements must include: party details, purpose, location, lawful bases, technical measures, DPIA outcomes, confidentiality, and dispute resolution. Controllers are liable for processor violations.",
+      description: "Per GAID Art. 34, Data Processing Agreements must include: party details, purpose, location, lawful bases, technical measures, DPIA outcomes, confidentiality, and dispute resolution.",
       difficulty: "Medium",
       timeEstimate: "2-3 hours",
       resources: [
         { label: "Data Processing Agreement Template", url: "https://ndpc.gov.ng/our-data-privacy-policy/" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload signed DPA with third-party processors",
     },
   ],
   "14": [
@@ -182,6 +203,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Whitelist Countries", url: "https://ndpc.gov.ng/resources/whitelist-countries" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload CBDTI approval documentation",
     },
   ],
   "15": [
@@ -197,6 +220,8 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Compliance Checklist", url: "https://ndpc.gov.ng/compliance-checklist" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload compliance review report",
     },
     {
       id: "rem-employee-training",
@@ -210,11 +235,13 @@ const ndpaRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Training Resources", url: "https://ndpc.gov.ng/training-materials" },
       ],
       framework: "ndpa",
+      requiresEvidence: true,
+      evidenceRequired: "Upload training attendance records or certificates",
     },
   ],
 };
 
-// CBN AML Remediation Items
+// ==================== CBN AML REMEDIATION ITEMS ====================
 const cbnRemediationMap: Record<string, RemediationItem[]> = {
   "cbn-aml-001": [
     {
@@ -230,6 +257,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "BVN Integration Guide", url: "https://nibss-plc.com.ng/bvn" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload KYC policy document and BVN integration proof",
     },
     {
       id: "cbn-customer-due-diligence",
@@ -243,6 +272,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "CDD Guidelines", url: "https://www.cbn.gov.ng/cdd-guidelines" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload CDD policy and procedure documentation",
     },
   ],
   "cbn-aml-002": [
@@ -258,6 +289,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Transaction Monitoring Systems", url: "https://www.cbn.gov.ng/tms-guidelines" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload transaction monitoring system configuration and reports",
     },
     {
       id: "cbn-pep-screening",
@@ -271,6 +304,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "PEP Screening Solutions", url: "https://www.cbn.gov.ng/pep-screening" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload PEP screening policy and vendor documentation",
     },
   ],
   "cbn-aml-003": [
@@ -287,6 +322,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "STR Guidelines", url: "https://www.cbn.gov.ng/str-guidelines" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload STR filing procedure and sample reports",
     },
   ],
   "cbn-aml-004": [
@@ -302,6 +339,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "AML Risk Assessment Template", url: "https://www.cbn.gov.ng/risk-assessment" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload AML risk assessment report",
     },
   ],
   "cbn-aml-005": [
@@ -317,6 +356,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "AML Training Modules", url: "https://www.cbn.gov.ng/aml-training" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload training attendance records and certificates",
     },
   ],
   "cbn-aml-006": [
@@ -332,6 +373,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Record Retention Guidelines", url: "https://www.cbn.gov.ng/record-keeping" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload record retention policy and system documentation",
     },
   ],
   "cbn-aml-007": [
@@ -347,6 +390,8 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Audit Requirements", url: "https://www.cbn.gov.ng/audit-guidelines" },
       ],
       framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload audit report and management response",
     },
   ],
   "cbn-aml-008": [
@@ -362,43 +407,20 @@ const cbnRemediationMap: Record<string, RemediationItem[]> = {
         { label: "Compliance Officer Requirements", url: "https://www.cbn.gov.ng/compliance-officer" },
       ],
       framework: "cbn",
-    },
-  ],
-  "cbn-aml-policy": [
-    {
-      id: "cbn-aml-policy",
-      clauseId: "cbn-aml-policy",
-      title: "Establish AML/CFT Policy",
-      priority: "critical",
-      description: "Develop and implement a comprehensive Anti-Money Laundering and Counter Financing of Terrorism policy approved by board of directors covering all regulatory requirements.",
-      difficulty: "Medium",
-      timeEstimate: "1-2 weeks",
-      resources: [
-        { label: "CBN AML/CFT Framework", url: "https://www.cbn.gov.ng/aml-framework" },
-        { label: "Policy Template", url: "https://www.cbn.gov.ng/aml-policy-template" },
-      ],
-      framework: "cbn",
-    },
-  ],
-  "cbn-fintech-licensing": [
-    {
-      id: "cbn-fintech-licensing",
-      clauseId: "cbn-fintech-licensing",
-      title: "Obtain CBN Fintech License",
-      priority: "critical",
-      description: "Secure appropriate CBN licensing for financial services operations including Payment Service Bank (PSB), Mobile Money Operator (MMO), or other relevant licenses.",
-      difficulty: "Hard",
-      timeEstimate: "1-3 months",
-      resources: [
-        { label: "Fintech Licensing Requirements", url: "https://www.cbn.gov.ng/fintech-license" },
-        { label: "License Application Portal", url: "https://www.cbn.gov.ng/licensing" },
-      ],
-      framework: "cbn",
+      requiresEvidence: true,
+      evidenceRequired: "Upload Compliance Officer appointment letter",
     },
   ],
 };
 
-// Combined function to get remediation items based on framework
+// ==================== HELPER FUNCTIONS ====================
+
+/**
+ * Get remediation items based on triggered clause IDs and framework
+ * @param triggeredClauseIds - Array of clause IDs that were triggered
+ * @param framework - Either "ndpa" or "cbn"
+ * @returns Array of remediation items sorted by priority
+ */
 export function getRemediationItems(
   triggeredClauseIds: string[], 
   framework: "ndpa" | "cbn" = "ndpa"
@@ -419,12 +441,17 @@ export function getRemediationItems(
     });
   });
   
-  // Order priorities with low included
+  // Order priorities: critical, high, medium, low
   const order = { critical: 0, high: 1, medium: 2, low: 3 };
   return items.sort((a, b) => order[a.priority] - order[b.priority]);
 }
 
-// Helper function to get framework-specific items for a single clause
+/**
+ * Get remediation items for a specific clause
+ * @param clauseId - The clause ID
+ * @param framework - Either "ndpa" or "cbn"
+ * @returns Array of remediation items for that clause
+ */
 export function getRemediationItemsByClause(
   clauseId: string, 
   framework: "ndpa" | "cbn" = "ndpa"
@@ -433,7 +460,11 @@ export function getRemediationItemsByClause(
   return remediationMap[clauseId] || [];
 }
 
-// Helper to get all remediation items for a framework
+/**
+ * Get all remediation items for a framework
+ * @param framework - Either "ndpa" or "cbn"
+ * @returns Array of all remediation items for that framework
+ */
 export function getAllRemediationItems(framework: "ndpa" | "cbn" = "ndpa"): RemediationItem[] {
   const remediationMap = framework === "ndpa" ? ndpaRemediationMap : cbnRemediationMap;
   const items: RemediationItem[] = [];
@@ -450,4 +481,26 @@ export function getAllRemediationItems(framework: "ndpa" | "cbn" = "ndpa"): Reme
   
   const order = { critical: 0, high: 1, medium: 2, low: 3 };
   return items.sort((a, b) => order[a.priority] - order[b.priority]);
+}
+
+/**
+ * Get the count of remediation items by priority for a framework
+ * @param framework - Either "ndpa" or "cbn"
+ * @returns Object with counts for each priority level
+ */
+export function getRemediationStats(framework: "ndpa" | "cbn" = "ndpa"): {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+  total: number;
+} {
+  const items = getAllRemediationItems(framework);
+  return {
+    critical: items.filter(i => i.priority === "critical").length,
+    high: items.filter(i => i.priority === "high").length,
+    medium: items.filter(i => i.priority === "medium").length,
+    low: items.filter(i => i.priority === "low").length,
+    total: items.length,
+  };
 }

@@ -46,10 +46,10 @@ const HeroSection = () => {
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Headline - FIXED HERE */}
         <h1 className="animate-fade-in-up font-heading text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl mx-auto leading-[1.1]" style={{ animationDelay: "0.1s", color: "hsl(0, 0%, 100%)" }}>
-          {t('hero.title.part1')}{" "}
-          <span className="text-brand-gradient">{t('hero.title.part2')}</span>
+          {t('hero.titlePart1')}{" "}
+          <span className="text-brand-gradient">{t('hero.titlePart2')}</span>
         </h1>
 
         {/* Subtext */}

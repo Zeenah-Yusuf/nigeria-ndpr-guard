@@ -38,8 +38,8 @@ const SolutionSection = () => {
             <span className="text-sm font-medium text-secondary">{t('solution.badge')}</span>
           </div>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">
-            {t('solution.title.part1')}{" "}
-            <span className="text-brand-gradient">{t('solution.title.part2')}</span>
+            {t('solution.titlePart1')}{" "}
+            <span className="text-brand-gradient">{t('solution.titlePart2')}</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
             {t('solution.subtitle')}

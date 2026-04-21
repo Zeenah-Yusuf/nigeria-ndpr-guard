@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { RemediationItem } from "@/lib/remediationData";
+import { EvidenceUploadModal } from "./EvidenceUploadModal";
 import { 
   CheckCircle2, 
   Circle, 
@@ -23,7 +24,11 @@ import {
   Users,
   Truck,
   Briefcase,
-  FileText
+  FileText,
+  DollarSign,
+  FileCheck,
+  Eye,
+  Upload
 } from "lucide-react";
 
 interface Props {
@@ -31,11 +36,20 @@ interface Props {
   storageKey: string;
   initialRiskScore: number;
   userSector?: string;
+  activeFramework?: "ndpa" | "cbn";
   onRiskScoreUpdate?: (newScore: number) => void;
 }
 
-// Sector-specific compliance officer mapping
-const getComplianceOfficer = (sector: string) => {
+interface EvidenceData {
+  fileName: string;
+  fileUrl: string;
+  uploadDate: string;
+  fileSize: number;
+  fileType: string;
+}
+
+// Sector-specific compliance officer mapping with framework support
+const getComplianceOfficer = (sector: string, framework: "ndpa" | "cbn" = "ndpa") => {
   const officers: Record<string, {
     name: string;
     role: string;
@@ -49,7 +63,9 @@ const getComplianceOfficer = (sector: string) => {
       role: "Product & Compliance Research Lead",
       email: "pkulutuye@gmail.com",
       location: "Abuja, Federal Capital Territory, Nigeria",
-      specialization: "Healthcare Data Protection & NDP Act Compliance",
+      specialization: framework === "ndpa" 
+        ? "Healthcare Data Protection & NDP Act Compliance"
+        : "Healthcare Financial Compliance & AML Regulations",
       icon: Stethoscope,
     },
     fintech: {
@@ -57,8 +73,18 @@ const getComplianceOfficer = (sector: string) => {
       role: "Product & Compliance Research Lead",
       email: "pkulutuye@gmail.com",
       location: "Abuja, Federal Capital Territory, Nigeria",
-      specialization: "Financial Services Data Protection & DCPMI Registration",
+      specialization: framework === "ndpa" 
+        ? "Financial Services Data Protection & DCPMI Registration"
+        : "CBN AML/CFT Compliance & Fintech Licensing",
       icon: Landmark,
+    },
+    banking: {
+      name: "Precious Kulutuye",
+      role: "Product & Compliance Research Lead",
+      email: "pkulutuye@gmail.com",
+      location: "Abuja, Federal Capital Territory, Nigeria",
+      specialization: "Banking Compliance & CBN AML Regulations",
+      icon: DollarSign,
     },
     edtech: {
       name: "Precious Kulutuye",
@@ -97,7 +123,9 @@ const getComplianceOfficer = (sector: string) => {
       role: "Product & Compliance Research Lead",
       email: "pkulutuye@gmail.com",
       location: "Abuja, Federal Capital Territory, Nigeria",
-      specialization: "General NDP Act Compliance & DCPMI Advisory",
+      specialization: framework === "ndpa"
+        ? "General NDP Act Compliance & DCPMI Advisory"
+        : "General CBN AML Compliance & Advisory",
       icon: Briefcase,
     },
   };
@@ -105,46 +133,95 @@ const getComplianceOfficer = (sector: string) => {
   return officers[sector] || officers.other;
 };
 
-// Official NDPC Resources
-const officialResources = [
-  {
-    title: "NDPC Official Website",
-    description: "Nigeria Data Protection Commission",
-    url: "https://ndpc.gov.ng",
-    icon: Globe,
-  },
-  {
-    title: "DPCO Directory",
-    description: "Find licensed Data Protection Compliance Organizations",
-    url: "https://ndpc.gov.ng/dpco-directory",
-    icon: Building2,
-  },
-  {
-    title: "NDP Act 2023 Full Text",
-    description: "Official regulatory document",
-    url: "https://ndpc.gov.ng/ndpa-2023",
-    icon: Shield,
-  },
-  {
-    title: "Data Protection Compliance Audit Filing",
-    description: "Submit your annual CAR filing",
-    url: "https://ndpc.gov.ng/audit-filing",
-    icon: FileText,
-  },
-];
+// Framework-specific official resources
+const getOfficialResources = (framework: "ndpa" | "cbn" = "ndpa") => {
+  if (framework === "cbn") {
+    return [
+      {
+        title: "CBN Official Website",
+        description: "Central Bank of Nigeria",
+        url: "https://www.cbn.gov.ng",
+        icon: Landmark,
+      },
+      {
+        title: "CBN AML/CFT Framework",
+        description: "Anti-Money Laundering regulations",
+        url: "https://www.cbn.gov.ng/aml-framework",
+        icon: Shield,
+      },
+      {
+        title: "NFIU STR Filing Portal",
+        description: "Suspicious Transaction Reporting",
+        url: "https://nfiu.gov.ng",
+        icon: AlertTriangle,
+      },
+      {
+        title: "BVN Integration Guidelines",
+        description: "Bank Verification Number requirements",
+        url: "https://nibss-plc.com.ng/bvn",
+        icon: FileText,
+      },
+      {
+        title: "CBN Fintech Framework",
+        description: "Regulatory framework for fintechs",
+        url: "https://www.cbn.gov.ng/fintech",
+        icon: Building2,
+      },
+    ];
+  }
+  
+  return [
+    {
+      title: "NDPC Official Website",
+      description: "Nigeria Data Protection Commission",
+      url: "https://ndpc.gov.ng",
+      icon: Globe,
+    },
+    {
+      title: "DPCO Directory",
+      description: "Find licensed Data Protection Compliance Organizations",
+      url: "https://ndpc.gov.ng/dpco-directory",
+      icon: Building2,
+    },
+    {
+      title: "NDP Act 2023 Full Text",
+      description: "Official regulatory document",
+      url: "https://ndpc.gov.ng/ndpa-2023",
+      icon: Shield,
+    },
+    {
+      title: "Data Protection Compliance Audit Filing",
+      description: "Submit your annual CAR filing",
+      url: "https://ndpc.gov.ng/audit-filing",
+      icon: FileText,
+    },
+  ];
+};
 
 const RemediationChecklist = ({ 
   items, 
   storageKey, 
   initialRiskScore,
   userSector = "other",
+  activeFramework = "ndpa",
   onRiskScoreUpdate 
 }: Props) => {
   const { t } = useLanguage();
   
   const [checked, setChecked] = useState<Record<string, boolean>>(() => {
     try {
-      const saved = localStorage.getItem(storageKey);
+      const frameworkStorageKey = `${storageKey}_${activeFramework}`;
+      const saved = localStorage.getItem(frameworkStorageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [evidenceMap, setEvidenceMap] = useState<Record<string, EvidenceData>>(() => {
+    try {
+      const evidenceStorageKey = `${storageKey}_evidence_${activeFramework}`;
+      const saved = localStorage.getItem(evidenceStorageKey);
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -154,52 +231,105 @@ const RemediationChecklist = ({
   const [currentRiskScore, setCurrentRiskScore] = useState(initialRiskScore);
   const [showContactDetails, setShowContactDetails] = useState(false);
   const [showOfficialResources, setShowOfficialResources] = useState(false);
+  const [showEvidenceModal, setShowEvidenceModal] = useState(false);
+  const [selectedItemForEvidence, setSelectedItemForEvidence] = useState<RemediationItem | null>(null);
 
-  const complianceOfficer = getComplianceOfficer(userSector);
+  const complianceOfficer = getComplianceOfficer(userSector, activeFramework);
   const OfficerIcon = complianceOfficer.icon;
+  const officialResources = getOfficialResources(activeFramework);
+  
+  const frameworkName = activeFramework === "cbn" ? "CBN AML" : "NDP Act";
+  const frameworkColor = activeFramework === "cbn" ? "accent" : "primary";
 
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(checked));
-    
-    const newScore = calculateRiskScore();
-    setCurrentRiskScore(newScore);
-    
-    if (onRiskScoreUpdate) {
-      onRiskScoreUpdate(newScore);
-    }
-  }, [checked, items]);
+  // Calculate completed count and progress
+  const completedCount = useMemo(() => {
+    return items.filter(item => checked[item.id] || evidenceMap[item.id]).length;
+  }, [items, checked, evidenceMap]);
 
-  const calculateRiskScore = (): number => {
+  const progress = useMemo(() => {
+    return items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0;
+  }, [completedCount, items.length]);
+
+  // Calculate risk score based on completed items (checked OR has evidence)
+  const calculateRiskScore = useCallback(() => {
     if (items.length === 0) return initialRiskScore;
     
     const priorityWeights: Record<string, number> = {
       critical: 15,
       high: 10,
       medium: 5,
-      low: 3,
+      low: 2,
     };
     
-    let totalReduction = 0;
-    const maxPossibleReduction = items.reduce((sum, item) => {
-      return sum + (priorityWeights[item.priority] || 5);
-    }, 0);
+    let totalCompletedWeight = 0;
+    let totalPossibleWeight = 0;
     
     items.forEach(item => {
-      if (checked[item.id]) {
-        totalReduction += priorityWeights[item.priority] || 5;
+      const weight = priorityWeights[item.priority] || 5;
+      totalPossibleWeight += weight;
+      
+      // Item is considered complete if either checked OR has evidence uploaded
+      const isComplete = checked[item.id] || evidenceMap[item.id];
+      if (isComplete) {
+        totalCompletedWeight += weight;
       }
     });
     
-    const reductionPercentage = maxPossibleReduction > 0 
-      ? totalReduction / maxPossibleReduction 
+    // Calculate reduction percentage based on completed items
+    const reductionPercentage = totalPossibleWeight > 0 
+      ? totalCompletedWeight / totalPossibleWeight 
       : 0;
     
-    // Allow full reduction to zero when all items completed
-    const maxAllowedReduction = initialRiskScore;
-    const actualReduction = Math.floor(maxAllowedReduction * reductionPercentage);
+    // New risk score = initial - (initial * reduction percentage)
+    const newScore = Math.max(0, Math.min(100, Math.round(initialRiskScore * (1 - reductionPercentage))));
     
-    return Math.max(0, Math.min(100, initialRiskScore - actualReduction));
-  };
+    return newScore;
+  }, [items, checked, evidenceMap, initialRiskScore]);
+
+  // Save to localStorage when framework changes
+  useEffect(() => {
+    const frameworkStorageKey = `${storageKey}_${activeFramework}`;
+    localStorage.setItem(frameworkStorageKey, JSON.stringify(checked));
+  }, [checked, storageKey, activeFramework]);
+
+  // Save evidence to localStorage
+  useEffect(() => {
+    const evidenceStorageKey = `${storageKey}_evidence_${activeFramework}`;
+    localStorage.setItem(evidenceStorageKey, JSON.stringify(evidenceMap));
+  }, [evidenceMap, storageKey, activeFramework]);
+
+  // Reset checked state when framework changes
+  useEffect(() => {
+    const frameworkStorageKey = `${storageKey}_${activeFramework}`;
+    const evidenceStorageKey = `${storageKey}_evidence_${activeFramework}`;
+    try {
+      const saved = localStorage.getItem(frameworkStorageKey);
+      const savedEvidence = localStorage.getItem(evidenceStorageKey);
+      if (saved) {
+        setChecked(JSON.parse(saved));
+      } else {
+        setChecked({});
+      }
+      if (savedEvidence) {
+        setEvidenceMap(JSON.parse(savedEvidence));
+      } else {
+        setEvidenceMap({});
+      }
+    } catch {
+      setChecked({});
+      setEvidenceMap({});
+    }
+  }, [activeFramework, storageKey]);
+
+  // Recalculate risk score whenever checked or evidenceMap changes
+  useEffect(() => {
+    const newScore = calculateRiskScore();
+    setCurrentRiskScore(newScore);
+    
+    if (onRiskScoreUpdate) {
+      onRiskScoreUpdate(newScore);
+    }
+  }, [calculateRiskScore, onRiskScoreUpdate]);
 
   const getScoreImprovement = (): number => {
     return initialRiskScore - currentRiskScore;
@@ -209,8 +339,36 @@ const RemediationChecklist = ({
     setChecked(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const completedCount = items.filter(i => checked[i.id]).length;
-  const progress = items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0;
+  const handleUploadEvidence = (item: RemediationItem) => {
+    setSelectedItemForEvidence(item);
+    setShowEvidenceModal(true);
+  };
+
+  const handleEvidenceConfirm = (evidence: EvidenceData) => {
+    if (selectedItemForEvidence) {
+      setEvidenceMap(prev => ({ ...prev, [selectedItemForEvidence.id]: evidence }));
+      setSelectedItemForEvidence(null);
+    }
+    setShowEvidenceModal(false);
+  };
+
+  const handleRemoveEvidence = (itemId: string) => {
+    const newEvidenceMap = { ...evidenceMap };
+    delete newEvidenceMap[itemId];
+    setEvidenceMap(newEvidenceMap);
+    // Also uncheck the item if evidence is removed
+    if (checked[itemId]) {
+      setChecked(prev => ({ ...prev, [itemId]: false }));
+    }
+  };
+
+  const handleViewEvidence = (itemId: string) => {
+    const evidence = evidenceMap[itemId];
+    if (evidence && evidence.fileUrl) {
+      window.open(evidence.fileUrl, '_blank');
+    }
+  };
+
   const scoreImprovement = getScoreImprovement();
 
   const priorityConfig = {
@@ -265,6 +423,15 @@ const RemediationChecklist = ({
 
   return (
     <div className="space-y-5">
+      {/* Framework Indicator */}
+      <div className={`text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 ${
+        activeFramework === "cbn" 
+          ? "bg-accent/10 text-accent" 
+          : "bg-primary/10 text-primary"
+      }`}>
+        <span>{frameworkName} Remediation Checklist</span>
+      </div>
+
       {/* Progress and Score Card */}
       <div className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-center justify-between mb-3">
@@ -275,7 +442,9 @@ const RemediationChecklist = ({
         </div>
         <div className="h-2.5 bg-muted rounded-full overflow-hidden mb-4">
           <div
-            className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
+            className={`h-full rounded-full transition-all duration-700 ease-out ${
+              activeFramework === "cbn" ? "bg-accent" : "bg-primary"
+            }`}
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -326,33 +495,88 @@ const RemediationChecklist = ({
             </div>
 
             {group.map((item, i) => {
-              const done = !!checked[item.id];
+              const isChecked = !!checked[item.id];
+              const hasEvidence = !!evidenceMap[item.id];
+              const isCompleted = isChecked || hasEvidence;
+              const requiresEvidence = item.requiresEvidence;
+              
               return (
                 <div
                   key={item.id}
                   className={`rounded-xl border p-4 transition-all duration-300 animate-fade-in-up ${
-                    done ? "border-secondary/30 bg-secondary/5 opacity-75" : `${cfg.border} bg-card`
+                    isCompleted ? "border-secondary/30 bg-secondary/5 opacity-75" : `${cfg.border} bg-card`
                   }`}
                   style={{ animationDelay: `${i * 0.05}s` }}
                 >
                   <div className="flex items-start gap-3">
+                    {/* Checkbox - can only be checked if evidence is uploaded (if required) */}
                     <button
                       onClick={() => toggle(item.id)}
+                      disabled={requiresEvidence && !hasEvidence && !isChecked}
                       className="mt-0.5 flex-shrink-0 transition-transform active:scale-90"
                     >
-                      {done ? (
+                      {isChecked ? (
                         <CheckCircle2 className="w-5 h-5 text-secondary" />
                       ) : (
-                        <Circle className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
+                        <Circle className={`w-5 h-5 ${
+                          requiresEvidence && !hasEvidence 
+                            ? "text-muted-foreground/40 cursor-not-allowed" 
+                            : "text-muted-foreground hover:text-primary"
+                        } transition-colors`} />
                       )}
                     </button>
+                    
                     <div className="flex-1 min-w-0">
-                      <h5 className={`font-heading font-semibold text-sm ${done ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                      <h5 className={`font-heading font-semibold text-sm ${isCompleted ? "line-through text-muted-foreground" : "text-foreground"}`}>
                         {t(`checklist.items.${item.id}.title`)}
                       </h5>
                       <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
                         {t(`checklist.items.${item.id}.description`)}
                       </p>
+
+                      {/* Evidence Required Badge */}
+                      {requiresEvidence && !hasEvidence && !isChecked && (
+                        <div className="mt-2 inline-flex items-center gap-1 text-[10px] text-destructive bg-destructive/10 px-2 py-0.5 rounded-full">
+                          <FileCheck className="w-3 h-3" />
+                          Evidence Required
+                        </div>
+                      )}
+
+                      {/* Evidence Uploaded Badge with Actions */}
+                      {hasEvidence && (
+                        <div className="mt-2 flex items-center gap-2 flex-wrap">
+                          <span className="inline-flex items-center gap-1 text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">
+                            <FileCheck className="w-3 h-3" />
+                            Evidence: {evidenceMap[item.id].fileName}
+                          </span>
+                          <button
+                            onClick={() => handleViewEvidence(item.id)}
+                            className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline"
+                          >
+                            <Eye className="w-3 h-3" />
+                            View
+                          </button>
+                          {!isChecked && (
+                            <button
+                              onClick={() => handleRemoveEvidence(item.id)}
+                              className="inline-flex items-center gap-1 text-[10px] text-destructive hover:underline"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Upload Evidence Button - Show if requires evidence and no evidence yet */}
+                      {requiresEvidence && !hasEvidence && (
+                        <button
+                          onClick={() => handleUploadEvidence(item)}
+                          className="mt-2 inline-flex items-center gap-1 text-[10px] text-primary hover:underline"
+                        >
+                          <Upload className="w-3 h-3" />
+                          Upload Supporting Document
+                        </button>
+                      )}
 
                       {/* Meta */}
                       <div className="flex flex-wrap items-center gap-2 mt-2.5">
@@ -407,7 +631,7 @@ const RemediationChecklist = ({
         {showContactDetails && (
           <div className="p-4 pt-0 border-t border-border">
             <p className="text-xs text-muted-foreground mb-4">
-              Based on your sector, we recommend connecting with:
+              Based on your sector and {frameworkName} framework, we recommend connecting with:
             </p>
             
             <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
@@ -455,7 +679,7 @@ const RemediationChecklist = ({
         )}
       </div>
 
-      {/* Official NDPC Resources */}
+      {/* Official Framework Resources */}
       <div className="rounded-xl border border-border bg-card overflow-hidden">
         <button
           onClick={() => setShowOfficialResources(!showOfficialResources)}
@@ -464,7 +688,7 @@ const RemediationChecklist = ({
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-foreground">
-              Official NDPC Resources
+              Official {activeFramework === "cbn" ? "CBN" : "NDPC"} Resources
             </span>
           </div>
           <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${showOfficialResources ? "rotate-90" : ""}`} />
@@ -473,7 +697,7 @@ const RemediationChecklist = ({
         {showOfficialResources && (
           <div className="p-4 pt-0 border-t border-border space-y-3">
             <p className="text-xs text-muted-foreground">
-              Access official resources from the Nigeria Data Protection Commission:
+              Access official resources from the {activeFramework === "cbn" ? "Central Bank of Nigeria" : "Nigeria Data Protection Commission"}:
             </p>
             
             {officialResources.map((resource, index) => (
@@ -500,7 +724,7 @@ const RemediationChecklist = ({
             ))}
             
             <p className="text-[10px] text-muted-foreground text-center pt-2">
-              Always verify compliance requirements with official NDPC guidance.
+              Always verify compliance requirements with official {activeFramework === "cbn" ? "CBN" : "NDPC"} guidance.
             </p>
           </div>
         )}
@@ -516,6 +740,22 @@ const RemediationChecklist = ({
             {t('checklist.empty.message')}
           </p>
         </div>
+      )}
+
+      {/* Evidence Upload Modal */}
+      {selectedItemForEvidence && (
+        <EvidenceUploadModal
+          isOpen={showEvidenceModal}
+          onClose={() => {
+            setShowEvidenceModal(false);
+            setSelectedItemForEvidence(null);
+          }}
+          onConfirm={handleEvidenceConfirm}
+          itemTitle={selectedItemForEvidence.title}
+          evidenceRequired={selectedItemForEvidence.evidenceRequired || "Please upload supporting documentation for this compliance item."}
+          existingEvidence={evidenceMap[selectedItemForEvidence.id]}
+          onRemove={() => handleRemoveEvidence(selectedItemForEvidence.id)}
+        />
       )}
     </div>
   );

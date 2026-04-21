@@ -5,7 +5,7 @@ import ClauseFinder from "./ClauseFinder";
 import { ObligationExtractor } from "./ObligationExtractor";
 import { RegulationUpdateBanner } from "./RegulationUpdateBanner";
 import ResourcesSidebar from "./ResourcesSidebar";
-import { Shield, Search, FileText, Building2, ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
+import { Shield, Search, FileText, Building2, ChevronDown, ChevronRight, ExternalLink, ClipboardCheck } from "lucide-react";
 
 // Import framework data for policy-as-code demonstration
 import ndpaFramework from "@/lib/frameworks/ndpa-obligations.json";
@@ -16,9 +16,17 @@ const DemoSection = () => {
   const [activeTab, setActiveTab] = useState<"scanner" | "finder" | "extractor">("scanner");
   const [activeFramework, setActiveFramework] = useState<"ndpa" | "cbn">("ndpa");
   const [showFrameworkInfo, setShowFrameworkInfo] = useState(false);
+  // Add key to force re-render of RiskScanner when framework changes
+  const [scannerKey, setScannerKey] = useState(0);
 
   const currentFramework = activeFramework === "ndpa" ? ndpaFramework : cbnFramework;
   const frameworkColor = activeFramework === "ndpa" ? "primary" : "accent";
+
+  const handleFrameworkChange = (framework: "ndpa" | "cbn") => {
+    setActiveFramework(framework);
+    // Increment key to force RiskScanner to re-mount with new framework
+    setScannerKey(prev => prev + 1);
+  };
 
   return (
     <section id="demo" className="py-24 bg-card relative">
@@ -38,12 +46,12 @@ const DemoSection = () => {
 
         <div className="max-w-3xl mx-auto">
           
-          {/* Regulation Update Banner - NEW */}
+          {/* Regulation Update Banner */}
           <div className="mb-6">
             <RegulationUpdateBanner />
           </div>
 
-          {/* Framework Selector - Policy-as-Code Demo - NEW */}
+          {/* Framework Selector - Policy-as-Code Demo */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -64,7 +72,7 @@ const DemoSection = () => {
             {/* Framework Toggle */}
             <div className="flex rounded-xl bg-muted p-1">
               <button
-                onClick={() => setActiveFramework("ndpa")}
+                onClick={() => handleFrameworkChange("ndpa")}
                 className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                   activeFramework === "ndpa"
                     ? "bg-primary text-primary-foreground shadow-card"
@@ -75,7 +83,7 @@ const DemoSection = () => {
                 NDP Act 2023
               </button>
               <button
-                onClick={() => setActiveFramework("cbn")}
+                onClick={() => handleFrameworkChange("cbn")}
                 className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                   activeFramework === "cbn"
                     ? "bg-accent text-accent-foreground shadow-card"
@@ -153,7 +161,7 @@ const DemoSection = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Shield className="w-4 h-4" />
+              <ClipboardCheck className="w-4 h-4" />
               {t('demo.tabs.scanner')}
             </button>
             <button
@@ -181,23 +189,32 @@ const DemoSection = () => {
           </div>
 
           {/* Tab Content */}
-          <div key={activeTab} className="animate-fade-in">
-            {activeTab === "scanner" && <RiskScanner />}
-            {activeTab === "finder" && <ClauseFinder />}
-            {activeTab === "extractor" && <ObligationExtractor />}
+          <div key={`${activeTab}-${activeFramework}`} className="animate-fade-in">
+            {activeTab === "scanner" && (
+              <RiskScanner 
+                key={scannerKey}
+                activeFramework={activeFramework} 
+              />
+            )}
+            {activeTab === "finder" && <ClauseFinder framework={activeFramework} />}
+            {activeTab === "extractor" && <ObligationExtractor framework={activeFramework} />}
           </div>
           
           {/* Framework Context Indicator */}
           {activeTab === "scanner" && (
-            <div className="mt-4 text-center">
-              <p className="text-[10px] text-muted-foreground">
-                Scanning against: <span className={activeFramework === "ndpa" ? "text-primary" : "text-accent"}>
+            <div className="mt-6 text-center">
+              <p className="text-xs text-muted-foreground">
+                <span className={`font-medium ${activeFramework === "ndpa" ? "text-primary" : "text-accent"}`}>
                   {currentFramework.framework.name}
                 </span>
-                {" • "}{currentFramework.obligations.length} obligations • 
+                {" • "}
+                <span className="text-muted-foreground">
+                  {currentFramework.obligations.length} regulatory obligations
+                </span>
+                {" • "}
                 <button 
-                  onClick={() => setActiveFramework(activeFramework === "ndpa" ? "cbn" : "ndpa")}
-                  className="text-primary hover:underline ml-1"
+                  onClick={() => handleFrameworkChange(activeFramework === "ndpa" ? "cbn" : "ndpa")}
+                  className="text-primary hover:underline font-medium"
                 >
                   Switch Framework
                 </button>
@@ -211,7 +228,7 @@ const DemoSection = () => {
           <ResourcesSidebar />
         </div>
         
-        {/* Continuous Monitoring Notice - NEW */}
+        {/* Continuous Monitoring Notice */}
         <div className="max-w-3xl mx-auto mt-6 text-center">
           <p className="text-[10px] text-muted-foreground">
             RegTrack continuously monitors NDPC, CBN, and NITDA for regulatory updates.

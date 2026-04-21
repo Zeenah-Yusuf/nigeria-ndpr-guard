@@ -1,7 +1,16 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import ndprData from "@/data/ndpr_dataset.json";
+import cbnData from "@/data/cbn_dataset.json";
 import { RemediationItem } from "./remediationData";
+
+interface EvidenceData {
+  fileName: string;
+  fileUrl: string;
+  uploadDate: string;
+  fileSize: number;
+  fileType: string;
+}
 
 interface ReportData {
   appName: string;
@@ -12,6 +21,7 @@ interface ReportData {
   triggeredClauses: any[];
   remediationItems: RemediationItem[];
   checkedItems: Record<string, boolean>;
+  evidenceMap?: Record<string, EvidenceData>;
   sector?: string;
   framework?: "ndpa" | "cbn";
 }
@@ -27,6 +37,10 @@ export function generateReportPDF(data: ReportData) {
   
   const frameworkName = data.framework === "cbn" ? "CBN AML 2022" : "NDP Act 2023 with GAID 2025";
   const regulatoryBody = data.framework === "cbn" ? "Central Bank of Nigeria (CBN)" : "Nigeria Data Protection Commission (NDPC)";
+  const entityLabel = data.framework === "cbn" ? "Financial Service" : "Business";
+
+  const evidenceMap = data.evidenceMap || {};
+  const evidenceCount = Object.keys(evidenceMap).length;
 
   // ==================== COVER PAGE ====================
   doc.setFillColor(...brandColor);
@@ -43,7 +57,7 @@ export function generateReportPDF(data: ReportData) {
   doc.setTextColor(...textColor);
   doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
-  doc.text(`App: ${data.appName || "Unnamed App"}`, 20, 80);
+  doc.text(`${entityLabel}: ${data.appName || "Unnamed"}`, 20, 80);
   if (data.sector) {
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
@@ -102,7 +116,7 @@ export function generateReportPDF(data: ReportData) {
   doc.setTextColor(...textColor);
   
   // Progress bar
-  const progressWidth = (pageW - 40) * (completedCount / totalItems);
+  const progressWidth = totalItems > 0 ? (pageW - 40) * (completedCount / totalItems) : 0;
   doc.setFillColor(200, 200, 200);
   doc.rect(20, 78, pageW - 40, 8, "F");
   doc.setFillColor(...brandColor);
@@ -110,12 +124,21 @@ export function generateReportPDF(data: ReportData) {
 
   doc.text(`✓ Completed: ${completedCount}`, 20, 100);
   doc.text(`○ Pending: ${pendingCount}`, 20, 112);
+  
+  // Evidence summary
+  if (evidenceCount > 0) {
+    doc.setTextColor(...brandColor);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text(`📎 Supporting Evidence: ${evidenceCount} file${evidenceCount !== 1 ? 's' : ''} uploaded`, 20, 124);
+    doc.setTextColor(...textColor);
+  }
 
   // Recommendation
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...brandColor);
-  doc.text("Recommendation", 20, 130);
+  doc.text("Recommendation", 20, 140);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(...textColor);
@@ -124,13 +147,13 @@ export function generateReportPDF(data: ReportData) {
   if (data.riskScore <= 25) {
     recommendation = `Continue monitoring your compliance posture and stay updated with regulatory changes. Schedule your next ${frameworkName} review in 6 months.`;
   } else if (data.riskScore <= 50) {
-    recommendation = `Address the remaining ${pendingCount} ${pendingCount === 1 ? 'item' : 'items'} before launch to reduce regulatory exposure.`;
+    recommendation = `Address the remaining ${pendingCount} ${pendingCount === 1 ? 'item' : 'items'} to reduce regulatory exposure.`;
   } else {
-    recommendation = `Complete all critical and high-priority items before launching your product to avoid potential penalties under ${frameworkName}.`;
+    recommendation = `Complete all critical and high-priority items to avoid potential penalties under ${frameworkName}.`;
   }
 
   const recLines = doc.splitTextToSize(recommendation, pageW - 40);
-  doc.text(recLines, 20, 145);
+  doc.text(recLines, 20, 155);
 
   // ==================== QUESTIONS & ANSWERS ====================
   doc.addPage();
@@ -164,10 +187,10 @@ export function generateReportPDF(data: ReportData) {
 
   if (data.triggeredClauses.length > 0) {
     const clauseRows = data.triggeredClauses.map(c => [
-      c.id || c.article_ref || c.clause_id || "N/A",
-      c.title || c.name || "Regulatory Requirement",
-      (c.summary || c.description || "").substring(0, 120) + ((c.summary || c.description || "").length > 120 ? "…" : ""),
-      data.framework === "cbn" ? "CBN enforcement actions may apply" : (c.penalty_info || "NDPC enforcement actions may apply"),
+      c.article_ref || c.id || "N/A",
+      c.title || "Regulatory Requirement",
+      (c.summary || "").substring(0, 120) + ((c.summary || "").length > 120 ? "…" : ""),
+      data.framework === "cbn" ? (c.penalty_info || "CBN enforcement actions may apply") : (c.penalty_info || "NDPC enforcement actions may apply"),
     ]);
 
     autoTable(doc, {
@@ -184,6 +207,35 @@ export function generateReportPDF(data: ReportData) {
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...textColor);
     doc.text(`No ${data.framework === "cbn" ? "CBN AML" : "NDP Act"} sections were triggered. Your practices appear compliant.`, 20, 40);
+  }
+
+  // ==================== EVIDENCE SECTION ====================
+  if (evidenceCount > 0) {
+    doc.addPage();
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...brandColor);
+    doc.text("Supporting Evidence Submitted", 20, 25);
+
+    const evidenceRows = Object.entries(evidenceMap).map(([itemId, evidence]) => {
+      const item = data.remediationItems.find(i => i.id === itemId);
+      return [
+        item?.title || itemId,
+        evidence.fileName,
+        new Date(evidence.uploadDate).toLocaleDateString(),
+        `${(evidence.fileSize / 1024).toFixed(1)} KB`,
+      ];
+    });
+
+    autoTable(doc, {
+      startY: 35,
+      head: [["Remediation Item", "Document", "Upload Date", "Size"]],
+      body: evidenceRows,
+      headStyles: { fillColor: brandColor, textColor: [255, 255, 255] },
+      styles: { fontSize: 8, cellPadding: 4 },
+      columnStyles: { 0: { cellWidth: 70 }, 1: { cellWidth: 60 } },
+      theme: "striped",
+    });
   }
 
   // ==================== REMEDIATION CHECKLIST ====================
@@ -215,12 +267,13 @@ export function generateReportPDF(data: ReportData) {
       doc.setTextColor(...textColor);
       
       completedItems.forEach((item, idx) => {
-        // Check if we need a new page
         if (currentY > pageH - 40) {
           doc.addPage();
           currentY = 25;
         }
-        const itemText = `${idx + 1}. ${item.title} (${item.priority.toUpperCase()} priority)`;
+        const hasEvidence = !!evidenceMap[item.id];
+        const evidenceMarker = hasEvidence ? " [Evidence Uploaded]" : "";
+        const itemText = `${idx + 1}. ${item.title} (${item.priority.toUpperCase()} priority)${evidenceMarker}`;
         doc.text(itemText, 25, currentY);
         currentY += 6;
       });
@@ -230,7 +283,6 @@ export function generateReportPDF(data: ReportData) {
     // Pending items list
     const pendingItems = data.remediationItems.filter(item => !data.checkedItems[item.id]);
     if (pendingItems.length > 0) {
-      // Check if we need a new page
       if (currentY > pageH - 60) {
         doc.addPage();
         currentY = 25;
@@ -247,12 +299,12 @@ export function generateReportPDF(data: ReportData) {
       doc.setTextColor(...textColor);
       
       pendingItems.forEach((item, idx) => {
-        // Check if we need a new page
         if (currentY > pageH - 40) {
           doc.addPage();
           currentY = 25;
         }
-        const itemText = `${idx + 1}. ${item.title} (${item.priority.toUpperCase()} priority, ${item.difficulty}, ${item.timeEstimate})`;
+        const requiresEvidence = item.requiresEvidence ? " [Evidence Required]" : "";
+        const itemText = `${idx + 1}. ${item.title} (${item.priority.toUpperCase()} priority, ${item.difficulty}, ${item.timeEstimate})${requiresEvidence}`;
         doc.text(itemText, 25, currentY);
         currentY += 6;
       });
@@ -269,22 +321,26 @@ export function generateReportPDF(data: ReportData) {
       data.checkedItems[item.id] ? "✓" : "☐",
       item.priority.toUpperCase(),
       item.title,
-      item.description.substring(0, 80) + (item.description.length > 80 ? "…" : ""),
+      evidenceMap[item.id] ? "Yes" : (item.requiresEvidence ? "Required" : "No"),
+      item.description.substring(0, 60) + (item.description.length > 60 ? "…" : ""),
       item.difficulty,
       item.timeEstimate,
     ]);
 
     autoTable(doc, {
       startY: 35,
-      head: [["Status", "Priority", "Action", "Description", "Difficulty", "Est. Time"]],
+      head: [["Status", "Priority", "Action", "Evidence", "Description", "Difficulty", "Est. Time"]],
       body: remRows,
       headStyles: { fillColor: brandColor, textColor: [255, 255, 255] },
       styles: { fontSize: 7, cellPadding: 3 },
       columnStyles: { 
-        0: { cellWidth: 12 }, 
-        1: { cellWidth: 16 },
-        4: { cellWidth: 18 },
-        5: { cellWidth: 20 }
+        0: { cellWidth: 10 }, 
+        1: { cellWidth: 14 },
+        2: { cellWidth: 35 },
+        3: { cellWidth: 14 },
+        4: { cellWidth: 35 },
+        5: { cellWidth: 14 },
+        6: { cellWidth: 16 }
       },
       theme: "striped",
     });
@@ -380,15 +436,16 @@ export function generateReportPDF(data: ReportData) {
 
 // ==================== PLAIN TEXT REPORT GENERATOR ====================
 export function generateTextReport(data: ReportData): string {
-  const { appName, riskScore, riskLevel, explanation, questions, triggeredClauses, remediationItems, checkedItems, sector, framework = "ndpa" } = data;
+  const { appName, riskScore, riskLevel, explanation, questions, triggeredClauses, remediationItems, checkedItems, evidenceMap, sector, framework = "ndpa" } = data;
   
   const completedItems = remediationItems.filter(item => checkedItems[item.id]);
   const completedCount = completedItems.length;
   const totalItems = remediationItems.length;
   const frameworkName = framework === "cbn" ? "CBN AML 2022" : "NDP Act 2023 with GAID 2025";
   const regulatoryBody = framework === "cbn" ? "Central Bank of Nigeria (CBN)" : "Nigeria Data Protection Commission (NDPC)";
+  const entityLabel = framework === "cbn" ? "Financial Service" : "Business";
+  const evidenceCount = evidenceMap ? Object.keys(evidenceMap).length : 0;
   
-  // Determine compliance status message
   let complianceStatus = "";
   
   if (riskScore <= 25) {
@@ -398,6 +455,7 @@ COMPLIANCE STATUS: READY FOR LAUNCH
 Based on your risk score of ${riskScore}/100, "${appName}" demonstrates strong compliance with ${sector ? sector : 'applicable'} regulations under ${frameworkName}.
 
 You have successfully implemented ${completedCount} of ${totalItems} recommended controls. Your ${framework === "cbn" ? "AML/CFT" : "data protection"} practices align with regulatory requirements.
+${evidenceCount > 0 ? `\n✓ ${evidenceCount} supporting evidence file${evidenceCount !== 1 ? 's have' : ' has'} been uploaded.` : ''}
 
 RECOMMENDATION:
 Continue monitoring your compliance posture and stay updated with regulatory changes. Schedule your next compliance review in 6 months.
@@ -407,42 +465,58 @@ Continue monitoring your compliance posture and stay updated with regulatory cha
 COMPLIANCE STATUS: PROCEED WITH CAUTION
 =======================================
 Your risk score of ${riskScore}/100 indicates moderate compliance gaps under ${frameworkName}. You have completed ${completedCount} of ${totalItems} recommended controls.
+${evidenceCount > 0 ? `\n✓ ${evidenceCount} supporting evidence file${evidenceCount !== 1 ? 's have' : ' has'} been uploaded.` : ''}
 
 RECOMMENDATION:
-Address the remaining ${totalItems - completedCount} ${totalItems - completedCount === 1 ? 'item' : 'items'} before launch to reduce regulatory exposure.
+Address the remaining ${totalItems - completedCount} ${totalItems - completedCount === 1 ? 'item' : 'items'} to reduce regulatory exposure.
 `;
   } else {
     complianceStatus = `
 COMPLIANCE STATUS: REMEDIATION REQUIRED
 =======================================
 Your risk score of ${riskScore}/100 indicates significant compliance gaps under ${frameworkName}. You have completed only ${completedCount} of ${totalItems} recommended controls.
+${evidenceCount > 0 ? `\n✓ ${evidenceCount} supporting evidence file${evidenceCount !== 1 ? 's have' : ' has'} been uploaded.` : ''}
 
 RECOMMENDATION:
-Complete all critical and high-priority items before launching your product to avoid potential penalties ${framework === "cbn" ? "under CBN AML regulations" : "up to ₦10,000,000 under the NDP Act"}.
+Complete all critical and high-priority items to avoid potential penalties ${framework === "cbn" ? "under CBN AML regulations" : "up to ₦10,000,000 under the NDP Act"}.
 `;
   }
 
-  // Generate completed items list
   const completedItemsList = completedItems.length > 0
-    ? completedItems.map(item => `✅ ${item.title}: ${item.description}`).join('\n')
+    ? completedItems.map(item => {
+        const hasEvidence = evidenceMap && evidenceMap[item.id];
+        return `✅ ${item.title}: ${item.description.substring(0, 150)}${item.description.length > 150 ? '...' : ''}${hasEvidence ? ' [Evidence Uploaded]' : ''}`;
+      }).join('\n')
     : 'No items marked as completed yet.';
 
-  // Generate pending items list
   const pendingItems = remediationItems.filter(item => !checkedItems[item.id]);
   const pendingItemsList = pendingItems.length > 0
-    ? pendingItems.map(item => `⏳ ${item.title} (${item.priority} priority, ${item.difficulty}, ${item.timeEstimate})`).join('\n')
+    ? pendingItems.map(item => {
+        const requiresEvidence = item.requiresEvidence ? ' [Evidence Required]' : '';
+        return `⏳ ${item.title} (${item.priority} priority, ${item.difficulty}, ${item.timeEstimate})${requiresEvidence}`;
+      }).join('\n')
     : 'All recommended controls have been implemented!';
+
+  const evidenceList = evidenceMap && evidenceCount > 0
+    ? `\n\nSUPPORTING EVIDENCE (${evidenceCount} file${evidenceCount !== 1 ? 's' : ''})
+---------------------------------------------------------
+${Object.entries(evidenceMap).map(([itemId, evidence]) => {
+  const item = remediationItems.find(i => i.id === itemId);
+  return `• ${item?.title || itemId}: ${evidence.fileName} (Uploaded: ${new Date(evidence.uploadDate).toLocaleDateString()})`;
+}).join('\n')}`
+    : '';
 
   const reportContent = `
 ================================================================================
                     RegTrack Compliance Assessment Report
 ================================================================================
 
-Application: ${appName || 'Unnamed'}
+${entityLabel}: ${appName || 'Unnamed'}
 Sector: ${sector || 'Not specified'}
 Assessment Date: ${new Date().toLocaleDateString('en-NG', { year: 'numeric', month: 'long', day: 'numeric' })}
 Framework: ${frameworkName}
 Regulatory Body: ${regulatoryBody}
+${evidenceCount > 0 ? `Evidence Files: ${evidenceCount}` : ''}
 
 ================================================================================
                               EXECUTIVE SUMMARY
@@ -464,7 +538,7 @@ ${completedItemsList}
 PENDING CONTROLS (${totalItems - completedCount} remaining)
 ---------------------------------------------------------
 ${pendingItemsList}
-
+${evidenceList}
 ================================================================================
                             ASSESSMENT DETAILS
 ================================================================================
@@ -478,7 +552,7 @@ ${questions.map((q, i) =>
 ================================================================================
 
 ${triggeredClauses.length > 0 
-  ? triggeredClauses.map(c => `• ${c.id || c.article_ref || c.clause_id || 'N/A'}: ${c.title || c.name || 'Regulatory Requirement'}`).join('\n')
+  ? triggeredClauses.map(c => `• ${c.article_ref || c.id}: ${c.title}`).join('\n')
   : `• No specific ${framework === "cbn" ? "CBN AML" : "NDP Act"} sections triggered - your practices appear compliant`}
 
 ================================================================================

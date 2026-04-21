@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import ScrollToTop from "@/components/ScrollToTop";
 import Home from "./pages/Home";
 import ComplianceGap from "./pages/ComplianceGap";
 import Solution from "./pages/solution";
@@ -20,6 +21,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/compliance-gap" element={<ComplianceGap />} />

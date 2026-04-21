@@ -1,354 +1,483 @@
 {
-  "app.name": "RegTrack",
-  "app.tagline": "NDP Act Compliance Simulator",
-  "app.builtFor": "Built for Naija",
-  
-  "nav.home": "Home",
-  "nav.about": "About",
-  "nav.compliance": "Compliance Gap",
-  "nav.solution": "Solution",
-  "nav.demo": "Demo",
-  "nav.resources": "Resources",
-  "nav.regulator": "Regulator View",
-  
-  "hero.title": "Avoid NDP Act fines before you launch.",
-  "hero.badge": "AI-Powered Compliance for Nigerian Startups",
-  "hero.trusted": "Trusted by Nigerian Startups",
-  "hero.title.part1": "Avoid NDP Act fines",
-  "hero.title.part2": "before you launch.",
-  "hero.subtitle": "RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI, the NDP Act 2023, and the GAID 2025 framework.",
-  "hero.scanner": "Try the Risk Scanner",
-  "hero.learnMore": "Learn More",
-  "hero.stats.articles": "NDP Act GAID Articles",
-  "hero.stats.maxFine": "Max Fine per Breach",
-  "hero.stats.breachDeadline": "Breach Report Deadline",
-
-  "scanner.title": "NDP Act Risk Scanner",
-  "scanner.subtitle": "Answer questions about your app. Get an instant risk score with triggered sections and plain-English explanations.",
-  "scanner.progress": "Question {{current}} of {{total}}",
-  "scanner.complete": "{{percent}}% Complete",
-  "scanner.defaultAppName": "Your app",
-  "scanner.progress.answered": "{{current}} of {{total}} answered",
-  "scanner.appName.label": "What are you building?",
-  "scanner.appName.placeholder": "e.g., Period tracker app",
-  "scanner.appName.cbnLabel": "What is your financial service?",
-  "scanner.appName.cbnPlaceholder": "e.g., Payment processing platform",
-  "scanner.sector.keyRisks": "Key Risks",
-  "scanner.feedback.lowers": "↓ Lowers your risk score",
-  "scanner.feedback.increases": "↑ Increases your risk score",
-  "scanner.calculate": "Calculate Risk Score",
-  "scanner.calculateCbn": "Calculate CBN AML Risk Score",
-  "scanner.analyzing": "Analyzing...",
-  "scanner.explanation.low": "\"{{appName}}\" has a low compliance risk under {{framework}}. Basic protections appear to be in place. Continue monitoring your data practices.",
-  "scanner.explanation.medium": "\"{{appName}}\" has moderate compliance risks under {{framework}}. Several areas need attention to avoid potential regulatory enforcement action.",
-  "scanner.explanation.high": "\"{{appName}}\" has significant compliance risks under {{framework}}. Without remediation, you could face regulatory penalties.",
-  "scanner.explanation.critical": "\"{{appName}}\" is at critical risk under {{framework}}! Immediate action required to avoid severe penalties.",
-  
-  "scanner.framework": {
-    "ndpa": "Active Framework: NDP Act 2023",
-    "cbn": "Active Framework: CBN AML 2022"
+  "app": {
+    "name": "RegTrack",
+    "tagline": "NDP Act Compliance Simulator",
+    "builtFor": "Built for Naija"
   },
-  
-  "scanner.questions": {
-    "collectsData": "Does your app collect personal data (names, emails, phone numbers)?",
-    "sensitiveData": "Do you store health, biometric, or other sensitive personal data?",
-    "hasPrivacyPolicy": "Do you have a published privacy policy on your app/website?",
-    "crossBorderTransfer": "Do you transfer user data outside Nigeria?",
-    "hasConsentMechanism": "Do you obtain explicit user consent before data collection?",
-    "targetsChildren": "Does your app target users under 18 years old?",
-    "thirdPartySharing": "Do you share user data with third-party services?",
-    "hasBreachProcess": "Do you have a data breach notification process (72-hour NDPC reporting)?",
-    "registeredWithNDPC": "Are you registered with NDPC as a data controller/processor of major importance?",
-    "usesAI": "Does your app use AI, automated decision-making, or profiling?"
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "compliance": "Compliance Gap",
+    "solution": "Solution",
+    "demo": "Compliance Assessment",
+    "resources": "Resources",
+    "regulator": "Regulator View"
   },
-  
-  "scanner.explanations": {
-    "collectsData": "The NDP Act applies to any processing of personal data of Nigerian citizens.",
-    "sensitiveData": "Section 30 requires special protection for sensitive personal data including health and biometric information.",
-    "hasPrivacyPolicy": "Section 27 requires a transparent and easily accessible privacy policy.",
-    "crossBorderTransfer": "Sections 41-43 restrict data transfers to countries with adequate protection levels.",
-    "hasConsentMechanism": "Section 26 requires specific, informed, and unambiguous consent.",
-    "targetsChildren": "Section 31 requires age verification and parental consent for users under 18.",
-    "thirdPartySharing": "Section 25 requires data processing agreements with third-party processors.",
-    "hasBreachProcess": "Section 40 requires reporting data breaches within 72 hours to NDPC.",
-    "registeredWithNDPC": "Section 44 requires registration as a data controller/processor of major importance.",
-    "usesAI": "GAID 2025 Article 15 requires transparency for automated decision-making systems."
+  "hero": {
+    "title": "Avoid NDP Act fines before you launch.",
+    "badge": "AI-Powered Compliance for Nigerian Startups",
+    "trusted": "Trusted by Nigerian Startups",
+    "titlePart1": "Avoid NDP Act fines",
+    "titlePart2": "before you launch.",
+    "subtitle": "RegTrack helps Nigerian founders test compliance risks in minutes — powered by AI, the NDP Act 2023, and the GAID 2025 framework.",
+    "scanner": "Compliance Assessment",
+    "learnMore": "Learn More",
+    "stats": {
+      "articles": "NDP Act GAID Articles",
+      "maxFine": "Max Fine per Breach",
+      "breachDeadline": "Breach Report Deadline"
+    }
   },
-  
-  "scanner.cbnQuestions": {
-    "collectsData": "Do you collect customer information for financial services?",
-    "kycVerification": "Do you verify customer identity using BVN, NIN, or international passport?",
-    "pepScreening": "Do you screen customers against Politically Exposed Persons (PEP) lists?",
-    "transactionMonitoring": "Do you monitor transactions for suspicious activities in real-time?",
-    "strFiling": "Do you report suspicious transactions to NFIU within 24 hours?",
-    "amlTraining": "Do you provide annual AML/CFT training to all relevant employees?",
-    "recordKeeping": "Do you retain transaction records for at least 5 years?",
-    "complianceOfficer": "Have you designated an AML/CFT Compliance Officer?",
-    "riskAssessment": "Do you conduct annual enterprise-wide AML risk assessments?",
-    "independentAudit": "Do you conduct independent AML compliance audits annually?"
+  "scanner": {
+    "title": "Compliance Assessment",
+    "subtitle": "Answer questions about your business. Get an instant compliance score with triggered sections and plain-English explanations.",
+    "progress": "Question {{current}} of {{total}}",
+    "complete": "{{percent}}% Complete",
+    "defaultAppName": "Your business",
+    "progressAnswered": "{{current}} of {{total}} answered",
+    "appName": {
+      "label": "What is your business or app name?",
+      "placeholder": "e.g., MyHealth App",
+      "cbnLabel": "What is your financial service?",
+      "cbnPlaceholder": "e.g., Payment processing platform"
+    },
+    "sector": {
+      "keyRisks": "Key Risks"
+    },
+    "feedback": {
+      "lowers": "↓ Lowers your risk score",
+      "increases": "↑ Increases your risk score"
+    },
+    "calculate": "Calculate Compliance Score",
+    "calculateCbn": "Calculate CBN AML Compliance Score",
+    "analyzing": "Analyzing your compliance posture...",
+    "framework": {
+      "ndpa": "Active Framework: NDP Act 2023",
+      "cbn": "Active Framework: CBN AML 2022"
+    },
+    "explanation": {
+      "low": "\"{{appName}}\" has a low compliance risk under {{framework}}. Basic protections appear to be in place. Continue monitoring your practices.",
+      "medium": "\"{{appName}}\" has moderate compliance risks under {{framework}}. Several areas need attention to avoid potential regulatory enforcement action.",
+      "high": "\"{{appName}}\" has significant compliance risks under {{framework}}. Without remediation, you could face regulatory penalties.",
+      "critical": "\"{{appName}}\" is at critical risk under {{framework}}! Immediate action required to avoid severe penalties."
+    },
+    "questions": {
+      "collectsData": "Does your business collect personal data (names, emails, phone numbers)?",
+      "sensitiveData": "Do you store health, biometric, or other sensitive personal data?",
+      "hasPrivacyPolicy": "Do you have a published privacy policy on your app/website?",
+      "crossBorderTransfer": "Do you transfer user data outside Nigeria?",
+      "hasConsentMechanism": "Do you obtain explicit user consent before data collection?",
+      "targetsChildren": "Does your business target users under 18 years old?",
+      "thirdPartySharing": "Do you share user data with third-party services?",
+      "hasBreachProcess": "Do you have a data breach notification process (72-hour NDPC reporting)?",
+      "registeredWithNDPC": "Are you registered with NDPC as a data controller/processor of major importance?",
+      "usesAI": "Does your business use AI, automated decision-making, or profiling?"
+    },
+    "explanations": {
+      "collectsData": "The NDP Act applies to any processing of personal data of Nigerian citizens.",
+      "sensitiveData": "Section 30 requires special protection for sensitive personal data including health and biometric information.",
+      "hasPrivacyPolicy": "Section 27 requires a transparent and easily accessible privacy policy.",
+      "crossBorderTransfer": "Sections 41-43 restrict data transfers to countries with adequate protection levels.",
+      "hasConsentMechanism": "Section 26 requires specific, informed, and unambiguous consent.",
+      "targetsChildren": "Section 31 requires age verification and parental consent for users under 18.",
+      "thirdPartySharing": "Section 25 requires data processing agreements with third-party processors.",
+      "hasBreachProcess": "Section 40 requires reporting data breaches within 72 hours to NDPC.",
+      "registeredWithNDPC": "Section 44 requires registration as a data controller/processor of major importance.",
+      "usesAI": "GAID 2025 Article 15 requires transparency for automated decision-making systems."
+    },
+    "cbnQuestions": {
+      "collectsData": "Do you collect customer information for financial services?",
+      "kycVerification": "Do you verify customer identity using BVN, NIN, or international passport?",
+      "pepScreening": "Do you screen customers against Politically Exposed Persons (PEP) lists?",
+      "transactionMonitoring": "Do you monitor transactions for suspicious activities in real-time?",
+      "strFiling": "Do you report suspicious transactions to NFIU within 24 hours?",
+      "amlTraining": "Do you provide annual AML/CFT training to all relevant employees?",
+      "recordKeeping": "Do you retain transaction records for at least 5 years?",
+      "complianceOfficer": "Have you designated an AML/CFT Compliance Officer?",
+      "riskAssessment": "Do you conduct annual enterprise-wide AML risk assessments?",
+      "independentAudit": "Do you conduct independent AML compliance audits annually?"
+    },
+    "cbnExplanations": {
+      "collectsData": "CBN AML regulations require customer due diligence for all financial services.",
+      "kycVerification": "Section 6 requires verifiable customer identification.",
+      "pepScreening": "Enhanced due diligence required for high-risk customers.",
+      "transactionMonitoring": "Section 7.1 requires real-time transaction screening.",
+      "strFiling": "Section 8.3 requires 24-hour STR filing.",
+      "amlTraining": "Section 12.1 requires annual staff training.",
+      "recordKeeping": "Section 15.1 requires 5-year record retention.",
+      "complianceOfficer": "Section 19 requires a designated Compliance Officer.",
+      "riskAssessment": "Section 5.2 requires annual risk assessment.",
+      "independentAudit": "Section 18.4 requires independent audit."
+    }
   },
-  
-  "scanner.cbnExplanations": {
-    "collectsData": "CBN AML regulations require customer due diligence for all financial services.",
-    "kycVerification": "Section 6 requires verifiable customer identification.",
-    "pepScreening": "Enhanced due diligence required for high-risk customers.",
-    "transactionMonitoring": "Section 7.1 requires real-time transaction screening.",
-    "strFiling": "Section 8.3 requires 24-hour STR filing.",
-    "amlTraining": "Section 12.1 requires annual staff training.",
-    "recordKeeping": "Section 15.1 requires 5-year record retention.",
-    "complianceOfficer": "Section 19 requires a designated Compliance Officer.",
-    "riskAssessment": "Section 5.2 requires annual risk assessment.",
-    "independentAudit": "Section 18.4 requires independent audit."
+  "problem": {
+    "badge": "The Compliance Gap",
+    "titlePart1": "Most Nigerian Startups Discover",
+    "titlePart2": "Compliance Gaps Too Late",
+    "storyPart1": "A Nigerian founder launches a health app.",
+    "storyPart2": "Users love it — 5,000 signups in the first week. Two weeks later, NDPC sends an enforcement notice.",
+    "finePart1": "The fine?",
+    "finePart2": "— or 2% of annual gross revenue, whichever is greater. No privacy policy. No consent mechanism. No data audit.",
+    "solution": "RegTrack prevents this. In minutes, not months."
   },
-
-  "question.collectsData": "Does your app collect personal data (names, emails, phone numbers)?",
-  "question.sensitiveData": "Do you store health, biometric, or other sensitive personal data?",
-  "question.hasPrivacyPolicy": "Do you have a published privacy policy on your app/website?",
-  "question.crossBorderTransfer": "Do you transfer user data outside Nigeria?",
-  "question.hasConsentMechanism": "Do you obtain explicit user consent before data collection?",
-  "question.targetsChildren": "Does your app target users under 18 years old?",
-  "question.thirdPartySharing": "Do you share user data with third-party services?",
-  "question.hasBreachProcess": "Do you have a data breach notification process (72-hour NDPC reporting)?",
-  "question.registeredWithNDPC": "Are you registered with NDPC as a data controller/processor of major importance?",
-  "question.usesAI": "Does your app use AI, automated decision-making, or profiling?",
-
-  "scanner.questions.q1": "Does your app collect personal data (names, emails, phone numbers)?",
-  "scanner.questions.q2": "Do you store health, biometric, or other sensitive personal data?",
-  "scanner.questions.q3": "Do you have a published privacy policy on your app/website?",
-  "scanner.questions.q4": "Do you transfer user data outside Nigeria?",
-  "scanner.questions.q5": "Do you obtain explicit user consent before data collection?",
-  "scanner.questions.q6": "Does your app target users under 18 years old?",
-  "scanner.questions.q7": "Do you share user data with third-party services?",
-  "scanner.questions.q8": "Do you have a data breach notification process (72-hour NDPC reporting)?",
-  "scanner.questions.q9": "Are you registered with NDPC as a data controller/processor of major importance?",
-  "scanner.questions.q10": "Does your app use AI, automated decision-making, or profiling?",
-
-  "problem.badge": "The Compliance Gap",
-  "problem.title.part1": "Most Nigerian Startups Discover",
-  "problem.title.part2": "Compliance Gaps Too Late",
-  "problem.story.part1": "A Nigerian founder launches a health app.",
-  "problem.story.part2": "Users love it — 5,000 signups in the first week. Two weeks later, NDPC sends an enforcement notice.",
-  "problem.fine.part1": "The fine?",
-  "problem.fine.part2": "— or 2% of annual gross revenue, whichever is greater. No privacy policy. No consent mechanism. No data audit.",
-  "problem.solution": "RegTrack prevents this. In minutes, not months.",
-  
-  "solution.badge": "Our Solution",
-  "solution.title.part1": "Two tools.",
-  "solution.title.part2": "Complete clarity.",
-  "solution.subtitle": "RegTrack gives you instant compliance insights powered by the full NDP Act and GAID 2025 framework.",
-  "solution.scanner.title": "NDP Act Risk Scanner",
-  "solution.scanner.description": "Answer questions about your app. Get an instant risk score with triggered NDP Act sections and plain-English explanations.",
-  "solution.scanner.flow.step1": "Questionnaire",
-  "solution.scanner.flow.step2": "Risk Score",
-  "solution.scanner.flow.step3": "Explanation",
-  "solution.finder.title": "Clause Finder",
-  "solution.finder.description": "Search the full NDP Act and GAID 2025 framework by keyword. Find the exact section that applies to your situation with a clear summary.",
-  "solution.finder.flow.step1": "Keyword Search",
-  "solution.finder.flow.step2": "NDP Act Section",
-  "solution.finder.flow.step3": "Summary",
-
-  "sector.label": "What sector is your app in?",
-  "sectors.health.name": "Health",
-  "sectors.fintech.name": "Fintech",
-  "sectors.edtech.name": "EdTech",
-  "sectors.ecommerce.name": "E-Commerce",
-  "sectors.social.name": "Social",
-  "sectors.logistics.name": "Logistics",
-  "sectors.government.name": "Government",
-  "sectors.other.name": "Other",
-
-  "common.yes": "Yes",
-  "common.no": "No",
-
-  "button.next": "Next",
-  "button.back": "Back",
-  "button.analyze": "Analyze Compliance",
-  "button.restart": "Start New Assessment",
-  "button.downloadPDF": "Download Report (PDF)",
-  
-  "waitlist.badge": "Early Access",
-  "waitlist.title": "Get early access to RegTrack",
-  "waitlist.subtitle": "Join the waitlist for the full platform with AI-powered compliance automation, real-time monitoring, and team collaboration.",
-  "waitlist.placeholder": "your@email.com",
-  "waitlist.button": "Join Waitlist",
-  "waitlist.success.title": "You're on the list!",
-  "waitlist.success.message": "We'll notify you when RegTrack launches.",
-
-  "risk.low": "Low Risk",
-  "risk.medium": "Medium Risk",
-  "risk.high": "High Risk",
-  "risk.critical": "Critical Risk",
-  "results.newScan": "New Scan",
-  "results.downloadPDF": "Download PDF",
-  "results.yourApp": "Your App",
-  "results.steps.analyze": "Analyze",
-  "results.steps.understand": "Understand",
-  "results.steps.fix": "Fix It",
-  "results.stats.clauses": "Clauses Triggered",
-  "results.stats.actions": "Actions Needed",
-  "results.stats.maxFine": "Max Fine",
-  "results.answerBreakdown": "Answer Breakdown",
-  "results.understandImpact": "Understand Impact",
-  "results.plainEnglish": "Plain-English Explanation",
-  "results.consequences.title": "Potential Consequences",
-  "results.consequences.fine": "Fines up to ₦10,000,000 or 2% of annual gross revenue",
-  "results.consequences.enforcement": "NDPC enforcement notice and investigation",
-  "results.consequences.suspension": "Service suspension and public warning",
-  "results.consequences.carPenalty": "Late CAR filing: 50% administrative penalty on filing fee (GAID Art. 10)",
-  "results.consequences.prosecution": "Criminal prosecution under the NDP Act 2023",
-  "results.sectorTips": "Tips",
-  "results.triggeredClauses": "Triggered Clauses",
-  "results.backToAnalyze": "Analyze",
-  "results.fixIt": "Fix It",
-  "results.backToImpact": "Back to Impact",
-  "results.downloadFullReport": "Download Full Report (PDF)",
-  "results.scanAnother": "Scan Another App",
-  "results.toast.downloaded.title": "Report downloaded!",
-  "results.toast.downloaded.description": "RegTrack_Report_{{date}}.pdf",
-  "results.toast.error.title": "Error",
-  "results.toast.error.description": "Failed to generate PDF. Please try again.",
-  "results.dcpmTier": "DCPMI Classification",
-  "results.aiConfidence": "AI Confidence",
-  "results.basedOn": "Based on",
-  
-  "search.placeholder": "Search NDP Act clauses...",
-  "search.button": "Find Clauses",
-  "search.searching": "Searching...",
-  "search.noResults": "No clauses found. Try different keywords.",
-  "search.resultsFound": "{{count}} clause(s) found",
-  "search.terms.consent": "consent",
-  "search.terms.breach": "breach",
-  "search.terms.children": "children",
-  "search.terms.transfer": "transfer",
-  "search.terms.audit": "audit",
-  "search.terms.penalty": "penalty",
-  "search.categories.consent": "Consent",
-  "search.categories.rights": "Data Subject Rights",
-  "search.categories.obligations": "Controller Obligations",
-  "search.categories.transfer": "Cross-Border Transfer",
-  "search.categories.enforcement": "Enforcement",
-  "search.categories.security": "Security",
-  "search.categories.breach": "Data Breach",
-  "search.title": "Search NDP Act & GAID Framework",
-
-  "checklist.progress.title": "Remediation Progress",
-  "checklist.progress.count": "{{completed}} of {{total}} items completed",
-  "checklist.priority.critical": "Critical Priority",
-  "checklist.priority.high": "High Priority",
-  "checklist.priority.medium": "Medium Priority",
-  "checklist.difficulty.easy": "Easy",
-  "checklist.difficulty.medium": "Medium",
-  "checklist.difficulty.hard": "Hard",
-  "checklist.empty.title": "Looking good!",
-  "checklist.empty.message": "No critical issues found. Keep up the good compliance practices.",
-  "checklist.critical": "Critical (Fix before launch)",
-  "checklist.high": "High Priority (Fix within 1 week)",
-  "checklist.medium": "Medium Priority (Fix within 1 month)",
-
-  "checklist.items.rem-privacy-policy.title": "Publish a Privacy Policy",
-  "checklist.items.rem-privacy-policy.description": "Your app collects personal data but lacks a privacy policy. NDP Act Section 27 requires transparent information about data processing.",
-  "checklist.items.rem-consent.title": "Implement Consent Mechanism",
-  "checklist.items.rem-consent.description": "Obtain explicit, informed consent before collecting personal data as required by NDP Act Section 26.",
-  "checklist.items.rem-children.title": "Child Data Protection",
-  "checklist.items.rem-children.description": "Implement age verification and parental consent for users under 18 per NDP Act Section 31.",
-  "checklist.items.rem-appoint-dpo.title": "Appoint Data Protection Officer",
-  "checklist.items.rem-appoint-dpo.description": "Designate a DPO as required for your processing activities under NDP Act Section 32.",
-  "checklist.items.rem-file-audit.title": "File Compliance Audit Returns",
-  "checklist.items.rem-file-audit.description": "Submit annual CAR filing to NDPC by March 31st as required by GAID 2025.",
-  "checklist.items.rem-register-ndpc.title": "Register with NDPC",
-  "checklist.items.rem-register-ndpc.description": "Register as a data controller/processor of major importance under NDP Act Section 44.",
-  "checklist.items.rem-dpia.title": "Conduct Data Protection Impact Assessment",
-  "checklist.items.rem-dpia.description": "Perform DPIA for high-risk processing activities per NDP Act Section 28.",
-  "checklist.items.rem-cross-border.title": "Cross-Border Transfer Safeguards",
-  "checklist.items.rem-cross-border.description": "Ensure adequate protection for international data transfers per NDP Act Sections 41-43.",
-  "checklist.items.rem-third-party.title": "Third-Party Data Processing Agreements",
-  "checklist.items.rem-third-party.description": "Execute written data processing agreements with all vendors and service providers.",
-  "checklist.items.rem-agf-coord.title": "Attorney-General Federation Coordination",
-  "checklist.items.rem-agf-coord.description": "Coordinate cross-border transfer approvals with the AGF office as required.",
-  "checklist.items.rem-cookie-consent.title": "Cookie Consent Implementation",
-  "checklist.items.rem-cookie-consent.description": "Implement cookie consent banner for website tracking and analytics.",
-  
-  "dcpm.uhl": "Ultra-High Level",
-  "dcpm.ehl": "Extra-High Level",
-  "dcpm.ohl": "Ordinary-High Level",
-  
-  "footer.by": "by Nexus SafeSphere",
-  "footer.tagline": "Bridging Nigerian innovation and regulation. AI-powered NDP Act & GAID 2025 compliance for the builders shaping Africa's future.",
-  "footer.quickLinks": "Quick Links",
-  "footer.about": "About",
-  "footer.ndpcResources": "NDPC Resources",
-  "footer.joinWaitlist": "Join Waitlist",
-  "footer.regulator": "Regulator Dashboard",
-  "footer.connect": "Connect",
-  "footer.contact": "Contact",
-  "footer.twitter": "Twitter",
-  "footer.linkedin": "LinkedIn",
-  "footer.whyBuilt.title": "Why We Built This for Nigeria",
-  "footer.whyBuilt.description": "Built in Abuja by Nigerian founders, for Nigerian regulations. We believe every Naija startup deserves to launch with confidence — knowing their data practices protect both their users and their business. RegTrack exists because compliance shouldn't be a barrier to innovation in Africa's largest tech ecosystem. Powered by the NDP Act 2023, NDPR Implementation Framework, and the GAID 2025.",
-  "footer.builtFor": "Built for Naija with",
-  "footer.madeIn": "Made in Abuja",
-  "footer.privacy": "Privacy Policy",
-  "footer.terms": "Terms of Service",
-  "footer.poweredBy": "Powered by AI",
-  "footer.hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
-  "footer.copyright": "© 2026 RegTrack by NSS.",
-  "footer.frameworkStatus": "Regulatory Framework Status",
-  "footer.lastSynced": "Last synced with NDPC",
-
-  "resources.title": "Quick Resources",
-  "resources.privacyTemplate.label": "Privacy Policy Template",
-  "resources.privacyTemplate.desc": "NDPC Official",
-  "resources.dpcoDirectory.label": "DPCO Directory",
-  "resources.dpcoDirectory.desc": "Find licensed compliance organizations",
-  "resources.breachTemplate.label": "Breach Notification Template",
-  "resources.breachTemplate.desc": "72-hour reporting",
-  "resources.dpa.label": "Data Processing Agreement",
-  "resources.dpa.desc": "DPA template",
-  "resources.fullText.label": "NDP Act & GAID 2025",
-  "resources.fullText.desc": "Official regulatory documents",
-  "resources.auditPortal.label": "Audit Filing Portal",
-  "resources.auditPortal.desc": "File your annual audit",
-
-  "demo.title.part1": "Try it",
-  "demo.title.part2": "now",
-  "demo.subtitle": "Test your app's NDP Act compliance risk in under 2 minutes.",
-  "demo.tabs.scanner": "Risk Scanner",
-  "demo.tabs.finder": "Clause Finder",
-  "demo.tabs.extractor": "Obligation Extractor",
-  "demo.framework.ndpa": "NDP Act 2023",
-  "demo.framework.cbn": "CBN AML 2024",
-  "demo.framework.hint": "Try the framework toggle above — switch between NDP Act 2023 and CBN AML 2024 instantly.",
-  "demo.framework.policyAsCode": "Policy-as-code: One JSON file per framework. Zero code changes.",
-  
-  "extractor.title": "AI Obligation Extractor",
-  "extractor.subtitle": "Upload any policy document — AI extracts NDP Act obligations automatically",
-  "extractor.dropzone": "Drag & drop your policy document",
-  "extractor.browse": "or click to browse",
-  "extractor.supports": "Supports PDF, DOCX, TXT (Max 10MB)",
-  "extractor.extract": "Extract Obligations",
-  "extractor.analyzing": "Analyzing Document...",
-  "extractor.total": "Total",
-  "extractor.compliant": "Compliant",
-  "extractor.partial": "Partial",
-  "extractor.nonCompliant": "Non-Compliant",
-  "extractor.extracted": "Extracted Obligations",
-  "extractor.viewClause": "View Clause",
-  "extractor.exportReport": "Export Report",
-  "extractor.uploadAnother": "Upload Another Document",
-  "extractor.demoNotice": "Demo: In production, this uses Azure OpenAI to extract obligations from any uploaded document.",
-  
-  "regulator.title": "NDPC Regulator Dashboard",
-  "regulator.subtitle": "Real-time compliance posture across all regulated entities",
-  "regulator.suptech": "SupTech Demo",
-  "regulator.totalEntities": "Total Entities",
-  "regulator.compliant": "Compliant",
-  "regulator.atRisk": "At Risk",
-  "regulator.highRisk": "High Risk",
-  "regulator.avgSectorRisk": "Avg Sector Risk",
-  "regulator.pendingCAR": "Pending CAR Filings",
-  "regulator.recentScans": "Recent Compliance Scans",
-  "regulator.sectorBreakdown": "Sector Breakdown",
-  "regulator.viewDetails": "View Details",
-  "regulator.exportData": "Export Data",
-  "regulator.backToHome": "Back to Home"
+  "solution": {
+    "badge": "Our Solution",
+    "titlePart1": "Two tools.",
+    "titlePart2": "Complete clarity.",
+    "subtitle": "RegTrack gives you instant compliance insights powered by the full NDP Act and GAID 2025 framework.",
+    "scanner": {
+      "title": "Compliance Assessment",
+      "description": "Answer questions about your business. Get an instant compliance score with triggered NDP Act sections and plain-English explanations.",
+      "flow": {
+        "step1": "Questionnaire",
+        "step2": "Compliance Score",
+        "step3": "Explanation"
+      }
+    },
+    "finder": {
+      "title": "Clause Finder",
+      "description": "Search the full NDP Act and GAID 2025 framework by keyword. Find the exact section that applies to your situation with a clear summary.",
+      "flow": {
+        "step1": "Keyword Search",
+        "step2": "NDP Act Section",
+        "step3": "Summary"
+      }
+    }
+  },
+  "sector": {
+    "label": "What sector is your business in?"
+  },
+  "sectors": {
+    "health": { "name": "Health" },
+    "fintech": { "name": "Fintech" },
+    "edtech": { "name": "EdTech" },
+    "ecommerce": { "name": "E-Commerce" },
+    "social": { "name": "Social" },
+    "logistics": { "name": "Logistics" },
+    "government": { "name": "Government" },
+    "other": { "name": "Other" }
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No"
+  },
+  "button": {
+    "next": "Next",
+    "back": "Back",
+    "analyze": "Analyze Compliance",
+    "restart": "Start New Assessment",
+    "downloadPDF": "Download Report (PDF)"
+  },
+  "waitlist": {
+    "badge": "Early Access",
+    "title": "Get early access to RegTrack",
+    "subtitle": "Join the waitlist for the full platform with AI-powered compliance automation, real-time monitoring, and team collaboration.",
+    "placeholder": "your@email.com",
+    "button": "Join Waitlist",
+    "success": {
+      "title": "You're on the list!",
+      "message": "We'll notify you when RegTrack launches."
+    }
+  },
+  "risk": {
+    "low": "Low Risk",
+    "medium": "Medium Risk",
+    "high": "High Risk",
+    "critical": "Critical Risk"
+  },
+  "results": {
+    "newScan": "New Assessment",
+    "downloadPDF": "Download PDF",
+    "yourApp": "Your Business",
+    "steps": {
+      "analyze": "Analyze",
+      "understand": "Understand",
+      "fix": "Fix It"
+    },
+    "stats": {
+      "clauses": "Clauses Triggered",
+      "actions": "Actions Needed",
+      "maxFine": "Max Fine"
+    },
+    "answerBreakdown": "Answer Breakdown",
+    "understandImpact": "Understand Impact",
+    "plainEnglish": "Plain-English Explanation",
+    "consequences": {
+      "title": "Potential Consequences",
+      "fine": "Fines up to ₦10,000,000 or 2% of annual gross revenue",
+      "enforcement": "NDPC enforcement notice and investigation",
+      "suspension": "Service suspension and public warning",
+      "carPenalty": "Late CAR filing: 50% administrative penalty on filing fee (GAID Art. 10)",
+      "prosecution": "Criminal prosecution under the NDP Act 2023"
+    },
+    "sectorTips": "Tips",
+    "triggeredClauses": "Triggered Clauses",
+    "backToAnalyze": "Analyze",
+    "fixIt": "Fix It",
+    "backToImpact": "Back to Impact",
+    "downloadFullReport": "Download Full Report (PDF)",
+    "scanAnother": "New Assessment",
+    "toast": {
+      "downloaded": {
+        "title": "Report downloaded!",
+        "description": "RegTrack_Report_{{date}}.pdf"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to generate PDF. Please try again."
+      }
+    },
+    "dcpmTier": "DCPMI Classification",
+    "aiConfidence": "AI Confidence",
+    "basedOn": "Based on"
+  },
+  "search": {
+    "placeholder": "Search NDP Act clauses...",
+    "button": "Find Clauses",
+    "searching": "Searching...",
+    "noResults": "No clauses found. Try different keywords.",
+    "resultsFound": "{{count}} clause(s) found",
+    "terms": {
+      "consent": "consent",
+      "breach": "breach",
+      "children": "children",
+      "transfer": "transfer",
+      "audit": "audit",
+      "penalty": "penalty"
+    },
+    "categories": {
+      "consent": "Consent",
+      "rights": "Data Subject Rights",
+      "obligations": "Controller Obligations",
+      "transfer": "Cross-Border Transfer",
+      "enforcement": "Enforcement",
+      "security": "Security",
+      "breach": "Data Breach"
+    },
+    "title": "Search NDP Act & GAID Framework"
+  },
+  "checklist": {
+    "progress": {
+      "title": "Remediation Progress",
+      "count": "{{completed}} of {{total}} items completed"
+    },
+    "priority": {
+      "critical": "Critical Priority",
+      "high": "High Priority",
+      "medium": "Medium Priority",
+      "low": "Low Priority"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "empty": {
+      "title": "Looking good!",
+      "message": "No critical issues found. Keep up the good compliance practices."
+    },
+    "critical": "Critical (Fix before launch)",
+    "high": "High Priority (Fix within 1 week)",
+    "medium": "Medium Priority (Fix within 1 month)",
+    "items": {
+      "rem-privacy-policy": {
+        "title": "Publish a Privacy Policy",
+        "description": "Your business collects personal data but lacks a privacy policy. NDP Act Section 27 requires transparent information about data processing."
+      },
+      "rem-consent": {
+        "title": "Implement Consent Mechanism",
+        "description": "Obtain explicit, informed consent before collecting personal data as required by NDP Act Section 26."
+      },
+      "rem-children": {
+        "title": "Child Data Protection",
+        "description": "Implement age verification and parental consent for users under 18 per NDP Act Section 31."
+      },
+      "rem-appoint-dpo": {
+        "title": "Appoint Data Protection Officer",
+        "description": "Designate a DPO as required for your processing activities under NDP Act Section 32."
+      },
+      "rem-file-audit": {
+        "title": "File Compliance Audit Returns",
+        "description": "Submit annual CAR filing to NDPC by March 31st as required by GAID 2025."
+      },
+      "rem-register-ndpc": {
+        "title": "Register with NDPC",
+        "description": "Register as a data controller/processor of major importance under NDP Act Section 44."
+      },
+      "rem-dpia": {
+        "title": "Conduct Data Protection Impact Assessment",
+        "description": "Perform DPIA for high-risk processing activities per NDP Act Section 28."
+      },
+      "rem-cross-border": {
+        "title": "Cross-Border Transfer Safeguards",
+        "description": "Ensure adequate protection for international data transfers per NDP Act Sections 41-43."
+      },
+      "rem-third-party": {
+        "title": "Third-Party Data Processing Agreements",
+        "description": "Execute written data processing agreements with all vendors and service providers."
+      },
+      "rem-agf-coord": {
+        "title": "Attorney-General Federation Coordination",
+        "description": "Coordinate cross-border transfer approvals with the AGF office as required."
+      },
+      "rem-cookie-consent": {
+        "title": "Cookie Consent Implementation",
+        "description": "Implement cookie consent banner for website tracking and analytics."
+      },
+      "cbn-kyc-implementation": {
+        "title": "Implement KYC Verification System",
+        "description": "CBN AML regulations require customer identification and verification using BVN, NIN, or international passport for all financial services."
+      },
+      "cbn-aml-policy": {
+        "title": "Establish AML/CFT Policy",
+        "description": "Develop and implement a comprehensive Anti-Money Laundering and Counter Financing of Terrorism policy."
+      },
+      "cbn-compliance-officer": {
+        "title": "Designate AML Compliance Officer",
+        "description": "Appoint a designated AML/CFT Compliance Officer responsible for overseeing all compliance matters."
+      },
+      "cbn-transaction-monitoring": {
+        "title": "Implement Transaction Monitoring System",
+        "description": "Deploy real-time transaction monitoring to detect suspicious activities."
+      },
+      "cbn-str-filing": {
+        "title": "Establish STR Filing Process",
+        "description": "Create process for filing Suspicious Transaction Reports to NFIU within 24 hours."
+      },
+      "cbn-aml-training": {
+        "title": "Conduct Annual AML Training",
+        "description": "Provide annual AML/CFT training to all relevant employees."
+      },
+      "cbn-record-keeping": {
+        "title": "Implement Record Keeping System",
+        "description": "Establish system to retain transaction records for at least 5 years."
+      },
+      "cbn-risk-assessment": {
+        "title": "Conduct AML Risk Assessment",
+        "description": "Perform annual enterprise-wide AML risk assessment."
+      },
+      "cbn-independent-audit": {
+        "title": "Schedule Independent AML Audit",
+        "description": "Conduct independent AML compliance audit annually."
+      },
+      "cbn-pep-screening": {
+        "title": "Implement PEP Screening",
+        "description": "Screen customers against Politically Exposed Persons lists."
+      },
+      "cbn-fintech-licensing": {
+        "title": "Obtain CBN Fintech License",
+        "description": "Secure appropriate CBN licensing for financial services operations."
+      }
+    }
+  },
+  "dcpm": {
+    "uhl": "Ultra-High Level",
+    "ehl": "Extra-High Level",
+    "ohl": "Ordinary-High Level"
+  },
+  "footer": {
+    "by": "by Nexus SafeSphere",
+    "tagline": "Bridging Nigerian innovation and regulation. AI-powered NDP Act & GAID 2025 compliance for the builders shaping Africa's future.",
+    "quickLinks": "Quick Links",
+    "about": "About",
+    "ndpcResources": "NDPC Resources",
+    "joinWaitlist": "Join Waitlist",
+    "regulator": "Regulator Dashboard",
+    "connect": "Connect",
+    "contact": "Contact",
+    "twitter": "Twitter",
+    "linkedin": "LinkedIn",
+    "whyBuilt": {
+      "title": "Why We Built This for Nigeria",
+      "description": "Built in Abuja by Nigerian founders, for Nigerian regulations. We believe every Naija startup deserves to launch with confidence — knowing their data practices protect both their users and their business. RegTrack exists because compliance shouldn't be a barrier to innovation in Africa's largest tech ecosystem. Powered by the NDP Act 2023, NDPR Implementation Framework, and the GAID 2025."
+    },
+    "builtFor": "Built for Naija with",
+    "madeIn": "Made in Abuja",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "poweredBy": "Powered by AI",
+    "hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
+    "copyright": "© 2026 RegTrack by NSS.",
+    "frameworkStatus": "Regulatory Framework Status",
+    "lastSynced": "Last synced with NDPC"
+  },
+  "resources": {
+    "title": "Quick Resources",
+    "privacyTemplate": {
+      "label": "Privacy Policy Template",
+      "desc": "NDPC Official"
+    },
+    "dpcoDirectory": {
+      "label": "DPCO Directory",
+      "desc": "Find licensed compliance organizations"
+    },
+    "breachTemplate": {
+      "label": "Breach Notification Template",
+      "desc": "72-hour reporting"
+    },
+    "dpa": {
+      "label": "Data Processing Agreement",
+      "desc": "DPA template"
+    },
+    "fullText": {
+      "label": "NDP Act & GAID 2025",
+      "desc": "Official regulatory documents"
+    },
+    "auditPortal": {
+      "label": "Audit Filing Portal",
+      "desc": "File your annual audit"
+    }
+  },
+  "demo": {
+    "title": {
+      "part1": "Try it",
+      "part2": "now"
+    },
+    "subtitle": "Test your compliance readiness in under 2 minutes.",
+    "tabs": {
+      "scanner": "Compliance Assessment",
+      "finder": "Clause Finder",
+      "extractor": "Obligation Extractor"
+    },
+    "framework": {
+      "ndpa": "NDP Act 2023",
+      "cbn": "CBN AML 2024",
+      "hint": "Try the framework toggle above — switch between NDP Act 2023 and CBN AML 2024 instantly.",
+      "policyAsCode": "Policy-as-code: One JSON file per framework. Zero code changes."
+    }
+  },
+  "extractor": {
+    "title": "AI Obligation Extractor",
+    "subtitle": "Upload any policy document — AI extracts NDP Act obligations automatically",
+    "dropzone": "Drag & drop your policy document",
+    "browse": "or click to browse",
+    "supports": "Supports PDF, DOCX, TXT (Max 10MB)",
+    "extract": "Extract Obligations",
+    "analyzing": "Analyzing Document...",
+    "total": "Total",
+    "compliant": "Compliant",
+    "partial": "Partial",
+    "nonCompliant": "Non-Compliant",
+    "extracted": "Extracted Obligations",
+    "viewClause": "View Clause",
+    "exportReport": "Export Report",
+    "uploadAnother": "Upload Another Document",
+    "demoNotice": "Demo: In production, this uses Azure OpenAI to extract obligations from any uploaded document."
+  },
+  "regulator": {
+    "title": "NDPC Regulator Dashboard",
+    "subtitle": "Real-time compliance posture across all regulated entities",
+    "suptech": "SupTech Demo",
+    "totalEntities": "Total Entities",
+    "compliant": "Compliant",
+    "atRisk": "At Risk",
+    "highRisk": "High Risk",
+    "avgSectorRisk": "Avg Sector Risk",
+    "pendingCAR": "Pending CAR Filings",
+    "recentScans": "Recent Compliance Scans",
+    "sectorBreakdown": "Sector Breakdown",
+    "viewDetails": "View Details",
+    "exportData": "Export Data",
+    "backToHome": "Back to Home"
+  }
 }

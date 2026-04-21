@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ndprData from "@/data/ndpr_dataset.json";
+import cbnData from "@/data/cbn_dataset.json";
 import RiskResults from "./RiskResults";
 import SectorSelector from "./SectorSelector";
+import QuestionModal from "./QuestionModal";
 import { getSectorById } from "@/lib/sectorRecommendations";
+import { forceScrollToTop } from "@/components/ScrollToTop";
 
 export interface ScanResult {
   riskScore: number;
   riskLevel: "low" | "medium" | "high" | "critical";
-  triggeredClauses: typeof ndprData.clauses;
+  triggeredClauses: any[];
   explanation: string;
   appName: string;
   sector: string;
@@ -28,6 +31,8 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [step, setStep] = useState<"form" | "result">("form");
   const [calculating, setCalculating] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showForm, setShowForm] = useState(true);
 
   // Framework-specific questions
   const ndpaQuestions = ndprData.risk_scanner_questions;
@@ -106,9 +111,22 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
   ];
 
   const questions = activeFramework === "ndpa" ? ndpaQuestions : cbnQuestions;
+  
+  // Get the appropriate clause data based on framework
+  const clauseData = activeFramework === "ndpa" ? ndprData.clauses : cbnData.clauses;
 
   const handleAnswer = (questionId: string, value: boolean) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
+  };
+
+  const startQuestionnaire = () => {
+    setShowForm(false);
+    setIsModalOpen(true);
+  };
+
+  const handleModalComplete = () => {
+    setIsModalOpen(false);
+    calculateRisk();
   };
 
   const calculateRisk = () => {
@@ -153,7 +171,7 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
       }
 
       const normalizedScore = Math.max(0, Math.min(100, Math.round(score)));
-      const triggeredClauses = ndprData.clauses.filter(c => triggeredClauseIds.has(c.id));
+      const triggeredClauses = clauseData.filter(c => triggeredClauseIds.has(c.id));
 
       const riskLevel: ScanResult["riskLevel"] =
         normalizedScore <= 25 ? "low" :
@@ -182,6 +200,9 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
       });
       setStep("result");
       setCalculating(false);
+      
+      // Scroll to top when results are shown
+      forceScrollToTop();
     }, 800);
   };
 
@@ -191,6 +212,10 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
     setAnswers({});
     setAppName("");
     setSector("");
+    setShowForm(true);
+    
+    // Force scroll to top when resetting to form
+    forceScrollToTop();
   };
 
   const allAnswered = questions.every(q => answers[q.id] !== undefined && answers[q.id] !== null);
@@ -201,158 +226,115 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
   }
 
   return (
-    <div className="space-y-5">
-      {/* Framework Indicator */}
-      <div className={`text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 ${
-        activeFramework === "ndpa" 
-          ? "bg-primary/10 text-primary" 
-          : "bg-accent/10 text-accent"
-      }`}>
-        <span>{activeFramework === "ndpa" ? t('scanner.framework.ndpa') : t('scanner.framework.cbn')}</span>
-      </div>
+    <>
+      {/* Initial Form View */}
+      {showForm && (
+        <div className="max-w-2xl mx-auto space-y-6">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
+              {t('scanner.title')}
+            </h2>
+            <p className="text-muted-foreground">
+              {t('scanner.subtitle')}
+            </p>
+          </div>
 
-      {/* Progress indicator */}
-      <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-        <span>{t('scanner.progress.answered').replace('{{current}}', String(answeredCount)).replace('{{total}}', String(questions.length))}</span>
-        <div className="flex-1 mx-4 h-1.5 bg-muted rounded-full overflow-hidden">
-          <div
-            className={`h-full rounded-full transition-all duration-500 ${
-              activeFramework === "ndpa" ? "bg-primary" : "bg-accent"
+          {/* Framework Indicator */}
+          <div className={`text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 ${
+            activeFramework === "ndpa" 
+              ? "bg-primary/10 text-primary" 
+              : "bg-accent/10 text-accent"
+          }`}>
+            <span>{activeFramework === "ndpa" ? t('scanner.framework.ndpa') : t('scanner.framework.cbn')}</span>
+          </div>
+
+          {/* App name */}
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-2">
+              {activeFramework === "ndpa" ? t('scanner.appName.label') : t('scanner.appName.cbnLabel')}
+            </label>
+            <input
+              type="text"
+              placeholder={activeFramework === "ndpa" ? t('scanner.appName.placeholder') : t('scanner.appName.cbnPlaceholder')}
+              value={appName}
+              onChange={e => setAppName(e.target.value)}
+              className="w-full px-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+            />
+          </div>
+
+          {/* Sector selector - only show for NDPA */}
+          {activeFramework === "ndpa" && (
+            <SectorSelector selected={sector} onSelect={setSector} />
+          )}
+
+          {/* Sector tips */}
+          {activeFramework === "ndpa" && sector && (() => {
+            const sp = getSectorById(sector);
+            if (!sp) return null;
+            return (
+              <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 animate-fade-in">
+                <p className="text-xs font-semibold text-primary mb-1">
+                  {sp.emoji} {t(`sectors.${sector}.name`)} — {t('scanner.sector.keyRisks')}
+                </p>
+                <ul className="text-xs text-muted-foreground space-y-1">
+                  {sp.keyRisks.slice(0, 3).map((r, i) => (
+                    <li key={i} className="flex items-start gap-1.5">
+                      <span className="text-primary mt-0.5">•</span> {r}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
+
+          {/* Start Assessment Button */}
+          <button
+            onClick={startQuestionnaire}
+            disabled={!appName.trim() || (activeFramework === "ndpa" && !sector)}
+            className={`w-full py-4 rounded-xl text-primary-foreground font-bold text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2 ${
+              activeFramework === "ndpa" 
+                ? "bg-primary" 
+                : "bg-accent"
             }`}
-            style={{ width: `${(answeredCount / questions.length) * 100}%` }}
-          />
+          >
+            Start Assessment
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
-        <span>{Math.round((answeredCount / questions.length) * 100)}%</span>
-      </div>
-
-      {/* App name */}
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-2">
-          {activeFramework === "ndpa" ? t('scanner.appName.label') : t('scanner.appName.cbnLabel')}
-        </label>
-        <input
-          type="text"
-          placeholder={activeFramework === "ndpa" ? t('scanner.appName.placeholder') : t('scanner.appName.cbnPlaceholder')}
-          value={appName}
-          onChange={e => setAppName(e.target.value)}
-          className="w-full px-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
-        />
-      </div>
-
-      {/* Sector selector - only show for NDPA */}
-      {activeFramework === "ndpa" && (
-        <SectorSelector selected={sector} onSelect={setSector} />
       )}
 
-      {/* Sector tips - from Code 2 */}
-      {activeFramework === "ndpa" && sector && (() => {
-        const sp = getSectorById(sector);
-        if (!sp) return null;
-        return (
-          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 animate-fade-in">
-            <p className="text-xs font-semibold text-primary mb-1">
-              {sp.emoji} {t(`sectors.${sector}.name`)} — {t('scanner.sector.keyRisks')}
-            </p>
-            <ul className="text-xs text-muted-foreground space-y-1">
-              {sp.keyRisks.slice(0, 3).map((r, i) => (
-                <li key={i} className="flex items-start gap-1.5">
-                  <span className="text-primary mt-0.5">•</span> {r}
-                </li>
-              ))}
-            </ul>
+      {/* Question Modal */}
+      <QuestionModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setShowForm(true);
+          // Scroll to top when modal closes and returns to form
+          forceScrollToTop();
+        }}
+        questions={questions}
+        answers={answers}
+        onAnswer={handleAnswer}
+        onComplete={handleModalComplete}
+        activeFramework={activeFramework}
+      />
+
+      {/* Loading Overlay */}
+      {calculating && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-card rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
+            <div className={`w-12 h-12 border-4 border-muted ${
+              activeFramework === "ndpa" ? "border-t-primary" : "border-t-accent"
+            } rounded-full animate-spin`} />
+            <p className="text-foreground font-medium">{t('scanner.analyzing')}</p>
+            <p className="text-sm text-muted-foreground">Please wait</p>
           </div>
-        );
-      })()}
-
-      {/* Questions */}
-      <div className="space-y-3">
-        {questions.map((q, idx) => {
-          const isAnswered = answers[q.id] !== undefined && answers[q.id] !== null;
-          const isSafeguard = q.risk_weight < 0;
-          const goodAnswer = isSafeguard ? true : false;
-          const userAnswer = answers[q.id];
-          const isGood = isAnswered && userAnswer === goodAnswer;
-
-          return (
-            <div
-              key={q.id}
-              className={`group rounded-xl border bg-card p-4 transition-all duration-300 hover:shadow-elevated hover:-translate-y-0.5 animate-fade-in-up ${
-                isAnswered
-                  ? isGood
-                    ? "border-secondary/40 shadow-card"
-                    : "border-destructive/30 shadow-card"
-                  : "border-border hover:border-primary/30"
-              }`}
-              style={{ animationDelay: `${idx * 0.04}s` }}
-            >
-              <div className="flex items-start gap-2 mb-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-muted text-muted-foreground text-[11px] font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                  {idx + 1}
-                </span>
-                <p className="text-sm font-medium text-foreground leading-relaxed flex-1">
-                  {activeFramework === "ndpa" ? t(`scanner.questions.${q.id}`) : q.question}
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleAnswer(q.id, true)}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] hover:scale-[1.02] ${
-                    answers[q.id] === true
-                      ? isSafeguard
-                        ? "bg-secondary text-secondary-foreground shadow-sm ring-2 ring-secondary/40"
-                        : "bg-destructive/90 text-destructive-foreground shadow-sm ring-2 ring-destructive/30"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  {t('common.yes')}
-                </button>
-                <button
-                  onClick={() => handleAnswer(q.id, false)}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-[0.97] hover:scale-[1.02] ${
-                    answers[q.id] === false
-                      ? isSafeguard
-                        ? "bg-destructive/90 text-destructive-foreground shadow-sm ring-2 ring-destructive/30"
-                        : "bg-secondary text-secondary-foreground shadow-sm ring-2 ring-secondary/40"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  {t('common.no')}
-                </button>
-              </div>
-              {isAnswered && (
-                <div className="mt-2.5 border-t border-border pt-2.5 animate-fade-in space-y-1.5">
-                  <p className={`text-[11px] font-semibold flex items-center gap-1 ${isGood ? "text-secondary" : "text-destructive"}`}>
-                    {isGood ? t('scanner.feedback.lowers') : t('scanner.feedback.increases')}
-                  </p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    💡 {activeFramework === "ndpa" ? t(`scanner.explanations.${q.id}`) : q.explanation}
-                  </p>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <button
-        onClick={calculateRisk}
-        disabled={!allAnswered || calculating}
-        className={`w-full py-4 rounded-xl text-primary-foreground font-bold text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98] animate-pulse-glow flex items-center justify-center gap-2 ${
-          activeFramework === "ndpa" 
-            ? "bg-primary" 
-            : "bg-accent"
-        }`}
-      >
-        {calculating ? (
-          <>
-            <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-            {t('scanner.analyzing')}
-          </>
-        ) : (
-          <>{activeFramework === "ndpa" ? "🛡 " : ""}{activeFramework === "ndpa" ? t('scanner.calculate') : t('scanner.calculateCbn')}</>
-        )}
-      </button>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

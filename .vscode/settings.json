@@ -3,5 +3,9 @@
   "deno.enablePaths": ["supabase/functions"],
   "deno.unstable": true,
   "typescript.validate.enabled": false,
-  "javascript.validate.enabled": false
+  "javascript.validate.enabled": false,
+  "css.lint.unknownAtRules": "ignore",
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
