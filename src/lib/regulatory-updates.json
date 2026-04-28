@@ -2,9 +2,10 @@
   "metadata": {
     "last_synced": "2026-04-20T08:00:00Z",
     "sync_frequency": "daily",
-    "total_updates": 4,
-    "sources": ["NDPC", "CBN", "NITDA"],
-    "version": "1.0",
+    "total_updates": 8,
+    "sources": ["NDPC", "CBN", "SEC", "NITDA"],
+    "version": "2.0.0",
+    "frameworks_covered": ["NDPA", "CBN-AML", "CBN-CP", "SEC-CF", "NITDA-DP", "NITDA-LC"],
     "disclaimer": "This is a demonstration feed showing RegTrack's real-time regulatory monitoring capability. All updates reference actual regulatory developments."
   },
   "updates": [
@@ -19,82 +20,15 @@
       "full_text_url": "https://ndpc.gov.ng/gaid-2025",
       "impact_level": "high",
       "categories": ["compliance", "registration", "dcpmi"],
-      "affected_frameworks": ["ndpa-2023"],
+      "affected_frameworks": ["NDPA"],
       "affected_sections": ["44", "32", "28", "40"],
-      "changes": [
-        {
-          "type": "implementation",
-          "section": "GAID 2025",
-          "before": "NDP Act 2023 without operational directive",
-          "after": "Comprehensive implementation framework with specific compliance deadlines"
-        }
-      ],
+      "affected_sectors": ["fintech", "healthtech", "ecommerce", "edtech", "agritech", "enterprise", "social_media"],
       "compliance_actions": [
         "Review DCPMI classification thresholds (UHL: >10,000 data subjects or sensitive data)",
         "Prepare for annual Compliance Audit Returns filing by March 31st",
         "Engage licensed DPCO for compliance audit certification",
         "Update breach response procedures per GAID specifications"
-      ],
-      "official_reference": "NDPC issued GAID 2025 on September 19, 2025, effective immediately"
-    },
-    {
-      "id": "cbn-aml-cft-2022",
-      "title": "CBN AML/CFT Regulations 2022 - Full Implementation Required",
-      "agency": "Central Bank of Nigeria",
-      "agency_code": "CBN",
-      "date": "2022-11-01",
-      "effective_date": "2022-11-01",
-      "summary": "The CBN AML/CFT Regulations for Banks and Other Financial Institutions in Nigeria, 2022, issued under the Money Laundering (Prevention and Prohibition) Act 2022, require enhanced customer due diligence, suspicious transaction reporting to NFIU within 24 hours, enterprise-wide risk assessments, and independent compliance audits.",
-      "full_text_url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation%20for%20banks%20and%20other%20financial%20institutions%20in%20nigeria.pdf",
-      "impact_level": "high",
-      "categories": ["aml", "cft", "compliance"],
-      "affected_frameworks": ["cbn-aml-2022"],
-      "affected_sections": ["6", "7", "14", "4", "20", "18", "23", "19"],
-      "changes": [
-        {
-          "type": "new_regulation",
-          "section": "Multiple",
-          "before": "Previous AML/CFT Regulations 2013",
-          "after": "Enhanced AML/CFT Regulations 2022 with stricter requirements"
-        }
-      ],
-      "compliance_actions": [
-        "Implement Customer Due Diligence with BVN/NIN verification",
-        "Establish 24-hour STR reporting to NFIU",
-        "Conduct enterprise-wide AML/CFT risk assessment",
-        "Appoint designated AML/CFT Compliance Officer",
-        "Maintain transaction records for minimum 5 years"
-      ],
-      "official_reference": "CBN AML/CFT Regulations 2022, issued pursuant to Money Laundering (Prevention and Prohibition) Act 2022"
-    },
-    {
-      "id": "ndpc-ai-guidance",
-      "title": "NDPC Guidance on AI and Automated Decision-Making Under Development",
-      "agency": "Nigeria Data Protection Commission",
-      "agency_code": "NDPC",
-      "date": "2025-11-10",
-      "effective_date": "Pending",
-      "summary": "NDPC has announced it is developing comprehensive guidance on the application of Section 37 of the NDP Act 2023 regarding automated decision-making and AI systems. The guidance will address transparency, human intervention, and explainability requirements for AI-driven decisions affecting data subjects.",
-      "full_text_url": "https://ndpc.gov.ng",
-      "impact_level": "medium",
-      "categories": ["ai", "automation", "guidance"],
-      "affected_frameworks": ["ndpa-2023"],
-      "affected_sections": ["37", "28"],
-      "changes": [
-        {
-          "type": "anticipated",
-          "section": "Section 37",
-          "before": "General right not to be subject to automated decisions",
-          "after": "Specific guidance on meaningful human intervention and explainability expected"
-        }
-      ],
-      "compliance_actions": [
-        "Monitor NDPC website for published AI guidance",
-        "Document current AI decision-making processes",
-        "Prepare to implement human review options for automated decisions",
-        "Review privacy policies for AI disclosure requirements"
-      ],
-      "official_reference": "NDPC announced AI guidance development at stakeholder engagement on November 10, 2025"
+      ]
     },
     {
       "id": "ndpa-2023-effective",
@@ -107,46 +41,139 @@
       "full_text_url": "https://ndpc.gov.ng/ndpa-2023",
       "impact_level": "high",
       "categories": ["legislation", "data-protection"],
-      "affected_frameworks": ["ndpa-2023"],
+      "affected_frameworks": ["NDPA"],
       "affected_sections": ["All"],
-      "changes": [
-        {
-          "type": "new_legislation",
-          "section": "Entire Act",
-          "before": "NDPR 2019 (subsidiary regulation)",
-          "after": "NDP Act 2023 (primary legislation with enhanced enforcement powers)"
-        }
-      ],
+      "affected_sectors": ["fintech", "healthtech", "ecommerce", "edtech", "agritech", "enterprise", "social_media"],
       "compliance_actions": [
         "Understand lawful bases for processing (Section 25)",
         "Implement consent mechanisms meeting Section 26 requirements",
         "Publish privacy policy per Section 27",
         "Determine DCPMI status and registration requirements",
         "Establish 72-hour breach notification procedures"
-      ],
-      "official_reference": "NDP Act 2023 signed into law June 12, 2023"
+      ]
+    },
+    {
+      "id": "cbn-aml-cft-2022",
+      "title": "CBN AML/CFT Regulations 2022 - Full Implementation Required",
+      "agency": "Central Bank of Nigeria",
+      "agency_code": "CBN",
+      "date": "2022-11-01",
+      "effective_date": "2022-11-01",
+      "summary": "The CBN AML/CFT Regulations for Banks and Other Financial Institutions in Nigeria, 2022, require enhanced customer due diligence, suspicious transaction reporting to NFIU within 24 hours, enterprise-wide risk assessments, and independent compliance audits.",
+      "full_text_url": "https://www.cbn.gov.ng/out/2022/fpr/aml%20cft%20regulation.pdf",
+      "impact_level": "high",
+      "categories": ["aml", "cft", "compliance"],
+      "affected_frameworks": ["CBN-AML"],
+      "affected_sections": ["6", "7", "14", "4", "20", "18", "23", "19"],
+      "affected_sectors": ["fintech", "ecommerce"],
+      "compliance_actions": [
+        "Implement Customer Due Diligence with BVN/NIN verification",
+        "Establish 24-hour STR reporting to NFIU",
+        "Conduct enterprise-wide AML/CFT risk assessment",
+        "Appoint designated AML/CFT Compliance Officer",
+        "Maintain transaction records for minimum 5 years"
+      ]
+    },
+    {
+      "id": "cbn-consumer-protection",
+      "title": "CBN Consumer Protection Regulations 2019 - Data Privacy Requirements",
+      "agency": "Central Bank of Nigeria",
+      "agency_code": "CBN",
+      "date": "2019-11-01",
+      "effective_date": "2019-11-01",
+      "summary": "Financial service providers must protect consumer privacy, not disclose information without consent, implement data security measures, and comply with Nigeria Data Protection Regulation.",
+      "full_text_url": "https://www.cbn.gov.ng/consumer-protection",
+      "impact_level": "medium",
+      "categories": ["consumer-protection", "privacy"],
+      "affected_frameworks": ["CBN-CP"],
+      "affected_sections": ["4.2"],
+      "affected_sectors": ["fintech", "ecommerce"],
+      "compliance_actions": [
+        "Protect consumer data privacy and confidentiality",
+        "Obtain express consent before sharing consumer data",
+        "Implement appropriate data security measures"
+      ]
+    },
+    {
+      "id": "sec-crowdfunding-2021",
+      "title": "SEC Crowdfunding Rules 2021 - Registration Requirements",
+      "agency": "Securities and Exchange Commission Nigeria",
+      "agency_code": "SEC",
+      "date": "2021-01-01",
+      "effective_date": "2021-01-01",
+      "summary": "Crowdfunding portals must register with SEC, maintain minimum N100 million capital, implement investor protection measures, and conduct due diligence on issuers.",
+      "full_text_url": "https://sec.gov.ng/crowdfunding",
+      "impact_level": "high",
+      "categories": ["crowdfunding", "registration", "investor-protection"],
+      "affected_frameworks": ["SEC-CF"],
+      "affected_sections": ["4.2", "8.1"],
+      "affected_sectors": ["fintech", "enterprise"],
+      "compliance_actions": [
+        "Register crowdfunding portal with SEC",
+        "Maintain minimum N100 million capital",
+        "Implement risk disclosure and 48-hour cooling-off period",
+        "Conduct issuer due diligence"
+      ]
+    },
+    {
+      "id": "nitda-dp-framework",
+      "title": "NITDA Data Protection Implementation Framework",
+      "agency": "National Information Technology Development Agency",
+      "agency_code": "NITDA",
+      "date": "2020-11-01",
+      "effective_date": "2020-11-01",
+      "summary": "Organizations processing data of 1000+ individuals must appoint DPO, conduct annual DPIAs, publish privacy policy, maintain data inventory, and implement breach notification procedures.",
+      "full_text_url": "https://nitda.gov.ng/dp-framework",
+      "impact_level": "medium",
+      "categories": ["data-protection", "compliance"],
+      "affected_frameworks": ["NITDA-DP"],
+      "affected_sections": ["3.1", "4.2"],
+      "affected_sectors": ["fintech", "healthtech", "ecommerce", "edtech", "agritech", "enterprise", "social_media"],
+      "compliance_actions": [
+        "Appoint Data Protection Officer if processing 1000+ data subjects",
+        "Conduct annual Data Protection Impact Assessments",
+        "Publish privacy policy on website",
+        "Report breaches to NITDA within 72 hours"
+      ]
+    },
+    {
+      "id": "nitda-local-content",
+      "title": "NITDA Guidelines for Nigerian Content Development in ICT",
+      "agency": "National Information Technology Development Agency",
+      "agency_code": "NITDA",
+      "date": "2021-03-01",
+      "effective_date": "2021-03-01",
+      "summary": "Guidelines promoting local content in ICT sector, requiring preference for Nigerian-made software, hardware, and services in government procurement and private sector.",
+      "full_text_url": "https://nitda.gov.ng/local-content",
+      "impact_level": "low",
+      "categories": ["local-content", "ict-development"],
+      "affected_frameworks": ["NITDA-LC"],
+      "affected_sections": ["2.3", "4.1"],
+      "affected_sectors": ["enterprise", "edtech"],
+      "compliance_actions": [
+        "Review software procurement policies for local content compliance",
+        "Register Nigerian-developed solutions with NITDA"
+      ]
+    },
+    {
+      "id": "ndpc-ai-guidance",
+      "title": "NDPC Guidance on AI and Automated Decision-Making Under Development",
+      "agency": "Nigeria Data Protection Commission",
+      "agency_code": "NDPC",
+      "date": "2025-11-10",
+      "effective_date": "Pending",
+      "summary": "NDPC is developing comprehensive guidance on Section 37 of the NDP Act 2023 regarding automated decision-making and AI systems. The guidance will address transparency, human intervention, and explainability requirements.",
+      "full_text_url": "https://ndpc.gov.ng",
+      "impact_level": "medium",
+      "categories": ["ai", "automation", "guidance"],
+      "affected_frameworks": ["NDPA"],
+      "affected_sections": ["37", "28"],
+      "affected_sectors": ["fintech", "healthtech", "enterprise"],
+      "compliance_actions": [
+        "Monitor NDPC website for published AI guidance",
+        "Document current AI decision-making processes",
+        "Prepare to implement human review options for automated decisions"
+      ]
     }
-  ],
-  "affected_controls_summary": {
-    "total_affected": 14,
-    "by_priority": {
-      "critical": 6,
-      "high": 6,
-      "medium": 2
-    },
-    "by_status": {
-      "compliant": 0,
-      "at_risk": 6,
-      "non_compliant": 8
-    },
-    "note": "This summary reflects a typical Nigerian startup's compliance posture before implementing remediation measures"
-  },
-  "subscription_info": {
-    "available_via_api": true,
-    "api_endpoint": "/api/regulatory-updates",
-    "webhook_supported": true,
-    "rss_feed": "https://nigeria-ndpr-guard.vercel.app/updates.rss",
-    "email_digest": "weekly",
-    "demo_note": "This is a demonstration feed. In production, RegTrack would consume real-time updates from official NDPC, CBN, and NITDA sources."
-  }
+  ]
 }

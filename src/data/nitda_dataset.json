@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "regulation": "NITDA Data Protection Framework & Local Content Guidelines",
+    "issued_by": "NITDA (National Information Technology Development Agency)",
+    "date": "2021",
+    "version": "1.0",
+    "framework": "NITDA"
+  },
+  "clauses": [
+    {
+      "id": "nitda-dp-001",
+      "article_ref": "NITDA DP Art. 3.1",
+      "title": "Data Protection Compliance Requirements",
+      "category": "compliance",
+      "summary": "Every organization that processes personal data of more than 1000 data subjects within six months shall appoint a Data Protection Officer, conduct annual Data Protection Impact Assessments, publish a privacy policy on their website, maintain a data inventory of all processing activities, implement data breach notification procedures, and ensure continuous capacity building for personnel involved in data processing.",
+      "penalty_info": "Non-compliance may result in NITDA enforcement action and compliance orders."
+    },
+    {
+      "id": "nitda-dp-002",
+      "article_ref": "NITDA DP Art. 4.2",
+      "title": "Data Breach Notification Requirements",
+      "category": "breach",
+      "summary": "In the event of a data breach, the organization shall notify NITDA within 72 hours of becoming aware of the breach. Affected data subjects shall be notified without undue delay where the breach is likely to result in high risk to their rights and freedoms. The notification shall include the nature of the breach, categories of data subjects affected, likely consequences, and measures taken or proposed.",
+      "penalty_info": "Failure to notify within 72 hours is a violation subject to enforcement."
+    },
+    {
+      "id": "nitda-lc-001",
+      "article_ref": "NITDA LC Guideline 2.3",
+      "title": "Nigerian Content Development Requirements",
+      "category": "local_content",
+      "summary": "ICT companies and government agencies should prioritize Nigerian-made software, hardware, and services in procurement and development. This promotes local content development and strengthens the Nigerian ICT ecosystem.",
+      "penalty_info": "Non-compliance may affect government contract eligibility and regulatory approvals."
+    }
+  ],
+  "risk_scanner_questions": [
+    {
+      "id": "nitdaAppointDPO",
+      "question": "Have you appointed a Data Protection Officer (DPO)?",
+      "risk_weight": 16,
+      "clause_ids": ["nitda-dp-001"],
+      "explanation": "NITDA requires DPO appointment for organizations processing 1000+ data subjects in six months. The DPO must have expert knowledge of data protection law and practices."
+    },
+    {
+      "id": "nitdaConductDPIA",
+      "question": "Do you conduct annual Data Protection Impact Assessments (DPIAs)?",
+      "risk_weight": 14,
+      "clause_ids": ["nitda-dp-001"],
+      "explanation": "Annual DPIAs are mandatory for organizations under the NITDA DP Framework to assess and mitigate privacy risks."
+    },
+    {
+      "id": "nitdaPrivacyPolicy",
+      "question": "Do you have a privacy policy published on your website?",
+      "risk_weight": -12,
+      "clause_ids": ["nitda-dp-001"],
+      "explanation": "Organizations must publish a privacy policy on their website or make it readily available to the public. Having one reduces your compliance risk."
+    },
+    {
+      "id": "nitdaDataInventory",
+      "question": "Do you maintain a data inventory of all personal data processing activities?",
+      "risk_weight": 10,
+      "clause_ids": ["nitda-dp-001"],
+      "explanation": "A comprehensive data inventory is required to track all personal data processing activities, purposes, and recipients."
+    },
+    {
+      "id": "nitdaBreachNotification",
+      "question": "Do you have a process to report data breaches to NITDA within 72 hours?",
+      "risk_weight": -14,
+      "clause_ids": ["nitda-dp-002"],
+      "explanation": "NITDA requires breach notification within 72 hours. Affected data subjects must also be notified if the breach poses high risk. Having a process reduces your risk."
+    },
+    {
+      "id": "nitdaLocalContent",
+      "question": "Do you prioritize Nigerian-made software, hardware, or services in your procurement?",
+      "risk_weight": 8,
+      "clause_ids": ["nitda-lc-001"],
+      "explanation": "NITDA Local Content Guidelines encourage prioritizing Nigerian-made ICT products and services to strengthen the local ecosystem."
+    },
+    {
+      "id": "nitdaCapacityBuilding",
+      "question": "Do you provide continuous data protection training for your personnel?",
+      "risk_weight": 10,
+      "clause_ids": ["nitda-dp-001"],
+      "explanation": "Continuous capacity building for personnel involved in data processing is a compliance requirement under the NITDA DP Framework."
+    }
+  ]
+}

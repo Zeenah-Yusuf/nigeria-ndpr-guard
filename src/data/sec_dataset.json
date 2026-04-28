@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "regulation": "SEC Rules on Crowdfunding 2021 & Code of Conduct",
+    "issued_by": "SEC (Securities and Exchange Commission Nigeria)",
+    "date": "2021",
+    "version": "1.0",
+    "framework": "SEC"
+  },
+  "clauses": [
+    {
+      "id": "sec-cf-001",
+      "article_ref": "SEC CF Rule 4.2",
+      "title": "Crowdfunding Portal Registration and Requirements",
+      "category": "registration",
+      "summary": "A crowdfunding portal shall be registered with the Commission, have a minimum paid-up capital of N100 million, maintain proper books of accounts and financial records, implement adequate investor protection measures including risk disclosure, investor education, and complaint handling mechanisms, and conduct due diligence on issuers using the platform including background checks and verification of business information.",
+      "penalty_info": "Operating an unregistered portal may result in shutdown, penalties, and possible prosecution."
+    },
+    {
+      "id": "sec-cf-002",
+      "article_ref": "SEC CF Rule 8.1",
+      "title": "Investor Protection Measures",
+      "category": "investor_protection",
+      "summary": "Crowdfunding portals shall implement measures to protect investors including mandatory risk acknowledgment forms before investment, investment limits for retail investors not exceeding 10% of annual income, a cooling-off period of 48 hours during which investors may withdraw their investment, escrow arrangements for investor funds, and transparent disclosure of all fees, charges, and potential conflicts of interest.",
+      "penalty_info": "Failure to protect investors may result in license revocation and enforcement action."
+    },
+    {
+      "id": "sec-cc-001",
+      "article_ref": "SEC Code of Conduct",
+      "title": "Capital Market Operator Conduct",
+      "category": "governance",
+      "summary": "Capital market operators must adhere to the SEC Code of Conduct covering transparency in operations, fair dealing with all market participants, conflict of interest management and disclosure, maintenance of proper records, and compliance with all applicable securities laws and regulations.",
+      "penalty_info": "Code violations subject to SEC disciplinary actions including fines, suspension, or revocation of registration."
+    }
+  ],
+  "risk_scanner_questions": [
+    {
+      "id": "secRegistered",
+      "question": "Is your crowdfunding portal registered with SEC?",
+      "risk_weight": 20,
+      "clause_ids": ["sec-cf-001"],
+      "explanation": "SEC Rule 4.2 requires all crowdfunding portals to register with the Commission before operating. Operating without registration is a serious violation."
+    },
+    {
+      "id": "secCapital",
+      "question": "Do you maintain the minimum paid-up capital of N100 million?",
+      "risk_weight": 18,
+      "clause_ids": ["sec-cf-001"],
+      "explanation": "Crowdfunding portals must have a minimum paid-up capital of N100 million as a prerequisite for registration and continued operation."
+    },
+    {
+      "id": "secInvestorProtection",
+      "question": "Do you provide risk disclosure and a 48-hour cooling-off period for investors?",
+      "risk_weight": 16,
+      "clause_ids": ["sec-cf-002"],
+      "explanation": "SEC Rule 8.1 requires mandatory risk acknowledgment forms, investment limits, a 48-hour cooling-off period, and escrow arrangements to protect investors."
+    },
+    {
+      "id": "secDueDiligence",
+      "question": "Do you conduct background checks and due diligence on issuers using your platform?",
+      "risk_weight": 14,
+      "clause_ids": ["sec-cf-001"],
+      "explanation": "Portals must conduct thorough due diligence on issuers including background checks and verification of business information before listing."
+    },
+    {
+      "id": "secEscrow",
+      "question": "Do you use escrow arrangements to safeguard investor funds?",
+      "risk_weight": 12,
+      "clause_ids": ["sec-cf-002"],
+      "explanation": "Escrow arrangements are mandatory to protect investor funds during the crowdfunding process until conditions are met."
+    },
+    {
+      "id": "secTransparency",
+      "question": "Do you disclose all fees, charges, and potential conflicts of interest to investors?",
+      "risk_weight": 12,
+      "clause_ids": ["sec-cf-002", "sec-cc-001"],
+      "explanation": "Transparent disclosure of all fees, charges, and potential conflicts of interest is mandatory under SEC rules and the Code of Conduct."
+    },
+    {
+      "id": "secInvestorEducation",
+      "question": "Do you provide investor education and maintain a complaint handling mechanism?",
+      "risk_weight": 10,
+      "clause_ids": ["sec-cf-001"],
+      "explanation": "Portals must implement investor education programs and complaint handling mechanisms as part of investor protection measures."
+    }
+  ]
+}

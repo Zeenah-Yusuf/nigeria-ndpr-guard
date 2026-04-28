@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "regulation": "Nigeria Data Protection Act 2023",
+    "document": "NDP Act 2023 & GAID 2025 Implementation Framework",
+    "issued_by": "NDPC (Nigeria Data Protection Commission)",
+    "date": "March 2025",
+    "version": "2.0",
+    "gaid_reference": "NDPC/NDP ACT-GAID/01/2025",
+    "framework": "NDPA"
+  },
+  "clauses": [
+    {
+      "id": "ndpa-001",
+      "article_ref": "NDP Act s.1, GAID Art.1",
+      "title": "Background & Objectives",
+      "category": "general",
+      "summary": "The NDP Act 2023 is Nigeria's primary data protection law, superseding the NDPR 2019. It safeguards the constitutional right to privacy under s.37 of the 1999 Constitution. It applies to all data controllers/processors in Nigeria and those targeting Nigerian data subjects.",
+      "risk_factors": ["operating_without_awareness", "no_compliance_framework"],
+      "penalty_info": "Non-compliance can result in fines up to N10M or 2% of annual gross revenue, whichever is greater."
+    },
+    {
+      "id": "ndpa-002",
+      "article_ref": "NDP Act s.24",
+      "title": "Principles of Processing Personal Data",
+      "category": "data_handling",
+      "summary": "Data controllers and processors shall ensure that personal data is processed lawfully, fairly, and transparently. Processing shall be for specified, explicit, and legitimate purposes. Data shall be adequate, relevant, limited to what is necessary, accurate, kept up to date, and processed with appropriate security measures.",
+      "risk_factors": ["unlawful_processing", "purpose_creep", "data_minimization_failure"],
+      "penalty_info": "Violation of processing principles triggers enforcement proceedings."
+    },
+    {
+      "id": "ndpa-003",
+      "article_ref": "NDP Act s.25, GAID Art.16-20",
+      "title": "Consent & Lawful Bases for Processing",
+      "category": "consent",
+      "summary": "Six lawful bases exist: consent, contract, legal obligation, vital interest, public interest, and legitimate interest. Consent must be freely given, specific, informed, and unambiguous. No pre-ticked boxes or implied consent. Separate consent needed for different data uses. Data subjects can withdraw consent at any time.",
+      "risk_factors": ["no_consent_mechanism", "pre_ticked_boxes", "bundled_consent", "no_withdrawal_mechanism"],
+      "penalty_info": "Processing without valid consent or lawful basis is a direct violation subject to sanctions."
+    },
+    {
+      "id": "ndpa-004",
+      "article_ref": "NDP Act s.28, GAID Art.28-29",
+      "title": "Data Protection Impact Assessment (DPIA)",
+      "category": "compliance",
+      "summary": "DPIA is mandatory for: profiling/scoring, automated decision-making with legal effects, systematic monitoring, sensitive data, vulnerable data subjects, new technologies, financial services, healthcare, e-commerce, and surveillance. Must be filed with NDPC. A single DPIA may cover similar processing operations.",
+      "risk_factors": ["no_dpia", "high_risk_processing", "new_technology_no_assessment"],
+      "penalty_info": "Processing without required DPIA triggers enforcement and possible prosecution."
+    },
+    {
+      "id": "ndpa-005",
+      "article_ref": "NDP Act s.30",
+      "title": "Sensitive Personal Data",
+      "category": "data_handling",
+      "summary": "Processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, trade union membership, genetic data, biometric data, health data, or data concerning sex life or sexual orientation is prohibited unless specific conditions apply. Requires explicit consent and enhanced safeguards.",
+      "risk_factors": ["sensitive_data_no_safeguards", "processing_without_explicit_consent"],
+      "penalty_info": "Unauthorized sensitive data processing subject to enhanced penalties."
+    },
+    {
+      "id": "ndpa-006",
+      "article_ref": "NDP Act s.31, GAID Art.43",
+      "title": "Children's Data Protection",
+      "category": "consent",
+      "summary": "A child is any person under 18 years. Where processing relates to offering services directly to a child, consent shall be given or authorized by the holder of parental responsibility. The controller shall make reasonable efforts to verify parental consent. Child-friendly privacy notices are required.",
+      "risk_factors": ["children_data_no_guardian_consent", "no_age_verification"],
+      "penalty_info": "Processing children's data without parental consent is a serious violation with enhanced penalties."
+    },
+    {
+      "id": "ndpa-007",
+      "article_ref": "NDP Act s.32, GAID Art.11-14",
+      "title": "Data Protection Officer (DPO)",
+      "category": "governance",
+      "summary": "Data controllers of major importance must designate a DPO with expert knowledge of data protection law and practices. The DPO may be a staff member or contracted. DPO must report directly to management, receive adequate resources, and not face dismissal for performing duties. Annual Credential Assessment (ACA) is required.",
+      "risk_factors": ["no_dpo_appointed", "dpo_not_certified", "dpo_no_resources"],
+      "penalty_info": "Failure to designate a qualified DPO is an enforceable violation."
+    },
+    {
+      "id": "ndpa-008",
+      "article_ref": "NDP Act s.39, GAID Art.29",
+      "title": "Security of Processing",
+      "category": "security",
+      "summary": "Controllers and processors shall implement appropriate technical and organizational measures including pseudonymization, encryption, ensuring confidentiality, integrity, availability, and resilience of processing systems. Must prepare Monitoring, Evaluation and Maintenance (MEM) schedules. Security rated from Poor to Industry Grade.",
+      "risk_factors": ["weak_security", "no_encryption", "no_access_controls", "no_mem_schedule"],
+      "penalty_info": "Inadequate security measures trigger enforcement proceedings."
+    },
+    {
+      "id": "ndpa-009",
+      "article_ref": "NDP Act s.40, GAID Art.33",
+      "title": "Data Breach Notification",
+      "category": "breach",
+      "summary": "In case of a personal data breach, the controller shall notify NDPC without undue delay and, where feasible, not later than 72 hours after becoming aware of it. Where the breach is likely to result in high risk to data subjects, the controller shall also communicate the breach to affected data subjects immediately.",
+      "risk_factors": ["no_breach_process", "breach_unreported", "no_incident_response_plan"],
+      "penalty_info": "Failure to report breaches within 72 hours triggers enforcement and possible prosecution."
+    },
+    {
+      "id": "ndpa-010",
+      "article_ref": "NDP Act s.44-45, GAID Art.7-10",
+      "title": "Registration & Compliance Audit Returns",
+      "category": "compliance",
+      "summary": "Data controllers and processors of major importance shall register with NDPC within six months of the Act's commencement. Three classification levels: UHL (N250,000), EHL (N100,000), OHL (N10,000). Must file annual Compliance Audit Returns (CAR) by March 31st through a licensed DPCO. Late filing incurs 50% penalty on filing fee.",
+      "risk_factors": ["not_registered", "no_annual_audit", "car_not_filed"],
+      "penalty_info": "Registration required for processing 200+ subjects in 6 months. Late CAR filing: 50% administrative penalty."
+    }
+  ],
+  "risk_scanner_questions": [
+    {
+      "id": "collectsData",
+      "question": "Does your business collect personal data (names, emails, phone numbers)?",
+      "risk_weight": 15,
+      "clause_ids": ["ndpa-001", "ndpa-002"],
+      "explanation": "The NDP Act applies to any processing of personal data of Nigerian citizens. Collecting personal data triggers compliance requirements including registration, privacy policies, and consent mechanisms."
+    },
+    {
+      "id": "sensitiveData",
+      "question": "Do you store health, biometric, or other sensitive personal data?",
+      "risk_weight": 18,
+      "clause_ids": ["ndpa-005"],
+      "explanation": "Section 30 requires special protection for sensitive personal data including health, biometric, genetic, religious, and political information. Explicit consent and enhanced safeguards are mandatory."
+    },
+    {
+      "id": "hasPrivacyPolicy",
+      "question": "Do you have a published privacy policy on your app/website?",
+      "risk_weight": -15,
+      "clause_ids": ["ndpa-002", "ndpa-010"],
+      "explanation": "Section 27 and GAID Art. 7 require a transparent, easily accessible privacy policy published on all platforms where data processing occurs. Having one significantly reduces your compliance risk."
+    },
+    {
+      "id": "crossBorderTransfer",
+      "question": "Do you transfer user data outside Nigeria?",
+      "risk_weight": 14,
+      "clause_ids": ["ndpa-002", "ndpa-010"],
+      "explanation": "Sections 41-43 restrict data transfers to countries without adequate protection levels. Cross-border transfers require NDPC adequacy decision or approved safeguards like Standard Contractual Clauses."
+    },
+    {
+      "id": "hasConsentMechanism",
+      "question": "Do you obtain explicit user consent before data collection?",
+      "risk_weight": -12,
+      "clause_ids": ["ndpa-003"],
+      "explanation": "Section 26 requires specific, informed, and unambiguous consent through clear affirmative action. No pre-ticked boxes or implied consent. Having a proper consent mechanism reduces your risk."
+    },
+    {
+      "id": "targetsChildren",
+      "question": "Does your business target users under 18 years old?",
+      "risk_weight": 16,
+      "clause_ids": ["ndpa-006"],
+      "explanation": "Section 31 requires age verification and parental consent for users under 18. Special protections and child-friendly privacy notices are mandatory."
+    },
+    {
+      "id": "thirdPartySharing",
+      "question": "Do you share user data with third-party services (analytics, payment processors)?",
+      "risk_weight": 12,
+      "clause_ids": ["ndpa-003", "ndpa-010"],
+      "explanation": "Section 25 and GAID Art. 34 require written Data Processing Agreements with all third-party processors covering purpose, security measures, and DPIA outcomes. Controllers are liable for processor violations."
+    },
+    {
+      "id": "hasBreachProcess",
+      "question": "Do you have a data breach notification process (72-hour NDPC reporting)?",
+      "risk_weight": -14,
+      "clause_ids": ["ndpa-009"],
+      "explanation": "Section 40 requires reporting data breaches to NDPC within 72 hours. Data subjects must also be notified if the breach poses high risk. Having a breach response plan reduces your compliance risk."
+    },
+    {
+      "id": "registeredWithNDPC",
+      "question": "Are you registered with NDPC as a data controller/processor of major importance?",
+      "risk_weight": -10,
+      "clause_ids": ["ndpa-010"],
+      "explanation": "Section 44 requires registration for organizations processing 200+ data subjects in 6 months. Registration fees: UHL (N250,000), EHL (N100,000), OHL (N10,000). Being registered reduces your risk."
+    },
+    {
+      "id": "usesAI",
+      "question": "Does your business use AI, automated decision-making, or profiling?",
+      "risk_weight": 10,
+      "clause_ids": ["ndpa-004"],
+      "explanation": "GAID 2025 requires DPIA for automated processing, transparency about AI systems, and the right for data subjects to not be subject to solely automated decisions with legal effects."
+    }
+  ]
+}

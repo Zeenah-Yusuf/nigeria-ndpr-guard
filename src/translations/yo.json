@@ -1,483 +1,251 @@
 {
   "app": {
     "name": "RegTrack",
-    "tagline": "NDP Act Compliance Simulator",
+    "tagline": "Multi-Framework Compliance Simulator",
     "builtFor": "Ti a Kọ́ fún Nàìjíríà"
   },
   "nav": {
-    "home": "Ilé",
-    "about": "Nípa Wa",
-    "compliance": "Àlàfo Ìbámu",
-    "solution": "Ọ̀nà Àbáyọ",
-    "demo": "Ìgbeyewo Ìbámu",
-    "resources": "Àwọn Ohun Èlò",
-    "regulator": "Ìwo Alákòóso"
+    "home": "Ilé", "about": "Nípa Wa", "compliance": "Àlàfo Ìbámu", "solution": "Ọ̀nà Àbáyọ",
+    "demo": "Ìgbeyewo Ìbámu", "regulator": "Ìwo Alákòóso", "admin": "Alákòóso",
+    "dashboard": "Dashboard", "signIn": "Wọlé", "signOut": "Jáde",
+    "register": "Forúkọsílẹ̀", "switchAccount": "Yí Àkọọ́lẹ̀ Padà", "joinWaitlist": "Dara Pọ̀ Mọ́ Àtòjọ"
   },
   "hero": {
-    "title": "Yẹra fún ìtanràn Òfin NDP kí o tó ṣe ìfilọ́lẹ̀.",
-    "badge": "Ìbámu Agbára AI fún Àwọn Olùdásílẹ̀ Nàìjíríà",
-    "trusted": "Àwọn Olùdásílẹ̀ Nàìjíríà Gbẹ́kẹ̀ Wá Lé",
-    "titlePart1": "Yẹra fún ìtanràn Òfin NDP",
+    "badge": "Ìbámu Agbára AI fún Àwọn Olùdásílẹ̀",
+    "trusted": "Àwọn Olùdásílẹ̀ Gbẹ́kẹ̀ Wá Lé",
+    "titlePart1": "Yẹra fún ìtanràn",
     "titlePart2": "kí o tó ṣe ìfilọ́lẹ̀.",
-    "subtitle": "RegTrack ń ràn àwọn olùdásílẹ̀ ní Nàìjíríà lọ́wọ́ láti dán ewu ìbámu wò lááárín ìṣéjú — nípa AI, Òfin NDP 2023, àti GAID 2025.",
-    "scanner": "Ìgbeyewo Ìbámu",
+    "subtitle": "RegTrack n ran awon oludasile lowo lati dan ewu ibamu wo laarin iseju.",
+    "scanner": "Bẹ̀rẹ̀ Ìgbeyewo",
     "learnMore": "Kọ́ Siwájú",
-    "stats": {
-      "articles": "Àwọn Abala NDP Act GAID",
-      "maxFine": "Ìtanràn Tí Ó Pọ̀ Jùlọ fún Ìrúfin",
-      "breachDeadline": "Àkókò Ìjábọ̀ Ìrúfin"
-    }
+    "seeWhatWeStandFor": "Wo Ohun Tí A Dúró Fún",
+    "stats": { "frameworks": "Àwọn Ìlànà", "maxFine": "Ìtanràn Tó Pọ̀ Jù", "breachDeadline": "Àkókò Ìjábọ̀" }
   },
   "scanner": {
-    "title": "Ìgbeyewo Ìbámu",
-    "subtitle": "Dáhùn àwọn ìbéèrè nípa òwò rẹ. Gba àmì ìbámu lẹ́sẹ̀kẹsẹ̀ pẹ̀lú àwọn abala tí ó kàn àti àlàyé ní èdè tí ó rọrùn.",
-    "progress": "Ìbéèrè {{current}} nínú {{total}}",
-    "complete": "{{percent}}% Ti Parí",
+    "appName": "Kí ni o n kọ?",
+    "appNamePlaceholder": "fún àpẹẹrẹ, Sàkáníṣọ̀nà ìṣètò ìsanwó",
     "defaultAppName": "Òwò rẹ",
-    "progressAnswered": "{{current}} nínú {{total}} ti dáhùn",
-    "appName": {
-      "label": "Kí ni orúkọ òwò tàbí ẹ̀rọ rẹ?",
-      "placeholder": "fún àpẹẹrẹ, Ẹ̀rọ Ìlera Mi",
-      "cbnLabel": "Kí ni iṣẹ́ ìnáwó rẹ?",
-      "cbnPlaceholder": "fún àpẹẹrẹ, Sàkáníṣọ̀nà ìṣètò ìsanwó"
-    },
-    "sector": {
-      "keyRisks": "Àwọn Ewu Pàtàkì"
-    },
-    "feedback": {
-      "lowers": "↓ Ń dín àmì ewu rẹ kù",
-      "increases": "↑ Ń fi kún àmì ewu rẹ"
-    },
+    "startAssessment": "Bẹ̀rẹ̀ Ìgbeyewo",
     "calculate": "Ṣírò Àmì Ìbámu",
-    "calculateCbn": "Ṣírò Àmì Ìbámu CBN AML",
     "analyzing": "Ń ṣàyẹ̀wò ipo ìbámu rẹ...",
-    "framework": {
-      "ndpa": "Ètò Ìṣiṣẹ́: NDP Act 2023",
-      "cbn": "Ètò Ìṣiṣẹ́: CBN AML 2022"
-    },
-    "explanation": {
-      "low": "\"{{appName}}\" ní ewu ìbámu kékeré lábẹ́ {{framework}}. Àwọn ìdáàbòbò ìpìlẹ̀ wà níbẹ̀. Tẹ̀síwájú láti máa ṣàbójútó àwọn ìṣe rẹ.",
-      "medium": "\"{{appName}}\" ní àwọn ewu ìbámu alábọ̀dé lábẹ́ {{framework}}. Ọ̀pọ̀lọpọ̀ àgbègbè nílò àfiyèsí láti yẹra fún ìgbésẹ̀ ìmúṣe tí ó ṣeéṣe.",
-      "high": "\"{{appName}}\" ní àwọn ewu ìbámu pàtàkì lábẹ́ {{framework}}. Láìsí àtúnṣe, o lè dojúkọ ìtanràn ìlànà.",
-      "critical": "\"{{appName}}\" wà nínú ewu tí ó le koko lábẹ́ {{framework}}! A nílò ìgbésẹ̀ lẹ́sẹ̀kẹsẹ̀ láti yẹra fún àwọn ìjìyà tí ó le."
-    },
+    "enterAppAndSector": "Tẹ orúkọ app rẹ kí o yan ẹ̀ka láti bẹ̀rẹ̀",
     "questions": {
-      "collectsData": "Ṣé òwò rẹ ń gba dátà àdání (orúkọ, íméèlì, nọ́ḿbà fóónù)?",
-      "sensitiveData": "Ṣé o ń tọjú dátà ìlera, bayọmétríìkì, tàbí àwọn dátà àdání ẹlẹgẹ̣́ mìíràn?",
-      "hasPrivacyPolicy": "Ṣé o ní ètò ìpamọ́ tí a tè jáde lórí ẹ̀rọ rẹ tàbí ojú-ìwé ayélujára rẹ?",
-      "crossBorderTransfer": "Ṣé o ń gbé dátà àwọn olùṣàmúlò lọ sí ìta Nàìjíríà?",
-      "hasConsentMechanism": "Ṣé o ní ìlànà láti gba ìgbàláàyè tó hàn gbangba lọ́wọ́ olùṣàmúlò ṣáájú kí ó tó gba dátà?",
-      "targetsChildren": "Ṣé òwò rẹ dojúkọ àwọn olùṣàmúlò tí ọjọ́ orí wọn kò tìí pé ọdún 18?",
-      "thirdPartySharing": "Ṣé o ń pín dátà àwọn olùṣàmúlò pẹ̀lú àwọn ilé-iṣẹ́ kẹta?",
-      "hasBreachProcess": "Ṣé o ní ìlànà ìfìtónílétí ìrúfin dátà (fìtónílétí fún NDPC lááárín wákàtí 72)?",
-      "registeredWithNDPC": "Ṣé o ti forúkọ sílẹ̀ lọ́dọ̀ NDPC gẹ́gẹ́ bí olùṣàkóso dátà tàbí olùṣètò dátà pàtàkì?",
-      "usesAI": "Ṣé òwò rẹ ń lo AI, ṣíṣe ìpinnu adáṣiṣẹ̣́, tàbí dá ìrírí ẹni?"
+      "collectsData": "Ṣé o n gba dátà àdání (orúkọ, ímeèlì, nọ́mbà)?",
+      "sensitiveData": "Ṣé o n tọju dátà ìlera tàbí bayọmetriiki?",
+      "hasPrivacyPolicy": "Ṣé o ní ètò ìpamọ́ tí a tè jáde?",
+      "crossBorderTransfer": "Ṣé o n gbé dátà lọ sí ìta Nàìjíríà?",
+      "hasConsentMechanism": "Ṣé o ní ìlànà láti gba ìgbanilaaye?",
+      "targetsChildren": "Ṣé òwò rẹ dojukọ àwọn tí kò tíì pé ọdún 18?",
+      "thirdPartySharing": "Ṣé o n pín dátà pẹlu àwọn ilé-isẹ́ kẹta?",
+      "hasBreachProcess": "Ṣé o ní ìlànà ìfitónilétí ìrúfin (wákàtí 72)?",
+      "registeredWithNDPC": "Ṣé o ti forúkọ sílẹ̀ lọdọ NDPC?",
+      "usesAI": "Ṣé o n lo AI tàbí ìpinnu adásisẹ?"
     },
     "explanations": {
-      "collectsData": "Òfin NDP kan gbogbo ṣiṣé dátà àdání ti àwọn arálù Nàìjíríà.",
-      "sensitiveData": "Abala 30 ń bèèrè ààbọ̀ pàtàkì fún dátà àdání ẹlẹgẹẹ́ pàápàá jù àwọn alayé ìlera àti bayọmétríìkì lọ.",
-      "hasPrivacyPolicy": "Abala 27 ń bèèrè ètò àdání tí ó hàn gbangba àti tí ó rùn láti wọlé.",
-      "crossBorderTransfer": "Abala 41-43 ní ìhamọ̀ gígbé dátà lọ sí àwọn orílẹ̀-èdè tí kò ní ìpele ààbọ̀ tó ye.",
-      "hasConsentMechanism": "Abala 26 ń bèèrè ìgbàláàyè pàtó, gbangba, àti láìṣiyàméyèméyè.",
-      "targetsChildren": "Abala 31 ń bèèrè ìdúrú ọjọ́ orí àti ìgbàláàyè òbí fún àwọn olùṣàmúlò tí ò tì í pé ọdún 18.",
-      "thirdPartySharing": "Abala 25 ń bèèrè àdéhùn ṣíṣeto dátà pẹ̀lú àwọn aṣeto ẹ̀ka-ẹta.",
-      "hasBreachProcess": "Abala 40 ń bèèrè ìjábọ̀ ìrúfin dátà lááárin wákàtí 72 si NDPC.",
-      "registeredWithNDPC": "Abala 44 ń bèèrè ìforúkọsílè gégé bí olùṣàkóso dátà tàbí olùṣètò dátà pàtàkì.",
-      "usesAI": "GAID 2025 Abala 15 ń bèèrè ìgbàfẹ̀sẹ̀tàn fún àwọn ọ̀nà ìpinnu adáṣiṣẹ́."
+      "collectsData": "Òfin NDP kan gbogbo ṣiṣe dátà àdání.",
+      "sensitiveData": "Abala 30 n beere aabo pataki fun data elege.",
+      "hasPrivacyPolicy": "Abala 27 n beere eto asiri to han gbangba.",
+      "crossBorderTransfer": "Abala 41-43 ni ihamọ gbigbe data lai ni aabo to peye.",
+      "hasConsentMechanism": "Abala 26 n beere igbanilaaye pato.",
+      "targetsChildren": "Abala 31 n beere iduru ojo ori ati igbanilaaye obi.",
+      "thirdPartySharing": "Abala 25 n beere adehun sise data.",
+      "hasBreachProcess": "Abala 40 n beere ijabọ irufin laarin wakati 72.",
+      "registeredWithNDPC": "Abala 44 n beere iforukosile.",
+      "usesAI": "GAID 2025 n beere igbafesetan fun ona ipinnu adasisẹ."
     },
-    "cbnQuestions": {
-      "collectsData": "Ṣé o ń gba ìsọfúnni oníbààmú fún àwọn iṣẹ́ ináwó?",
-      "kycVerification": "Ṣé o ń ṣe ídúrú ìdání oníbààmú nípa BVN, NIN, tàbí ìwé-ìrìnnà àgbáyé?",
-      "pepScreening": "Ṣé o ń ṣayẹ̀wò àwọn oníbààmú lodi si àtójọ Àwọn Ẹni Tí Ó Kan Iṣẹ́ Òṣèlú (PEP)?",
-      "transactionMonitoring": "Ṣé o ń ṣe àbójútó àwọn ìṣowò fún àwọn iṣẹ́ tí a fura si ní àkókò gidí?",
-      "strFiling": "Ṣé o ń jábọ̀ àwọn ìṣowò tí a fura si fún NFIU nínú wákàtí 24?",
-      "amlTraining": "Ṣé o ń pèsè ìdánú AML/CFT lọ́dọọdún fún gbogbo àwọn òṣiṣẹ́ tí ó kan?",
-      "recordKeeping": "Ṣé o ń fi àwọn ìgbásilẹ̀ ìṣowò há ní ó kùkàn ọdún marun?",
-      "complianceOfficer": "Ṣé o ti yan Ọ̀gá Ìbámu AML/CFT?",
-      "riskAssessment": "Ṣé o ń ṣe ìṣayẹ̀wò ewu AML lọ́dọọdún?",
-      "independentAudit": "Ṣé o ń ṣe ìṣayẹ̀wò ìbámu AML aládáàra lọ́dọọdún?"
-    },
-    "cbnExplanations": {
-      "collectsData": "Àwọn ìlànà CBN AML ń bèèrè ìwádìí oníbààmú fún gbogbo iṣẹ́ ináwó.",
-      "kycVerification": "Abala 6 ń bèèrè ìdání oníbààmú tí ó lè jẹrí.",
-      "pepScreening": "A ń bèèrè ìwádìí ìjinlẹ̀ fún àwọn oníbààmú ewu gíga.",
-      "transactionMonitoring": "Abala 7.1 ń bèèrè ṣíṣayẹ̀wò ìṣowò àkókò gidí.",
-      "strFiling": "Abala 8.3 ń bèèrè ìjábọ̀ STR nínú wákàtí 24.",
-      "amlTraining": "Abala 12.1 ń bèèrè ìdánú àwọn òṣiṣẹ́ lọ́dọọdún.",
-      "recordKeeping": "Abala 15.1 ń bèèrè ìfí àwọn ìgbásilẹ̀ há fún ọdún marun.",
-      "complianceOfficer": "Abala 19 ń bèèrè Ọ̀gá Ìbámu tí a yàn.",
-      "riskAssessment": "Abala 5.2 ń bèèrè ìṣayẹ̀wò ewu lọ́dọọdún.",
-      "independentAudit": "Abala 18.4 ń bèèrè ìṣayẹ̀wò aládáàra."
+    "explanation": {
+      "low": "{{appName}} ni ewu ibamu kekere.",
+      "medium": "{{appName}} ni ewu ibamu alabode.",
+      "high": "{{appName}} ni ewu ibamu pataki.",
+      "critical": "{{appName}} wa ninu ewu to le koko!"
     }
   },
-  "problem": {
-    "badge": "Àlàfo Ìbámu",
-    "titlePart1": "Ọ̀pọ̀lọpọ̀ Olùbẹ̀rẹ̀ Nàìjíríà Ń Ṣàwárí",
-    "titlePart2": "Àlàfo Ìbámu Pẹ́ Jù",
-    "storyPart1": "Olùdásílẹ̀ Nàìjíríà kan ṣe ìfilọ́lẹ̀ ẹ̀rọ ìlera kan.",
-    "storyPart2": "Àwọn olùṣàmúlò fẹ́ràn rẹ̀ — 5,000 fọwọ́ sí i lọ́sẹ̀ àkọ́kọ́. Ọ̀sẹ̀ méjì lẹ́yìn náà, NDPC fi ìkìlọ̀ ìmúṣe ránṣẹ́.",
-    "finePart1": "Ìtanràn náà?",
-    "finePart2": "— tàbí 2% ti owó tí wọ́n ń gbà lọ́dún, èyíkéyìí tí ó bá pọ̀ jù. Kò sí ètò àṣírí. Kò sí ìlànà ìyọ̀ǹda. Kò sí ìṣàyẹ̀wò dátà.",
-    "solution": "RegTrack ṣe ìdènà èyí. Láàárín ìṣẹ́jú, kì í ṣe oṣù."
-  },
-  "solution": {
-    "badge": "Ọ̀nà Àbáyọ Wa",
-    "titlePart1": "Irinṣẹ́ méjì.",
-    "titlePart2": "Ìmọ́tótó péré.",
-    "subtitle": "RegTrack fún ọ ní ìjìnlẹ̀ ìbámu lẹ́sẹ̀kẹsẹ̀ tí agbára ẹ̀kúnrẹ́rẹ́ Òfin NDP àti GAID 2025 ń ṣiṣẹ́.",
-    "scanner": {
-      "title": "Ìgbeyewo Ìbámu",
-      "description": "Dáhùn àwọn ìbéèrè nípa òwò rẹ. Gba àmì ìbámu lẹ́sẹ̀kẹsẹ̀ pẹ̀lú àwọn abala Òfin NDP tí ó kàn àti àlàyé ní èdè tí ó rọrùn.",
-      "flow": {
-        "step1": "Ìwé Ìbéèrè",
-        "step2": "Àmì Ìbámu",
-        "step3": "Àlàyé"
-      }
-    },
-    "finder": {
-      "title": "Aṣàwárí Abala",
-      "description": "Ṣàwárí ẹ̀kúnrẹ́rẹ́ Òfin NDP àti GAID 2025 nípa ọ̀rọ̀-ìṣílé. Wá abala gangan tí ó bá ipò rẹ mu pẹ̀lú àkópọ̀ tí ó ṣe kedere.",
-      "flow": {
-        "step1": "Ṣàwárí Ọ̀rọ̀-Ìṣílé",
-        "step2": "Abala Òfin NDP",
-        "step3": "Àkópọ̀"
-      }
-    }
-  },
-  "sector": {
-    "label": "Ẹ̀ka wo ni òwò rẹ wà?"
-  },
-  "sectors": {
-    "health": { "name": "Ìlera" },
-    "fintech": { "name": "Fintech" },
-    "edtech": { "name": "EdTech" },
-    "ecommerce": { "name": "Ìṣòwò Lórí Ẹ̀rọ" },
-    "social": { "name": "Àjọṣepọ̀" },
-    "logistics": { "name": "Ìṣàkóso Ẹrù" },
-    "government": { "name": "Ìjọba" },
-    "other": { "name": "Òmíràn" }
-  },
+  "sector": { "label": "Ẹ̀ka wo ni òwò rẹ wà?" },
   "common": {
-    "yes": "Bẹ́ẹ̀ni",
-    "no": "Bẹ́ẹ̀kọ́"
+    "yes": "Bẹ́ẹ̀ni", "no": "Bẹ́ẹ̀kọ́", "back": "Ẹ̀yìn", "cancel": "Fagilé", "confirm": "Fọwọ́sí",
+    "save": "Fipamọ́", "delete": "Parẹ́", "edit": "Ṣàtúnṣe", "view": "Wo",
+    "close": "Ti", "loading": "Ń Ṣiṣẹ́...", "refresh": "Tún Ṣe",
+    "export": "Ṣe Àgbéjáde", "download": "Ṣagbéjáde", "send": "Fi Ránṣẹ́",
+    "approve": "Fọwọ́sí", "reject": "Kọ̀", "change": "Yí Padà", "remove": "Yọ", "upload": "Ṣe Àgbéjáde"
   },
-  "button": {
-    "next": "Tẹ̀síwájú",
-    "back": "Ẹ̀yìn",
-    "analyze": "Ṣàyẹ̀wò Ìbámu",
-    "restart": "Bẹ̀rẹ̀ Ìṣirò Tuntun",
-    "downloadPDF": "Ṣagbéjáde Ìròyìn (PDF)"
+  "auth": {
+    "welcomeBack": "Káàbọ̀ Padà",
+    "createAccount": "Ṣẹ̀dá Àkọọ́lẹ̀",
+    "signInMessage": "Wọlé sí àkọọ́lẹ̀ RegTrack rẹ",
+    "joinMessage": "Dara pọ̀ mọ́ RegTrack láti ṣàkóso ìbámu rẹ",
+    "email": "Ímeèlì",
+    "password": "Ọ̀rọ̀ìṣírí",
+    "forgotPassword": "Ṣé o gbàgbé ọ̀rọ̀ìṣírí?",
+    "signIn": "Wọlé",
+    "register": "Ṣẹ̀dá Àkọọ́lẹ̀",
+    "continueWithGoogle": "Tẹ̀síwájú pẹ̀lú Google",
+    "or": "tàbí",
+    "noAccount": "Kò sí àkọọ́lẹ̀?",
+    "haveAccount": "Ṣé o ní àkọọ́lẹ̀?",
+    "createOne": "Ṣẹ̀dá ọ̀kan",
+    "signInInstead": "Wọlé dípò",
+    "resetPassword": "Tún Ọ̀rọ̀ìṣírí Ṣe",
+    "sendResetLink": "Fi Ọ̀na Àtúnṣe Ránṣẹ́",
+    "sending": "Ń Fi Ránṣẹ́...",
+    "checkEmail": "Ṣàyẹ̀wò Ímeèlì Rẹ",
+    "resetEmailSent": "A ti fi ọ̀na àtúnṣe ọ̀rọ̀ìṣírí ránṣẹ́ sí",
+    "backToSignIn": "Padà sí Wíwọlé",
+    "setNewPassword": "Ṣeto Ọ̀rọ̀ìṣírí Tuntun",
+    "enterNewPassword": "Tẹ ọ̀rọ̀ìṣírí tuntun rẹ",
+    "passwordUpdated": "A ti ṣe àtúnṣe ọ̀rọ̀ìṣírí!",
+    "redirecting": "Ń darí sí wíwọlé...",
+    "updating": "Ń ṣe àtúnṣe...",
+    "setPassword": "Ṣeto Ọ̀rọ̀ìṣírí",
+    "iAmA": "Èmi jẹ́",
+    "organization": "Àjọ / Ìbẹ̀rẹ̀",
+    "organizationDesc": "Mo nílò láti ṣàyẹ̀wò ìbámu mi",
+    "dpco": "Ọ̀gá Ìbámu (DPCO)",
+    "dpcoDesc": "Mo n pèsè àwọn iṣẹ́ ìbámu",
+    "companyName": "Orúkọ Ilé-iṣẹ́",
+    "fullName": "Orúkọ Kíkún / Orúkọ Ilé-iṣẹ́",
+    "companySize": "Ìwọ̀n Ilé-iṣẹ́",
+    "sector": "Ẹ̀ka",
+    "website": "Ojúlé Wẹ́ẹ̀bù (yíyàn)",
+    "phoneNumber": "Nọ́mbà Fóònù",
+    "registrationNumber": "Nọ́mbà Ìforúkọsílẹ̀ / Ìwé-àṣẹ",
+    "sectorSpecialization": "Ìmọ̀ Ẹ̀ka",
+    "selectSector": "Yan ẹ̀ka",
+    "selectSpecialization": "Yan ìmọ̀",
+    "errors": {
+      "emailExists": "Àkọọ́lẹ̀ kan wà pẹ̀lú ímeèlì yìí. Jọ̀wọ́ wọlé dípò.",
+      "invalidCredentials": "Ímeèlì tàbí ọ̀rọ̀ìṣírí kò tọ̀nà. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kan si.",
+      "emailNotConfirmed": "Jọ̀wọ́ ṣàyẹ̀wò ímeèlì rẹ kí o fọwọ́sí àkọọ́lẹ̀ rẹ ṣáájú wíwọlé.",
+      "createFailed": "Kò ṣeé ṣe láti ṣẹ̀dá àkọọ́lẹ̀"
+    },
+    "success": {
+      "accountCreated": "A ti ṣẹ̀dá àkọọ́lẹ̀! O lè wọlé nísinsìnyí.",
+      "checkEmailConfirm": "A ti ṣẹ̀dá àkọọ́lẹ̀! Jọ̀wọ́ ṣàyẹ̀wò ímeèlì rẹ láti fọwọ́sí ìforúkọsílẹ̀ rẹ."
+    }
   },
   "waitlist": {
-    "badge": "Ìwọlé Àkọ́kọ́",
-    "title": "Gba ìwọlé àkọ́kọ́ sí RegTrack",
-    "subtitle": "Dara pọ̀ mọ́ àtòjọ àwọn tí ń dúró fún pèpẹlẹ ẹ̀kúnrẹ́rẹ́ pẹ̀lú ìbámu aládàáṣiṣẹ́ agbára AI, àbójútó àkókò gidi, àti ìfọwọ́sowọ́pọ̀ ẹgbẹ́.",
-    "placeholder": "ímeèlì rẹ@àpẹẹrẹ.com",
-    "button": "Dara Pọ̀ Mọ́ Àtòjọ",
-    "success": {
-      "title": "O wà nínú àtòjọ!",
-      "message": "A ó fi tó ọ létí nígbà tí RegTrack bá ṣe ìfilọ́lẹ̀."
-    }
+    "badge": "Ìwọlé Àkọ́kọ́", "title": "Gba ìwọlé àkọ́kọ́ sí RegTrack",
+    "subtitle": "Dara pọ̀ mọ́ àtòjọ fún pèpẹlẹ ẹ̀kúnrẹ́rẹ́.",
+    "placeholder": "ímeèlì rẹ@àpẹẹrẹ.com", "button": "Dara Pọ̀ Mọ́ Àtòjọ",
+    "success": { "title": "O wà nínú àtòjọ!", "message": "A ó fi tó ọ létí nígbà tí RegTrack bá ṣe ìfilọ́lẹ̀." }
   },
-  "risk": {
-    "low": "Ewu Kéréje",
-    "medium": "Ewu Ààrin",
-    "high": "Ewu Gíga",
-    "critical": "Ewu Tí Ó Lé Koko"
-  },
+  "risk": { "low": "Ewu Kéréje", "medium": "Ewu Ààrin", "high": "Ewu Gíga", "critical": "Ewu Tí Ó Lé Koko" },
   "results": {
-    "newScan": "Ìgbeyewo Tuntun",
-    "downloadPDF": "Ṣagbéjáde PDF",
-    "yourApp": "Òwò Rẹ",
-    "steps": {
-      "analyze": "Ṣàyẹ̀wò",
-      "understand": "Lóye",
-      "fix": "Ṣàtúnṣe"
-    },
-    "stats": {
-      "clauses": "Àwọn Abala Tí Ó Ṣí",
-      "actions": "Àwọn Ìgbésẹ̀ Tí A Nílò",
-      "maxFine": "Ìtanràn Tí Ó Pọ̀ Jùlọ"
-    },
-    "answerBreakdown": "Ìpín Àwọn Ìdáhùn",
-    "understandImpact": "Lóye Ipa Náà",
-    "plainEnglish": "Àlàyé Ní Èdè Tí Ó Rọrùn",
-    "consequences": {
-      "title": "Àwọn Àbájáde Tí Ó Ṣeéṣe",
-      "fine": "Ìtanràn tí ó tó ₦10,000,000 tàbí 2% ti owó tí a ń gbà lọ́dún",
-      "enforcement": "Ìkìlọ̀ ìmúṣe àti ìwádìí NDPC",
-      "suspension": "Ìdádúró iṣẹ́ àti ìkìlọ̀ gbogbo gbọ̀",
-      "carPenalty": "Fífi CAR sílẹ̀ pẹ́: 50% ìtanràn ìṣàkóso lórí owó fífisílẹ̀ (GAID Art. 10)",
-      "prosecution": "Ẹjọ́ ọ̀daràn lábẹ́ Òfin NDP 2023"
-    },
-    "sectorTips": "Àwọn Ìmọ̀ràn",
-    "triggeredClauses": "Àwọn Abala Tí Ó Ṣí",
-    "backToAnalyze": "Ṣàyẹ̀wò",
-    "fixIt": "Ṣàtúnṣe",
-    "backToImpact": "Padà Sí Ipa",
-    "downloadFullReport": "Ṣagbéjáde Àkọsílẹ̀ Kíkún (PDF)",
-    "scanAnother": "Ìgbeyewo Tuntun",
-    "toast": {
-      "downloaded": {
-        "title": "A ti ṣagbéjáde àkọsílẹ̀!",
-        "description": "RegTrack_Àkọsílẹ̀_{{date}}.pdf"
-      },
-      "error": {
-        "title": "Àṣìṣe",
-        "description": "Kò ṣeé ṣe láti ṣẹ̀dá PDF. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kan si."
-      }
-    },
-    "dcpmTier": "Ìpínsọ̀rí DCPMI",
-    "aiConfidence": "Ìgbẹ́kẹ̀lé AI",
-    "basedOn": "Ní ìbámu pẹ̀lú"
+    "newScan": "Ìgbeyewo Tuntun", "downloadPDF": "Ṣagbéjáde PDF", "yourApp": "Òwò Rẹ",
+    "steps": { "analyze": "Ṣàyẹ̀wò", "understand": "Lóye", "fix": "Ṣàtúnṣe" },
+    "stats": { "clauses": "Àwọn Abala Tí Ó Ṣí", "actions": "Àwọn Ìgbésẹ̀", "maxFine": "Ìtanràn Pọ̀ Jù" },
+    "answerBreakdown": "Ìpín Àwọn Ìdáhùn", "understandImpact": "Lóye Ipa Náà", "plainEnglish": "Àlàyé Rọrùn",
+    "consequences": { "title": "Àwọn Àbájáde", "fine": "Ìtanràn tó N10,000,000 tàbí 2%", "enforcement": "Ìkìlọ̀ ìmúṣe àti ìwádìí", "suspension": "Ìdádúró iṣẹ́ àti ìkìlọ̀", "carPenalty": "Fífi CAR sílẹ̀ pẹ: 50% ìtanràn", "prosecution": "Ẹjọ ọ̀daràn lábẹ Òfin" },
+    "sectorTips": "Àwọn Ìmọ̀ràn", "triggeredClauses": "Àwọn Abala Tí Ó Ṣí", "backToAnalyze": "Ṣàyẹ̀wò", "fixIt": "Ṣàtúnṣe",
+    "backToImpact": "Padà Sí Ipa", "scanAnother": "Ìgbeyewo Tuntun",
+    "basedOn": "Ní ìbámu pẹ̀lú", "clause": "abala", "clauses": "àwọn abala", "triggered": "ti ṣí",
+    "officer": { "title": "Ọ̀gá Ìbámu Tí A Dámọ̀ràn", "for": "fún", "linked": "Ti So", "linkOfficer": "So Ọ̀gá", "linking": "Ń So...", "linkMessage": "So pọ̀ mọ́ ọ̀gá yìí fún ìfọwọ́sí ìbámu àti àtìlẹ́yìn jákòjádo ìrìn àtúnṣe rẹ.", "contactToLink": "Lọ sí Ṣàtúnṣe láti so pọ̀ mọ́ ọ̀gá yìí fún ìfọwọ́sí ìbámu." }
   },
-  "search": {
-    "placeholder": "Ṣàwárí àwọn abala Òfin NDP...",
-    "button": "Ṣàwárí Abala",
-    "searching": "Ń Ṣàwárí...",
-    "noResults": "A kò rí abala kankan. Gbìyànjú àwọn ọ̀rọ̀-ìṣílé mìíràn.",
-    "resultsFound": "A rí abala {{count}}",
-    "terms": {
-      "consent": "ìyọ̀ǹda",
-      "breach": "ìrúfin",
-      "children": "àwọn ọmọdé",
-      "transfer": "gbigbe",
-      "audit": "ìṣàyẹ̀wò",
-      "penalty": "ìtanràn"
-    },
-    "categories": {
-      "consent": "Ìyọ̀ǹda",
-      "rights": "Ẹ̀tọ́ Ẹni Tí Ó Ni Dátà",
-      "obligations": "Ojúṣe Alákòóso",
-      "transfer": "Gbígbé Sókè-Òkun",
-      "enforcement": "Ìmúṣẹ",
-      "security": "Ààbò",
-      "breach": "Ìrúfin Dátà"
-    },
-    "title": "Ṣàwárí NDP Act & GAID Framework"
-  },
+  "search": { "placeholder": "Ṣàwárí àwọn abala òfin...", "button": "Ṣàwárí Abala", "searching": "Ń Ṣàwárí...", "noResults": "A kò rí abala kankan.", "resultsFound": "A rí {{count}}" },
   "checklist": {
-    "progress": {
-      "title": "Ìlọsíwájú Àtúnṣe",
-      "count": "{{completed}} nínú {{total}} ti parí"
-    },
-    "priority": {
-      "critical": "Pàtàkì Kókó",
-      "high": "Pàtàkì Gíga",
-      "medium": "Pàtàkì Ààrin",
-      "low": "Pàtàkì Kéréje"
-    },
-    "difficulty": {
-      "easy": "Rọrùn",
-      "medium": "Ààrin",
-      "hard": "Lágbára"
-    },
-    "empty": {
-      "title": "Ó dára!",
-      "message": "A kò rí àwọn ìṣòro kókó kankan. Tẹ̀síwájú pẹ̀lú àwọn ìṣe ìbámu tó dára."
-    },
-    "critical": "Pàtàkì Jùlọ (Ṣàtúnṣe kí o tó ṣe ìfilọ́lẹ̀)",
-    "high": "Pàtàkì Gíga (Ṣàtúnṣe láàárín ọ̀sẹ̀ 1)",
-    "medium": "Pàtàkì Ààrin (Ṣàtúnṣe láàárín oṣù 1)",
-    "items": {
-      "rem-privacy-policy": {
-        "title": "Ṣe Àtẹ̀jáde Ètò Àṣírí",
-        "description": "Òwò rẹ ń gba dátà àdání ṣùgbọ́n kò ní ètò àṣírí. Abala 27 ti Òfin NDP nílò ìsọfúnni tí ó ṣe kedere nípa ìṣàkóso dátà."
-      },
-      "rem-consent": {
-        "title": "Ṣe Ìmúṣe Ìlànà Ìyọ̀ǹda",
-        "description": "Gba ìyọ̀ǹda tí ó hàn gbangba kí o tó gba dátà àdání gẹ́gẹ́ bí Abala 26 ti Òfin NDP ṣe nílò."
-      },
-      "rem-children": {
-        "title": "Ìdáàbòbò Dátà Ọmọdé",
-        "description": "Ṣe ìmúṣe ìfìdímúlẹ̀ ọjọ́ orí àti ìyọ̀ǹda òbí fún àwọn olùṣàmúlò tí kò tí ì pé ọmọ ọdún 18 gẹ́gẹ́ bí Abala 31 ti Òfin NDP ṣe nílò."
-      },
-      "rem-appoint-dpo": {
-        "title": "Yan Ọ̀gá Ààbò Dátà",
-        "description": "Yan DPO gẹ́gẹ́ bí ó ṣe nílò fún àwọn ìgbòkègbodò ìṣàkóso rẹ lábẹ́ Abala 32 ti Òfin NDP."
-      },
-      "rem-file-audit": {
-        "title": "Fi Ìṣàyẹ̀wò Ìbámu Sílẹ̀",
-        "description": "Fi CAR ọdọọdún sílẹ̀ fún NDPC ṣáájú Ọjọ́ 31 Oṣù Kẹta gẹ́gẹ́ bí GAID 2025 ṣe nílò."
-      },
-      "rem-register-ndpc": {
-        "title": "Forúkọsílẹ̀ pẹ̀lú NDPC",
-        "description": "Forúkọsílẹ̀ gẹ́gẹ́ bí olùṣàkóso dátà tàbí olùṣètò dátà pàtàkì lábẹ́ Abala 44 ti Òfin NDP."
-      },
-      "rem-dpia": {
-        "title": "Ṣe Ìṣàyẹ̀wò Ipa Ààbò Dátà",
-        "description": "Ṣe DPIA fún àwọn ìgbòkègbodò ìṣàkóso tí ó léwu gíga gẹ́gẹ́ bí Abala 28 ti Òfin NDP ṣe nílò."
-      },
-      "rem-cross-border": {
-        "title": "Ààbò Gbígbé Dátà Sókè-Òkun",
-        "description": "Rí i dájú pé ààbò tó péye wà fún àwọn gbígbé dátà àgbáyé gẹ́gẹ́ bí Abala 41-43 ti Òfin NDP ṣe nílò."
-      },
-      "rem-third-party": {
-        "title": "Àdéhùn Ìṣàkóso Dátà ti Ẹni Kẹta",
-        "description": "Ṣe àdéhùn ìṣàkóso dátà tí a kọ sílẹ̀ pẹ̀lú gbogbo àwọn olùtajà àti àwọn olùpèsè iṣẹ́."
-      },
-      "rem-agf-coord": {
-        "title": "Ìṣàkóso pẹ̀lú Attorney-General Federation",
-        "description": "Ṣàkóso ìfọwọ́sí gbígbé dátà sókè-òkun pẹ̀lú ọ́físì AGF gẹ́gẹ́ bí ó ṣe nílò."
-      },
-      "rem-cookie-consent": {
-        "title": "Ìmúṣe Ìyọ̀ǹda Kúkì",
-        "description": "Ṣe ìmúṣe ọ̀págun ìyọ̀ǹda kúkì fún ìtọpinpin ojúlé wẹ́ẹ̀bù àti ìtúpalẹ̀."
-      },
-      "cbn-kyc-implementation": {
-        "title": "Ṣe Ìmúṣe Ètò Ìdánilójú KYC",
-        "description": "Àwọn ìlànà CBN AML nílò ìdánimọ̀ alábàáṣepọ̀ àti ìdánilójú pẹ̀lú BVN, NIN, tàbí iwé ìrìnnà káríayé fún gbogbo iṣẹ́ ìnáwó."
-      },
-      "cbn-aml-policy": {
-        "title": "Ṣe Ìmúṣe Ètò Ìlànà AML/CFT",
-        "description": "Ṣe àgbékalẹ̀ àti ìmúṣe ètò ìlànà Ìjàkadì Ìrọ́wó Ọ̀daràn àti Ìfowóṣèṣíjọ Àwọn Oníṣe Panilára."
-      },
-      "cbn-compliance-officer": {
-        "title": "Yan Ọ̀gá Ìbámu AML",
-        "description": "Yan Ọ̀gá Ìbámu AML/CFT tí yóò máa bójútó gbogbo àwọn ọ̀ràn ìbámu."
-      },
-      "cbn-transaction-monitoring": {
-        "title": "Ṣe Ìmúṣe Ètò Àbójútó Ìṣòwò",
-        "description": "Fi ìmúṣe àbójútó ìṣòwò lákókò gidi ṣiṣẹ́ láti ṣàwárí àwọn ìgbòkègbodò tí a fura sí."
-      },
-      "cbn-str-filing": {
-        "title": "Ṣe Ìmúṣe Ètò Ìfilọ́lẹ̀ STR",
-        "description": "Ṣe àgbékalẹ̀ ètò fún ìfilọ́lẹ̀ Ìjábọ̀ Ìṣòwò Tí A Fura Sí sí NFIU lákòókò wákàtí 24."
-      },
-      "cbn-aml-training": {
-        "title": "Ṣe Ìdánilẹ́kọ̀ọ́ AML Lọ́dọọdún",
-        "description": "Pèsè ìdánilẹ́kọ̀ọ́ AML/CFT lọ́dọọdún fún gbogbo àwọn òṣìṣẹ́ tí ó kàn."
-      },
-      "cbn-record-keeping": {
-        "title": "Ṣe Ìmúṣe Ètò Ìpamọ́ Àkọsílẹ̀",
-        "description": "Ṣe àgbékalẹ̀ ètò ìpamọ́ àkọsílẹ̀ ìṣòwò fún ó kéré tán ọdún márùn-ún."
-      },
-      "cbn-risk-assessment": {
-        "title": "Ṣe Ìṣàyẹ̀wò Ewu AML",
-        "description": "Ṣe ìṣàyẹ̀wò ewu AML lọ́dọọdún fún gbogbo òwò."
-      },
-      "cbn-independent-audit": {
-        "title": "Ṣètò Ìṣàyẹ̀wò AML Aláìdásí",
-        "description": "Ṣe ìṣàyẹ̀wò ìbámu AML aláìdásí lọ́dọọdún."
-      },
-      "cbn-pep-screening": {
-        "title": "Ṣe Ìmúṣe Ìṣàyẹ̀wò PEP",
-        "description": "Ṣàyẹ̀wò àwọn alábàáṣepọ̀ lòdì sí àwọn àtòjọ Àwọn Ẹni Tí Ó Kan Nínú Òṣèlú (PEP)."
-      },
-      "cbn-fintech-licensing": {
-        "title": "Gba Ìwé Àṣẹ Fintech CBN",
-        "description": "Gba ìwé àṣẹ CBN tí ó yẹ fún àwọn iṣẹ́ ìnáwó."
-      }
-    }
+    "title": "Àtòjọ Àtúnṣe", "progress": { "title": "Ìlọsíwájú Àtúnṣe", "count": "{{completed}} nínú {{total}} ti parí" },
+    "priority": { "critical": "Kókó", "high": "Gíga", "medium": "Ààrin", "low": "Kéréje" },
+    "difficulty": { "easy": "Rọrùn", "medium": "Ààrin", "hard": "Lágbára" },
+    "currentRiskScore": "Àmì Ewu Lọ́wọ́lọ́wọ́",
+    "allTasksCompleted": "Gbogbo Iṣẹ́ Ti Parí!",
+    "complianceImproved": "Àmì ìbámu rẹ ti dára sí i púpọ̀",
+    "noItems": "Kò sí àwọn nǹkan àtúnṣe tí a rí!",
+    "appearsCompliant": "App rẹ dàbí ẹni pé ó wà ní ìbámu.",
+    "completed": "ti parí", "of": "nínú",
+    "linkOfficer": "So pọ̀ mọ́ ọ̀gá ìbámu fún ìfọwọ́sí:",
+    "linkedToOfficer": "Ti So pọ̀ mọ́ Ọ̀gá Ìbámu",
+    "signInRequired": "Wọlé nílò láti so pọ̀",
+    "signInOrRegister": "Wọlé tàbí forúkọsílẹ̀ láti so pọ̀ mọ́ ọ̀gá yìí",
+    "uploadEvidence": "Ṣe Àgbéjáde Ẹ̀rí Tí A Nílò",
+    "awaitingVerification": "Ń Dúró Ìfọwọ́sí",
+    "linkConfirmation": { "title": "So pọ̀ mọ́ Ọ̀gá Ìbámu?", "message": "Ọ̀gá yìí yóò lè wo ipo ìbámu rẹ kí ó sì fọwọ́sí ìlọsíwájú àtúnṣe rẹ. Ṣé ó dá ọ lójú?" }
   },
-  "dcpm": {
-    "uhl": "Ìpele Ultra-High",
-    "ehl": "Ìpele Extra-High",
-    "ohl": "Ìpele Ordinary-High"
-  },
-  "footer": {
-    "by": "láti ọwọ́ Nexus SafeSphere",
-    "tagline": "Ṣíṣe àfárá ìṣẹ̀dá àti ìlànà Nàìjíríà. Ìbámu Òfin NDP & GAID 2025 agbára AI fún àwọn akọ́lé tí ń ṣe àtúnṣe ọjọ́ iwájú Áfíríkà.",
-    "quickLinks": "Àwọn Ọ̀nà Kíákíá",
-    "about": "Nípa",
-    "ndpcResources": "Àwọn Ohun Èlò NDPC",
-    "joinWaitlist": "Dara Pọ̀ Mọ́ Àtòjọ",
-    "regulator": "Ìwo Alákòóso",
-    "connect": "Sopọ̀",
-    "contact": "Kàn sí",
-    "twitter": "Twitter",
-    "linkedin": "LinkedIn",
-    "whyBuilt": {
-      "title": "Ìdí Tí A Fi Kọ́ Èyí fún Nàìjíríà",
-      "description": "Àwọn olùdásílẹ̀ Nàìjíríà kọ́ ọ ní Abuja, fún àwọn ìlànà Nàìjíríà. A gbàgbọ́ pé gbogbo olùbẹ̀rẹ̀ Nàìjíríà yẹ láti ṣe ìfilọ́lẹ̀ pẹ̀lú ìgboyà — ní mímọ̀ pé àwọn ìṣe dátà wọn dáàbò bo àwọn olùṣàmúlò wọn àti òwò wọn. RegTrack wà nítorí pé ìbámu kò yẹ kí ó jẹ́ ìdènà fún ìṣẹ̀dá ní ilé-iṣẹ́ ìmọ̀ ẹ̀rọ tí ó tóbi jùlọ ní Áfíríkà. Agbára Òfin NDP 2023, Ìlànà Ìmúṣẹ NDPR, àti GAID 2025."
-    },
-    "builtFor": "Ti a Kọ́ fún Nàìjíríà pẹ̀lú",
-    "madeIn": "Ti a Ṣe ní Abuja",
-    "privacy": "Ìlànà Àṣírí",
-    "terms": "Àwọn Ìlànà Iṣẹ́",
-    "poweredBy": "Agbára AI",
-    "hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
-    "copyright": "© 2026 RegTrack láti ọwọ́ NSS.",
-    "frameworkStatus": "Ipò Ìlànà Ìṣàkóso",
-    "lastSynced": "Àmúṣiṣẹ́pọ̀ pẹ̀lú NDPC gbẹ̀yìn"
-  },
-  "resources": {
-    "title": "Àwọn Ohun Èlò Kíákíá",
-    "privacyTemplate": {
-      "label": "Àwòkọ́ṣe Ètò Àṣírí",
-      "desc": "NDPC Òṣìṣẹ́"
-    },
-    "dpcoDirectory": {
-      "label": "Ìwé Ìtọ́sọ́nà DPCO",
-      "desc": "Wá àwọn àjọ ìbámu tí ó ní ìwé àṣẹ"
-    },
-    "breachTemplate": {
-      "label": "Àwòkọ́ṣe Ìfitónilétí Ìrúfin",
-      "desc": "Ìjábọ̀ láàárín wákàtí 72"
-    },
-    "dpa": {
-      "label": "Àdéhùn Ṣíṣètò Dátà",
-      "desc": "Àwòkọ́ṣe DPA"
-    },
-    "fullText": {
-      "label": "Òfin NDP & GAID 2025",
-      "desc": "Àwọn ìwé ìlànà òṣìṣẹ́"
-    },
-    "auditPortal": {
-      "label": "Ọ̀nà Àbáwọlé Ìṣàyẹ̀wò",
-      "desc": "Fi ìṣàyẹ̀wò ọdọọdún rẹ sílẹ̀"
-    }
-  },
-  "demo": {
-    "title": {
-      "part1": "Gbìyànjú rẹ̀",
-      "part2": "nísinsìnyí"
-    },
-    "subtitle": "Dán ìmúratán ìbámu rẹ wò nínú iṣẹ́jú méjì tí ó kéré.",
-    "tabs": {
-      "scanner": "Ìgbeyewo Ìbámu",
-      "finder": "Aṣàwárí Abala",
-      "extractor": "Olùyọ Ojúṣe"
-    },
-    "framework": {
-      "ndpa": "NDP Act 2023",
-      "cbn": "CBN AML 2024",
-      "hint": "Gbìyànjú yíyí ìlànà tí ó wà lókè — yí padà láàárín NDP Act 2023 àti CBN AML 2024 lẹ́sẹ̀kẹsẹ̀.",
-      "policyAsCode": "Ìlànà-bíi-Code: Fáìlì JSON kan fún ìlànà kọ̀ọ̀kan. Kò sí àyípadà kóòdù."
-    }
-  },
+  "demo": { "title": { "part1": "Gbìyànjú rẹ̀", "part2": "nísinsìnyí" }, "subtitle": "Dán ìmúratán ìbámu rẹ wò nínú iṣẹ́jú 2.", "tabs": { "scanner": "Ìgbeyewo Ìbámu", "finder": "Aṣàwárí Abala", "extractor": "Olùyọ Ojúṣe" } },
   "extractor": {
-    "title": "Olùyọ Ojúṣe AI",
-    "subtitle": "Ṣe àgbéjáde ìwé ìlànà èyíkéyìí — AI yóò yọ àwọn ojúṣe NDP Act lẹ́sẹ̀kẹsẹ̀",
-    "dropzone": "Fà kí o sì fi ìwé ìlànà rẹ sílẹ̀",
-    "browse": "tàbí tẹ láti wákiri",
-    "supports": "Ó ṣe àtìlẹ́yìn PDF, DOCX, TXT (Max 10MB)",
-    "extract": "Yọ Ojúṣe",
-    "analyzing": "Ń Ṣàyẹ̀wò Ìwé...",
-    "total": "Lápapọ̀",
-    "compliant": "Ní Ìbámu",
-    "partial": "Apá Kan",
-    "nonCompliant": "Kò Ní Ìbámu",
-    "extracted": "Àwọn Ojúṣe Tí A Yọ",
-    "viewClause": "Wo Abala",
-    "exportReport": "Ṣe Àgbéjáde Ìròyìn",
-    "uploadAnother": "Ṣe Àgbéjáde Ìwé Mìíràn",
-    "demoNotice": "Àfihàn: Ní ìgbéjáde, èyí ń lo Azure OpenAI láti yọ àwọn ojúṣe láti inú ìwé èyíkéyìí tí a bá ṣàgbéjáde."
+    "title": "Olùyọ Ojúṣe AI", "subtitle": "Ṣe àgbéjáde ìwé ìlànà", "dropzone": "Fà kí o fi ìwé rẹ sílẹ̀",
+    "browse": "tàbí tẹ láti wákiri", "supports": "PDF, DOCX, TXT (10MB)", "extract": "Yọ Ojúṣe",
+    "analyzing": "Ń Ṣàyẹ̀wò...", "total": "Lápapọ̀", "compliant": "Ní Ìbámu", "partial": "Apá Kan",
+    "nonCompliant": "Kò Ní Ìbámu", "viewClause": "Wo Abala", "exportReport": "Ṣe Àgbéjáde", "uploadAnother": "Ìwé Mìíràn"
+  },
+  "dashboard": {
+    "org": {
+      "title": "Dashboard Ìbámu", "subtitle": "Dashboard Ìbámu",
+      "totalAssessments": "Lápapọ̀ Ìgbeyewo", "avgRiskScore": "Ìpíndọ́gba Àmì Ewu",
+      "highRisk": "Ewu Gíga", "linkedOfficers": "Àwọn Ọ̀gá Tí A So", "pendingApprovals": "Àwọn Ìfọwọ́sí Tí Ń Dúró",
+      "assessedBusinesses": "Àwọn Òwò Tí A Ṣàyẹ̀wò", "noAssessments": "Kò sí ìgbeyewo kankan",
+      "startFirst": "Bẹ̀rẹ̀ ìgbeyewo ìbámu àkọ́kọ́ rẹ", "newAssessment": "Ìgbeyewo Tuntun",
+      "refreshData": "Tún Data Ṣe", "reminders": "Àwọn Ìránnilétí",
+      "itemsAwaiting": "àwọn nǹkan tí ń dúró ìfọwọ́sí DPCO", "allUpToDate": "Gbogbo nǹkan wà lọ́jọ́",
+      "remediationProgress": "Ìlọsíwájú Àtúnṣe", "viewDetails": "Wo Ẹ̀kúnrẹ́rẹ́",
+      "clausesTriggered": "àwọn abala tí ó ṣí", "itemsCompleted": "àwọn nǹkan tí a parí",
+      "riskLevel": "ewu", "pending": "ń dúró ìfọwọ́sí", "noOfficer": "Kò sí ọ̀gá tí a so",
+      "sendReminder": "Fi Ìránnilétí Ránṣẹ́", "sending": "Ń Fi Ránṣẹ́...", "linkedTo": "Ti So pọ̀ mọ́"
+    },
+    "dpco": {
+      "title": "Dashboard DPCO", "subtitle": "Káàbọ̀, {{name}}",
+      "linkedOrgs": "Àwọn Àjọ Tí A So", "pending": "Àwọn Ìfọwọ́sí Tí Ń Dúró",
+      "compliant": "Ní Ìbámu", "highRisk": "Ewu Gíga",
+      "noOrgs": "Kò sí àwọn àjọ tí a so pọ̀ mọ́.",
+      "orgsWillAppear": "Àwọn àjọ yóò farahàn níbí nígbà tí wọ́n bá yàn láti so pọ̀ mọ́ ọ lẹ́yìn ìgbeyewo ìbámu.",
+      "noPending": "Kò sí àwọn ìfọwọ́sí tí ń dúró.", "licensePending": "Ìwé-àṣẹ Ń Dúró"
+    },
+    "admin": {
+      "title": "Dashboard Alákòóso", "subtitle": "Àkópọ̀ àti ìṣàkóso pèpẹlẹ",
+      "organizations": "Àwọn Àjọ", "dpcos": "Àwọn Ọ̀gá Ìbámu",
+      "totalScans": "Lápapọ̀ Ìgbeyewo", "avgRiskScore": "Ìpíndọ́gba Àmì Ewu",
+      "highRisk": "Ewu Gíga", "compliant": "Ní Ìbámu",
+      "pending": "Ń Dúró", "completed": "Ti Parí",
+      "overview": "Àkópọ̀", "noOrganizations": "Kò sí àwọn àjọ.",
+      "noDPCOs": "Kò sí DPCO tí ó forúkọsílẹ̀.",
+      "lastScan": "Ìgbeyewo tó kẹ́yìn", "never": "Kò tíì ṣẹlẹ̀",
+      "noLicense": "Kò sí ìwé-àṣẹ", "linkedOrgs": "àwọn àjọ", "pendingVerifications": "ń dúró"
+    }
   },
   "regulator": {
-    "title": "Ìwo Alákòóso NDPC",
-    "subtitle": "Ipò ìbámu àkókò gidi káàkiri gbogbo àwọn ilé-iṣẹ́ tí a ṣe ìlànà fún",
-    "suptech": "Àfihàn SupTech",
-    "totalEntities": "Lápapọ̀ Àwọn Ilé-iṣẹ́",
-    "compliant": "Ní Ìbámu",
-    "atRisk": "Nínú Ewu",
-    "highRisk": "Ewu Gíga",
-    "avgSectorRisk": "Ìpíndọ́gba Ewu Ẹ̀ka",
-    "pendingCAR": "CAR Tí Ń Dúró",
-    "recentScans": "Àwọn Ìṣàyẹ̀wò Ìbámu Láìpẹ́",
-    "sectorBreakdown": "Ìpín Ẹ̀ka",
-    "viewDetails": "Wo Àwọn Ẹ̀kúnrẹ́rẹ́",
-    "exportData": "Ṣe Àgbéjáde Dátà",
-    "backToHome": "Padà sí Ilé"
+    "title": "Dashboard Ọ̀pọ̀ Alákòóso", "subtitle": "Ìbámu àkókò gidi káàkiri NDPC, CBN, SEC, àti NITDA",
+    "suptech": "Àfihàn SupTech", "totalEntities": "Lápapọ̀", "compliant": "Ní Ìbámu",
+    "atRisk": "Nínú Ewu", "highRisk": "Ewu Gíga", "avgRisk": "Ìpíndọ́gba Ewu",
+    "pendingCAR": "CAR Dúró", "recentScans": "Àwọn Ìgbeyewo Láìpẹ́", "backToHome": "Padà sí Ilé",
+    "lastUpdated": "Àtúnṣe tó kẹ́yìn", "frameworksMonitored": "àwọn ìlànà tí a ń ṣàbójútó",
+    "clearAll": "Pa Gbogbo Rẹ̀ Rẹ́", "noAssessments": "Kò sí ìgbeyewo tí a rí.",
+    "suptechMessage": "Ipò ìbámu àkókò gidi káàkiri àwọn ìlànà NDPC, CBN, SEC, àti NITDA nípasẹ̀ API RegTrack."
+  },
+  "frameworks": { "ndpa": "NDP Act 2023", "cbnAml": "CBN AML/CFT", "secCf": "SEC Crowdfunding", "nitdaDp": "NITDA DP" },
+  "sectors": {
+    "fintech": { "name": "Fintech" }, "healthtech": { "name": "HealthTech" }, "ecommerce": { "name": "Ìṣòwò Lórí Ẹ̀rọ" },
+    "edtech": { "name": "EdTech" }, "agritech": { "name": "AgriTech" }, "enterprise": { "name": "Enterprise SaaS" },
+    "social_media": { "name": "Ìkànnì Àjọlù" }
+  },
+  "evidence": {
+    "title": "Ṣe Àgbéjáde Ẹ̀rí", "requiredFor": "A nílò fún {{framework}}",
+    "acceptedFormats": "Àwọn ọ̀nà tí a gbà", "maxSize": "Ìwọ̀n fáìlì",
+    "examples": "Àwọn àpẹẹrẹ", "guidance": "Ìtọ́sọ́nà {{regulator}}",
+    "uploadSuccess": "Àgbéjáde parí!", "keepExisting": "Fi Ẹ̀rí Sílẹ̀"
+  },
+  "features": {
+    "everythingYouNeed": "Gbogbo Nnkan Ti O Nilo Fun Ibamu",
+    "subtitle": "RegTrack n da awon ohun elo alagbara po kiri awon ilana NDPA, CBN, SEC, ati NITDA.",
+    "multilingual": "Atileyin Ede Pupo",
+    "multilingualDesc": "Atileyin kikun fun English, Hausa, Igbo, ati Yoruba kiri gbogbo awon ilana.",
+    "frameworks": "Awon Ilana Ofin 4",
+    "frameworksDesc": "NDPA, CBN AML/CFT, SEC Crowdfunding, ati NITDA DP — gbogbo won ni ori pepele kan.",
+    "deadlines": "Ma Se Gbagbe Awon Akoko Ipari",
+    "deadlinesDesc": "NDPC CAR dopin March 31st. Awon ijabọ CBN AML ni idamẹrin kọọkan. Wa niwaju gbogbo awọn akoko ipari.",
+    "seeKeyFeatures": "Wo Awon Ẹya Pataki",
+    "complianceAssessment": "Igbelewọn Ibamu",
+    "myDashboard": "Dashboard Mi",
+    "tryDemo": "Gbiyanju Demo",
+    "getStarted": "Bẹrẹ Ọfẹ",
+    "backToTop": "Pada si Oke"
+  },
+  "footer": {
+    "by": "láti ọwọ́ Nexus SafeSphere", "tagline": "Ṣíṣe àfárá ìṣẹ̀dá àti ìlànà Nàìjíríà.",
+    "quickLinks": "Ọ̀nà Kíákíá", "about": "Nípa", "joinWaitlist": "Dara Pọ̀ Mọ́ Àtòjọ",
+    "connect": "Sopọ̀", "contact": "Kàn sí", "privacy": "Ìlànà Àṣírí", "terms": "Àwọn Ìlànà Iṣẹ́",
+    "monitored": "Àwọn Ìlànà Tí A Ń Ṣàbójútó", "activelyMonitored": "A ń ṣàbójútó dáradára láti orísun òṣìṣẹ́",
+    "synced": "Ti ṣàmúṣiṣẹ́pọ̀",
+    "whyBuilt": { "title": "Ìdí Tí A Fi Kọ́ Èyí", "description": "Àwọn olùdásílẹ̀ Nàìjíríà kọ́ ọ ní Abuja." },
+    "builtFor": "Ti a Kọ́ fún Nàìjíríà pẹ̀lú", "madeIn": "Ti a Ṣe ní Abuja",
+    "hackathon": "RegTech Hackathon - Abuja 2026",
+    "disclaimer": "RegTrack n pese itọnisọna ẹkọ kọja awọn ilana NDPA, CBN, SEC, ati NITDA. Eyi kii ṣe imọran ofin."
   }
 }

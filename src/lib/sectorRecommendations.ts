@@ -1,151 +1,201 @@
+// src/lib/sectorRecommendations.ts
+// Multi-framework sector profiles with recommendations
+// Supports all 7 sectors and all 8 frameworks
+
 export interface SectorProfile {
   id: string;
   name: string;
   emoji: string;
   description: string;
   keyRisks: string[];
+  applicableFrameworks: string[];
   recommendedClauses: string[];
   tips: string[];
+  risk_level?: number; // Optional risk level for scoring in RiskScanner
+  riskLevel?: number;// Optional risk level label
 }
 
 export const sectorProfiles: SectorProfile[] = [
   {
-    id: "health",
-    name: "Health & Wellness",
-    emoji: "🏥",
-    description: "Health apps processing medical records, biometric data, or health metrics. Classified as mandatory registration sector under GAID Schedule 7.",
+    id: 'fintech',
+    name: 'Fintech & Payments',
+    emoji: '💳',
+    description: 'Financial apps classified as UHL under GAID Schedule 7. Must comply with NDPA, CBN AML/CFT, and potentially SEC regulations.',
     keyRisks: [
-      "Sensitive personal data (health records) requires explicit consent under NDP Act s.25",
-      "DPIA mandatory before processing health data (GAID Art. 28(3)(i))",
-      "Breach notification critical — health data breaches cause severe harm",
-      "Cross-border hosting of health records needs CBDTI or adequacy decision",
-      "Data Subject Vulnerability Index (DSVI) must consider age and health factors",
+      'UHL category — register with NDPC (₦250,000)',
+      'Financial data requires DPIA (GAID Art. 28)',
+      'CBN AML/CFT: KYC, CDD, STR filing to NFIU required',
+      'Consumer data privacy under CBN Consumer Protection Regulations',
+      'Cross-border payment processing needs adequacy verification',
     ],
-    recommendedClauses: ["3", "4", "5", "9", "17", "18"],
+    applicableFrameworks: ['NDPA', 'CBN-AML', 'CBN-CP', 'CBN-MMO', 'SEC-CF', 'SEC-CONDUCT', 'NITDA-DP'],
+    recommendedClauses: ['Section 24', 'Section 26', 'Section 30', 'Section 39', 'Section 40', 'Section 44', 'Section 3.1', 'Section 6.2', 'Section 4.2', 'Rule 4.2'],
     tips: [
-      "Always encrypt health data at rest and in transit per GAID Art. 29",
-      "Implement granular consent for each type of health data",
-      "Appoint a DPO with healthcare data expertise — certified per GAID Art. 14",
-      "Conduct DPIA using GAID Schedule 4 template before deployment",
+      'Maintain PCI DSS compliance alongside NDP Act requirements',
+      'Document all third-party payment processors with full DPAs',
+      'File annual CAR through DPCO by March 31st',
+      'Appoint AML/CFT Compliance Officer',
+      'Implement BVN/NIN verification for KYC',
     ],
   },
   {
-    id: "fintech",
-    name: "Fintech & Payments",
-    emoji: "💳",
-    description: "Financial apps classified as UHL under GAID Schedule 7. Fintechs and payment gateways must register at ₦250,000.",
+    id: 'healthtech',
+    name: 'Health & Wellness',
+    emoji: '🏥',
+    description: 'Health apps processing medical records, biometric data, or health metrics. Classified as mandatory registration sector under GAID Schedule 7.',
     keyRisks: [
-      "Fintechs are UHL category — must register with NDPC (₦250,000)",
-      "Financial data processing requires DPIA (GAID Art. 28(3)(h))",
-      "Third-party payment processors must have compliant DPAs (GAID Art. 34)",
-      "Cross-border payment processing needs adequacy verification or CBDTI",
-      "Data-driven financial assets require heightened security measures",
+      'Sensitive personal data requires explicit consent under NDP Act s.30',
+      'DPIA mandatory before processing health data',
+      'Breach notification critical — health data breaches cause severe harm',
+      'Cross-border hosting of health records needs CBDTI or adequacy decision',
+      'Data Subject Vulnerability Index must consider age and health factors',
     ],
-    recommendedClauses: ["3", "5", "7", "8", "12", "18"],
+    applicableFrameworks: ['NDPA', 'NITDA-DP'],
+    recommendedClauses: ['Section 24', 'Section 26', 'Section 30', 'Section 39', 'Section 40', 'Section 44', 'Article 3.1'],
     tips: [
-      "Maintain PCI DSS compliance alongside NDP Act requirements",
-      "Document all third-party payment processors with full DPAs",
-      "Implement MEM schedule for continuous security monitoring (GAID Art. 29)",
-      "File annual CAR through a licensed DPCO by March 31st",
+      'Always encrypt health data at rest and in transit',
+      'Implement granular consent for each type of health data',
+      'Appoint a DPO with healthcare data expertise',
+      'Conduct DPIA using GAID Schedule 4 template before deployment',
+      'Ensure GDPR compliance if handling EU patient data',
     ],
   },
   {
-    id: "edtech",
-    name: "EdTech & Learning",
-    emoji: "📚",
-    description: "Education platforms classified as mandatory sector under GAID Schedule 7. Higher institutions are EHL; primary/secondary schools are OHL.",
+    id: 'ecommerce',
+    name: 'E-Commerce & Retail',
+    emoji: '🛒',
+    description: 'E-commerce is a mandatory DPIA sector under GAID Art. 28 and mandatory registration sector under GAID Schedule 7.',
     keyRisks: [
-      "Children under 13 require guardian consent — DSVI applies (GAID Sch. 6)",
-      "Student data is sensitive personal information requiring DPIA",
-      "Higher institutions classified EHL (₦100,000), schools OHL (₦10,000)",
-      "Third-party analytics tracking on education platforms needs disclosure",
+      'E-commerce requires mandatory DPIA',
+      'Customer profiling and targeted marketing need explicit consent',
+      'Cookie consent banner must be conspicuous',
+      'Payment processor data sharing must be disclosed via DPA',
+      'Consumer protection under CBN-CP if processing payments',
     ],
-    recommendedClauses: ["3", "5", "8", "12", "16"],
+    applicableFrameworks: ['NDPA', 'CBN-CP', 'NITDA-DP'],
+    recommendedClauses: ['Section 24', 'Section 26', 'Section 27', 'Section 40', 'Section 44', 'Section 4.2'],
     tips: [
-      "Create child-friendly privacy notices as required by GAID Art. 27",
-      "Implement verifiable parental consent for minors",
-      "Register with NDPC based on your classification level",
-      "Develop Basic Privacy Checklist for all teaching staff (GAID Art. 30)",
+      'Implement conspicuous cookie consent banner',
+      'Disclose all analytics and marketing third parties',
+      'Offer easy data deletion and portability for customer accounts',
+      'Conduct Legitimate Interest Assessment if using profiling',
+      'Ensure payment gateway has CBN approval',
     ],
   },
   {
-    id: "ecommerce",
-    name: "E-Commerce & Retail",
-    emoji: "🛒",
-    description: "E-commerce is a mandatory DPIA sector under GAID Art. 28(3)(j) and a mandatory registration sector.",
+    id: 'edtech',
+    name: 'EdTech & Learning',
+    emoji: '📚',
+    description: 'Education platforms classified as mandatory sector under GAID Schedule 7. Schools and higher institutions have specific DCPMI classifications.',
     keyRisks: [
-      "E-commerce requires mandatory DPIA per GAID Art. 28(3)(j)",
-      "Customer profiling and targeted marketing need explicit consent",
-      "Cookie consent banner must be conspicuous — not at page bottom (GAID Art. 19)",
-      "Payment processor data sharing must be disclosed via DPA (GAID Art. 34)",
+      'Children under 18 require parental/guardian consent',
+      'Student data is sensitive personal information requiring DPIA',
+      'Higher institutions classified EHL (₦100,000), schools OHL (₦10,000)',
+      'Third-party analytics tracking on education platforms needs disclosure',
+      'NITDA Local Content guidelines may apply',
     ],
-    recommendedClauses: ["3", "5", "7", "12", "17"],
+    applicableFrameworks: ['NDPA', 'NITDA-DP', 'NITDA-LC'],
+    recommendedClauses: ['Section 24', 'Section 26', 'Section 31', 'Section 39', 'Section 44', 'Article 3.1'],
     tips: [
-      "Implement conspicuous cookie consent banner per GAID Art. 19(7)",
-      "Disclose all analytics and marketing third parties with proper DPAs",
-      "Offer easy data deletion and portability for customer accounts",
-      "Conduct Legitimate Interest Assessment if using profiling (GAID Sch. 8)",
+      'Create child-friendly privacy notices',
+      'Implement verifiable parental consent for minors',
+      'Register with NDPC based on classification level',
+      'Develop Basic Privacy Checklist for teaching staff',
+      'Consider NITDA local content requirements for EdTech solutions',
     ],
   },
   {
-    id: "social",
-    name: "Social & Community",
-    emoji: "💬",
-    description: "Public social media app developers are classified as UHL under GAID Schedule 7 (₦250,000 registration).",
+    id: 'agritech',
+    name: 'Agricultural Technology',
+    emoji: '🌾',
+    description: 'Agricultural technology solutions including farm management, supply chain, and precision agriculture platforms.',
     keyRisks: [
-      "Social media platforms are UHL category — highest compliance tier",
-      "User-generated content may contain personal data of others",
-      "Automated content moderation involves profiling — DPIA required",
-      "Direct messaging creates data retention and breach notification obligations",
+      'Farmer data collection may involve sensitive location data',
+      'Third-party data sharing with agricultural partners needs DPAs',
+      'IoT devices on farms create unique data security challenges',
+      'Cross-border data transfers for international supply chains',
     ],
-    recommendedClauses: ["3", "5", "6", "8", "9", "16"],
+    applicableFrameworks: ['NDPA', 'NITDA-DP'],
+    recommendedClauses: ['Section 24', 'Section 25', 'Section 26', 'Section 39', 'Section 40'],
     tips: [
-      "Implement content reporting and takedown mechanisms",
-      "Set clear data retention periods aligned with GAID Art. 49",
-      "File annual CAR through DPCO as UHL entity",
-      "Address DSVI for vulnerable users including minors and elderly",
+      'Implement data minimization for IoT sensor data',
+      'Create clear farmer data rights documentation',
+      'Ensure supply chain partners sign DPAs',
+      'Consider offline data collection privacy implications',
     ],
   },
   {
-    id: "logistics",
-    name: "Logistics & Delivery",
-    emoji: "🚚",
-    description: "Delivery and logistics apps tracking location data, addresses, and contact information.",
+    id: 'enterprise',
+    name: 'Enterprise SaaS',
+    emoji: '🏢',
+    description: 'Business software, cloud services, and B2B platforms. May be subject to multiple frameworks depending on client industries.',
     keyRisks: [
-      "Location tracking is sensitive personal data requiring consent",
-      "Driver and customer data sharing with third parties needs DPAs",
-      "Cross-border logistics data transfers need compliance verification",
-      "DPIA required for systematic location monitoring (GAID Art. 28(3)(c))",
+      'Processing client employee data requires DPA with each client',
+      'Cloud infrastructure must meet NDPA security standards',
+      'SEC and NITDA regulations may apply depending on sector',
+      'Cross-border data hosting needs adequacy verification',
+      'Multi-tenant architecture creates complex compliance requirements',
     ],
-    recommendedClauses: ["3", "4", "5", "7", "12"],
+    applicableFrameworks: ['NDPA', 'SEC-CF', 'NITDA-DP', 'NITDA-LC'],
+    recommendedClauses: ['Section 24', 'Section 25', 'Section 39', 'Section 40', 'Section 44', 'Article 3.1'],
     tips: [
-      "Minimize location tracking to delivery period only",
-      "Implement data anonymization for analytics per NDP Act s.24",
-      "Clearly disclose data sharing with delivery partners via DPAs",
-      "Develop MEM schedule for location data security",
+      'Implement strong data segregation between tenants',
+      'Create standardized DPA templates for clients',
+      'Ensure SOC 2 or ISO 27001 certification',
+      'Consider NITDA local content requirements',
+      'Build compliance dashboard for enterprise clients',
     ],
   },
   {
-    id: "government",
-    name: "Government & Public Sector",
-    emoji: "🏛️",
-    description: "MDAs are classified as EHL under GAID Schedule 7. Public institutions must comply with the NDP Act and designate DPOs.",
+    id: 'social_media',
+    name: 'Social Media & Content',
+    emoji: '💬',
+    description: 'Social platforms and content creation apps. Classified as UHL under GAID Schedule 7 (₦250,000 registration).',
     keyRisks: [
-      "MDAs classified as EHL — must register with NDPC (₦100,000)",
-      "Public interest processing still requires safeguards (GAID Art. 25)",
-      "Legal obligation processing must comply with necessity and proportionality",
-      "Data sovereignty considerations are paramount for government data",
+      'Social media platforms are UHL category — highest compliance tier',
+      'User-generated content may contain personal data of others',
+      'Automated content moderation involves profiling — DPIA required',
+      'Direct messaging creates data retention obligations',
+      'Minors on platform require special protections',
     ],
-    recommendedClauses: ["3", "4", "5", "7", "13", "18"],
+    applicableFrameworks: ['NDPA', 'NITDA-DP'],
+    recommendedClauses: ['Section 24', 'Section 26', 'Section 30', 'Section 31', 'Section 39', 'Section 40', 'Section 44'],
     tips: [
-      "Designate a certified DPO per NDP Act s.32",
-      "Conduct DPIA for new e-government systems (GAID Art. 28)",
-      "File CAR through DPCO by March 31st annually",
-      "Implement training schedule for all public servants handling data",
+      'Implement content reporting and takedown mechanisms',
+      'Set clear data retention periods',
+      'File annual CAR through DPCO as UHL entity',
+      'Address DSVI for vulnerable users including minors and elderly',
+      'Implement age verification for age-restricted content',
     ],
   },
 ];
 
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
 export function getSectorById(id: string): SectorProfile | undefined {
   return sectorProfiles.find(s => s.id === id);
+}
+
+export function getSectorByName(name: string): SectorProfile | undefined {
+  return sectorProfiles.find(s => s.name.toLowerCase() === name.toLowerCase());
+}
+
+export function getFrameworksForSector(sectorId: string): string[] {
+  const sector = getSectorById(sectorId);
+  return sector?.applicableFrameworks || ['NDPA'];
+}
+
+export function getClausesForSector(sectorId: string): string[] {
+  const sector = getSectorById(sectorId);
+  return sector?.recommendedClauses || [];
+}
+
+export function getAllSectorIds(): string[] {
+  return sectorProfiles.map(s => s.id);
+}
+
+export function getAllSectorNames(): string[] {
+  return sectorProfiles.map(s => s.name);
 }

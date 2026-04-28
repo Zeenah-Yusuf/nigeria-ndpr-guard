@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import ndprData from "@/data/ndpr_dataset.json";
+import ndprData from "@/data/ndpa_dataset.json";
 import cbnData from "@/data/cbn_dataset.json";
 import { RemediationItem } from "./remediationData";
 
@@ -23,7 +23,7 @@ interface ReportData {
   checkedItems: Record<string, boolean>;
   evidenceMap?: Record<string, EvidenceData>;
   sector?: string;
-  framework?: "ndpa" | "cbn";
+  framework?: string;
 }
 
 export function generateReportPDF(data: ReportData) {

@@ -1,209 +1,321 @@
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import ndprData from "@/data/ndpr_dataset.json";
-import cbnData from "@/data/cbn_dataset.json";
+import { getDatasetByFramework } from "@/data/index";
+import { supabase } from "@/lib/SupabaseClient";
 import RiskResults from "./RiskResults";
 import SectorSelector from "./SectorSelector";
 import QuestionModal from "./QuestionModal";
-import { getSectorById } from "@/lib/sectorRecommendations";
-import { forceScrollToTop } from "@/components/ScrollToTop";
+import { getSectorById, getFrameworksForSector } from "@/lib/sectorRecommendations";
+import { useRegulatorData } from "@/hooks/useRegulatorData";
+import { useToast } from "@/hooks/use-toast";
 
 export interface ScanResult {
   riskScore: number;
   riskLevel: "low" | "medium" | "high" | "critical";
   triggeredClauses: any[];
+  triggeredFrameworks: string[];
   explanation: string;
   appName: string;
   sector: string;
   answers: Record<string, boolean | null>;
-  framework?: "ndpa" | "cbn";
+  framework: string;
+  assessmentId?: string;
 }
 
 interface RiskScannerProps {
-  activeFramework?: "ndpa" | "cbn";
+  activeFramework?: string;
 }
 
-const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
+const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const { addAssessment } = useRegulatorData();
+  const { toast } = useToast();
+
   const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [appName, setAppName] = useState("");
   const [sector, setSector] = useState("");
   const [result, setResult] = useState<ScanResult | null>(null);
   const [step, setStep] = useState<"form" | "result">("form");
   const [calculating, setCalculating] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showForm, setShowForm] = useState(true);
+  const [showQuestions, setShowQuestions] = useState(false);
 
-  // Framework-specific questions
-  const ndpaQuestions = ndprData.risk_scanner_questions;
-  
-  const cbnQuestions = [
-    { 
-      id: "collectsData", 
-      question: t('scanner.cbnQuestions.collectsData'),
-      risk_weight: 15, 
-      clause_ids: ["cbn-aml-001"],
-      explanation: t('scanner.cbnExplanations.collectsData')
-    },
-    { 
-      id: "kycVerification", 
-      question: t('scanner.cbnQuestions.kycVerification'),
-      risk_weight: 15, 
-      clause_ids: ["cbn-aml-001"],
-      explanation: t('scanner.cbnExplanations.kycVerification')
-    },
-    { 
-      id: "pepScreening", 
-      question: t('scanner.cbnQuestions.pepScreening'),
-      risk_weight: 16, 
-      clause_ids: ["cbn-aml-002"],
-      explanation: t('scanner.cbnExplanations.pepScreening')
-    },
-    { 
-      id: "transactionMonitoring", 
-      question: t('scanner.cbnQuestions.transactionMonitoring'),
-      risk_weight: 18, 
-      clause_ids: ["cbn-aml-002"],
-      explanation: t('scanner.cbnExplanations.transactionMonitoring')
-    },
-    { 
-      id: "strFiling", 
-      question: t('scanner.cbnQuestions.strFiling'),
-      risk_weight: 14, 
-      clause_ids: ["cbn-aml-003"],
-      explanation: t('scanner.cbnExplanations.strFiling')
-    },
-    { 
-      id: "amlTraining", 
-      question: t('scanner.cbnQuestions.amlTraining'),
-      risk_weight: 8, 
-      clause_ids: ["cbn-aml-005"],
-      explanation: t('scanner.cbnExplanations.amlTraining')
-    },
-    { 
-      id: "recordKeeping", 
-      question: t('scanner.cbnQuestions.recordKeeping'),
-      risk_weight: 6, 
-      clause_ids: ["cbn-aml-006"],
-      explanation: t('scanner.cbnExplanations.recordKeeping')
-    },
-    { 
-      id: "complianceOfficer", 
-      question: t('scanner.cbnQuestions.complianceOfficer'),
-      risk_weight: 14, 
-      clause_ids: ["cbn-aml-008"],
-      explanation: t('scanner.cbnExplanations.complianceOfficer')
-    },
-    { 
-      id: "riskAssessment", 
-      question: t('scanner.cbnQuestions.riskAssessment'),
-      risk_weight: 12, 
-      clause_ids: ["cbn-aml-004"],
-      explanation: t('scanner.cbnExplanations.riskAssessment')
-    },
-    { 
-      id: "independentAudit", 
-      question: t('scanner.cbnQuestions.independentAudit'),
-      risk_weight: 10, 
-      clause_ids: ["cbn-aml-007"],
-      explanation: t('scanner.cbnExplanations.independentAudit')
-    },
-  ];
-
-  const questions = activeFramework === "ndpa" ? ndpaQuestions : cbnQuestions;
-  
-  // Get the appropriate clause data based on framework
-  const clauseData = activeFramework === "ndpa" ? ndprData.clauses : cbnData.clauses;
+  const dataset = getDatasetByFramework(activeFramework);
+  const questions: any[] = dataset?.risk_scanner_questions || [];
+  const clauses: any[] = (dataset?.clauses || []).map((c: any) => ({
+    ...c,
+    keywords: c.keywords || [],
+    penalty_info: c.penalty_info || undefined,
+    summary: c.summary || c.description || "",
+  }));
 
   const handleAnswer = (questionId: string, value: boolean) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
-  const startQuestionnaire = () => {
-    setShowForm(false);
-    setIsModalOpen(true);
-  };
-
-  const handleModalComplete = () => {
-    setIsModalOpen(false);
-    calculateRisk();
-  };
-
-  const calculateRisk = () => {
-    setCalculating(true);
-    setTimeout(() => {
-      let score = activeFramework === "ndpa" ? 35 : 40;
-      const triggeredClauseIds = new Set<string>();
-
-      questions.forEach(q => {
-        const answer = answers[q.id];
-        if (answer === null || answer === undefined) return;
-        const w = q.risk_weight;
-
-        if (w > 0) {
-          if (answer) {
-            score += w * 4;
-            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
-          } else {
-            score -= Math.ceil(w * 1.5);
-          }
-        } else if (w < 0) {
-          if (answer) {
-            score -= Math.abs(w) * 4;
-          } else {
-            score += Math.abs(w) * 4;
-            q.clause_ids.forEach(id => triggeredClauseIds.add(id));
-          }
-        }
-      });
-
-      const sectorProfile = getSectorById(sector);
-      if (activeFramework === "ndpa") {
-        const highRiskSectors = ["health", "fintech"];
-        if (sectorProfile) {
-          sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
-          if (highRiskSectors.includes(sector)) score += 6;
-        }
-      } else {
-        if (sector === "fintech" || sector === "banking") {
-          score += 10;
-        }
+  /**
+   * Gets the UUID of a sector from the sectors table by its slug
+   * Returns null if sector not found or on error
+   */
+  async function getSectorUuid(sectorSlug: string): Promise<string | null> {
+    if (!sectorSlug) return null;
+    try {
+      // Use maybeSingle() to avoid throwing if no row found
+      const { data, error } = await supabase
+        .from('sectors')
+        .select('id')
+        .eq('slug', sectorSlug)
+        .maybeSingle();
+      
+      if (error) {
+        console.warn('Sector lookup error:', error.message);
+        return null;
       }
+      
+      if (!data?.id) {
+        console.warn(`No sector found for slug: ${sectorSlug}`);
+        return null;
+      }
+      
+      console.log(`Sector UUID for ${sectorSlug}:`, data.id);
+      return data.id;
+    } catch (err) {
+      console.error('getSectorUuid failed:', err);
+      return null;
+    }
+  }
 
-      const normalizedScore = Math.max(0, Math.min(100, Math.round(score)));
-      const triggeredClauses = clauseData.filter(c => triggeredClauseIds.has(c.id));
-
-      const riskLevel: ScanResult["riskLevel"] =
-        normalizedScore <= 25 ? "low" :
-        normalizedScore <= 50 ? "medium" :
-        normalizedScore <= 75 ? "high" : "critical";
-
-      const appDisplayName = appName || t('scanner.defaultAppName');
-      const frameworkName = activeFramework === "ndpa" ? "NDP Act 2023" : "CBN AML 2022";
-
-      const explanations: Record<string, string> = {
-        low: t('scanner.explanation.low').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
-        medium: t('scanner.explanation.medium').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
-        high: t('scanner.explanation.high').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
-        critical: t('scanner.explanation.critical').replace('{{appName}}', appDisplayName).replace('{{framework}}', frameworkName),
+  /**
+   * Saves the scan results to Supabase compliance_scans table
+   * sector_id must be a valid UUID from the sectors table
+   */
+  async function saveToSupabase(
+    normalizedScore: number,
+    riskLevel: string,
+    triggeredClausesLength: number,
+    triggeredFrameworksArray: string[],
+    appDisplayName: string,
+    goodPracticesCount: number,
+    badAnswersLength: number,
+    sectorUuid: string | null,
+  ): Promise<boolean> {
+    try {
+      const scanPayload = {
+        user_id: user?.id || null,
+        sector_id: sectorUuid,
+        scan_type: 'quick',
+        status: 'completed',
+        results: {
+          riskScore: normalizedScore,
+          riskLevel,
+          triggeredClauses: triggeredClausesLength,
+          triggeredFrameworks: triggeredFrameworksArray,
+          framework: activeFramework,
+          appName: appDisplayName,
+          goodPractices: goodPracticesCount,
+          badPractices: badAnswersLength,
+          totalQuestions: questions.length,
+          answers: answers,
+          sector: sector,
+        },
+        risk_score: normalizedScore,
+        used_ai: false,
+        completed_at: new Date().toISOString(),
       };
 
-      setResult({ 
-        riskScore: normalizedScore, 
-        riskLevel, 
-        triggeredClauses, 
-        explanation: explanations[riskLevel], 
-        appName, 
-        sector, 
-        answers,
-        framework: activeFramework
-      });
-      setStep("result");
-      setCalculating(false);
+      console.log('Saving scan to Supabase:', scanPayload);
+
+      const { data, error: scanError } = await supabase
+        .from('compliance_scans')
+        .insert(scanPayload)
+        .select('id')
+        .single();
+
+      if (scanError) {
+        console.error('Failed to save scan to Supabase:', scanError.message, scanError.details, scanError.hint);
+        toast({
+          title: "Database Save Warning",
+          description: "Scan completed but may not sync to all dashboards. Data saved locally.",
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      console.log('Scan saved successfully to Supabase:', data?.id);
+      return true;
+    } catch (err) {
+      console.error('Failed to save scan log:', err);
+      return false;
+    }
+  }
+
+  /**
+   * Saves user's sector preference to user_sectors table
+   */
+  async function saveUserSector(sectorUuid: string | null) {
+    if (!user?.id || !sectorUuid) return;
+    try {
+      const { error } = await supabase
+        .from('user_sectors')
+        .upsert({
+          user_id: user.id,
+          sector_id: sectorUuid,
+        }, { 
+          onConflict: 'user_id' 
+        });
       
-      // Scroll to top when results are shown
-      forceScrollToTop();
-    }, 800);
+      if (error) {
+        console.warn('Failed to save user sector preference:', error.message);
+      }
+    } catch (err) {
+      console.error('Failed to save user sector:', err);
+    }
+  }
+
+  const calculateRisk = async () => {
+    setShowQuestions(false);
+    setCalculating(true);
+    
+    // Brief delay for UX
+    await new Promise(r => setTimeout(r, 800));
+
+    let totalRiskScore = 0;
+    let maxPossibleScore = 0;
+    const triggeredClauseIds = new Set<string>();
+    const triggeredFrameworks = new Set<string>([activeFramework]);
+
+    // Add frameworks based on sector
+    if (sector) {
+      getFrameworksForSector(sector).forEach(fw => triggeredFrameworks.add(fw));
+    }
+
+    // Calculate risk based on answers
+    questions.forEach(q => {
+      const answer = answers[q.id];
+      if (answer === null || answer === undefined) return;
+
+      const weight = Math.abs(q.risk_weight || 1);
+      maxPossibleScore += weight;
+
+      const isSafeguard = q.risk_weight < 0;
+      const goodAnswer = isSafeguard ? true : false;
+      const userGaveGoodAnswer = answer === goodAnswer;
+
+      if (!userGaveGoodAnswer) {
+        totalRiskScore += weight;
+        q.clause_ids?.forEach((id: string) => triggeredClauseIds.add(id));
+      } else if (isSafeguard && answer === true) {
+        q.clause_ids?.forEach((id: string) => triggeredClauseIds.add(id));
+      }
+    });
+
+    // Add sector-based risk
+    const sectorProfile = getSectorById(sector);
+    if (sectorProfile) {
+      sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
+      const sectorRisk = sectorProfile.riskLevel ?? sectorProfile.risk_level ?? 5;
+      totalRiskScore += (sectorRisk / 10) * 5;
+      maxPossibleScore += 5;
+    }
+
+    // Normalize score
+    const normalizedScore = maxPossibleScore > 0
+      ? Math.max(5, Math.min(100, Math.round((totalRiskScore / maxPossibleScore) * 100)))
+      : 35;
+
+    const triggeredClauses = clauses.filter((c: any) => triggeredClauseIds.has(c.id));
+
+    // Determine risk level
+    let riskLevel: ScanResult["riskLevel"];
+    if (normalizedScore <= 25) riskLevel = "low";
+    else if (normalizedScore <= 50) riskLevel = "medium";
+    else if (normalizedScore <= 75) riskLevel = "high";
+    else riskLevel = "critical";
+
+    const appDisplayName = appName.trim() || t('scanner.defaultAppName');
+
+    // Count bad answers
+    const badAnswers = questions.filter(q => {
+      const answer = answers[q.id];
+      if (answer === null || answer === undefined) return false;
+      const isSafeguard = q.risk_weight < 0;
+      return answer !== (isSafeguard ? true : false);
+    });
+
+    const goodPracticesCount = questions.length - badAnswers.length;
+
+    // Generate explanation
+    let explanation = getExplanationText(appDisplayName, riskLevel, goodPracticesCount, badAnswers.length);
+
+    // Determine status
+    const status: "compliant" | "at_risk" | "high_risk" =
+      normalizedScore <= 30 ? "compliant" : 
+      normalizedScore <= 60 ? "at_risk" : 
+      "high_risk";
+
+    // Build scan result
+    const assessmentResult: ScanResult = {
+      riskScore: normalizedScore,
+      riskLevel,
+      triggeredClauses,
+      triggeredFrameworks: Array.from(triggeredFrameworks),
+      explanation,
+      appName: appDisplayName,
+      sector,
+      answers,
+      framework: activeFramework,
+    };
+
+    // 1. Save to RegulatorData (local state - immediate UI update)
+    const newAssessment = addAssessment({
+      appName: appDisplayName,
+      sector: sector || "other",
+      riskScore: normalizedScore,
+      riskLevel,
+      framework: activeFramework,
+      triggeredClausesCount: triggeredClauses.length,
+      triggeredClauseIds: Array.from(triggeredClauseIds),
+      triggeredFrameworks: Array.from(triggeredFrameworks),
+      remediationCompleted: 0,
+      remediationTotal: badAnswers.length,
+      answers,
+      status,
+      assessmentDate: new Date().toISOString(),
+    });
+
+    assessmentResult.assessmentId = newAssessment.id;
+
+    // 2. Save to Supabase for cross-dashboard sync
+    const sectorUuid = await getSectorUuid(sector);
+    const supabaseSaved = await saveToSupabase(
+      normalizedScore, 
+      riskLevel, 
+      triggeredClauses.length,
+      Array.from(triggeredFrameworks), 
+      appDisplayName,
+      goodPracticesCount, 
+      badAnswers.length, 
+      sectorUuid,
+    );
+    
+    // Save user sector preference
+    await saveUserSector(sectorUuid);
+
+    if (supabaseSaved) {
+      console.log('✅ Scan fully synced - all dashboards will reflect this');
+    } else {
+      console.warn('⚠️ Scan saved to regulator data but Supabase sync had issues');
+    }
+
+    setResult(assessmentResult);
+    setStep("result");
+    setCalculating(false);
+  };
+
+  const getExplanationText = (appName: string, riskLevel: string, goodPractices: number, badPractices: number) => {
+    const key = `scanner.explanation.${riskLevel}`;
+    return t(key, { appName: appName || t('scanner.defaultAppName') });
   };
 
   const resetScanner = () => {
@@ -212,129 +324,78 @@ const RiskScanner = ({ activeFramework = "ndpa" }: RiskScannerProps) => {
     setAnswers({});
     setAppName("");
     setSector("");
-    setShowForm(true);
-    
-    // Force scroll to top when resetting to form
-    forceScrollToTop();
+    setShowQuestions(false);
   };
-
-  const allAnswered = questions.every(q => answers[q.id] !== undefined && answers[q.id] !== null);
-  const answeredCount = questions.filter(q => answers[q.id] !== undefined && answers[q.id] !== null).length;
 
   if (step === "result" && result) {
     return <RiskResults result={result} onReset={resetScanner} />;
   }
 
+  const canStart = appName.trim().length > 0 && sector !== "";
+
   return (
-    <>
-      {/* Initial Form View */}
-      {showForm && (
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2">
-              {t('scanner.title')}
-            </h2>
-            <p className="text-muted-foreground">
-              {t('scanner.subtitle')}
-            </p>
+    <div className="space-y-5">
+      <div className="text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 bg-primary/10 text-primary">
+        <span>{activeFramework}</span>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-2">{t('scanner.appName')}</label>
+        <input
+          type="text"
+          placeholder={t('scanner.appNamePlaceholder')}
+          value={appName}
+          onChange={e => setAppName(e.target.value)}
+          className="w-full px-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
+        />
+      </div>
+
+      <SectorSelector selected={sector} onSelect={setSector} />
+
+      {sector && (() => {
+        const sp = getSectorById(sector);
+        if (!sp) return null;
+        return (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 animate-fade-in">
+            <p className="text-xs font-semibold text-primary mb-1">{sp.emoji} {sp.name} — Key Risks</p>
+            <ul className="text-xs text-muted-foreground space-y-1">
+              {sp.keyRisks.slice(0, 3).map((r, i) => (
+                <li key={i} className="flex items-start gap-1.5"><span className="text-primary mt-0.5">•</span> {r}</li>
+              ))}
+            </ul>
           </div>
+        );
+      })()}
 
-          {/* Framework Indicator */}
-          <div className={`text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 ${
-            activeFramework === "ndpa" 
-              ? "bg-primary/10 text-primary" 
-              : "bg-accent/10 text-accent"
-          }`}>
-            <span>{activeFramework === "ndpa" ? t('scanner.framework.ndpa') : t('scanner.framework.cbn')}</span>
-          </div>
+      {!canStart && (
+        <p className="text-sm text-muted-foreground text-center py-4">{t('scanner.enterAppAndSector')}</p>
+      )}
 
-          {/* App name */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              {activeFramework === "ndpa" ? t('scanner.appName.label') : t('scanner.appName.cbnLabel')}
-            </label>
-            <input
-              type="text"
-              placeholder={activeFramework === "ndpa" ? t('scanner.appName.placeholder') : t('scanner.appName.cbnPlaceholder')}
-              value={appName}
-              onChange={e => setAppName(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all duration-200"
-            />
-          </div>
+      {canStart && !calculating && (
+        <button onClick={() => setShowQuestions(true)}
+          className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold text-base transition-all duration-200 hover:opacity-90 active:scale-[0.98] animate-pulse-glow">
+          {t('scanner.startAssessment')}
+        </button>
+      )}
 
-          {/* Sector selector - only show for NDPA */}
-          {activeFramework === "ndpa" && (
-            <SectorSelector selected={sector} onSelect={setSector} />
-          )}
-
-          {/* Sector tips */}
-          {activeFramework === "ndpa" && sector && (() => {
-            const sp = getSectorById(sector);
-            if (!sp) return null;
-            return (
-              <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 animate-fade-in">
-                <p className="text-xs font-semibold text-primary mb-1">
-                  {sp.emoji} {t(`sectors.${sector}.name`)} — {t('scanner.sector.keyRisks')}
-                </p>
-                <ul className="text-xs text-muted-foreground space-y-1">
-                  {sp.keyRisks.slice(0, 3).map((r, i) => (
-                    <li key={i} className="flex items-start gap-1.5">
-                      <span className="text-primary mt-0.5">•</span> {r}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })()}
-
-          {/* Start Assessment Button */}
-          <button
-            onClick={startQuestionnaire}
-            disabled={!appName.trim() || (activeFramework === "ndpa" && !sector)}
-            className={`w-full py-4 rounded-xl text-primary-foreground font-bold text-base transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2 ${
-              activeFramework === "ndpa" 
-                ? "bg-primary" 
-                : "bg-accent"
-            }`}
-          >
-            Start Assessment
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+      {calculating && (
+        <div className="text-center py-8">
+          <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-sm text-muted-foreground">{t('scanner.analyzing')}</p>
         </div>
       )}
 
-      {/* Question Modal */}
       <QuestionModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setShowForm(true);
-          // Scroll to top when modal closes and returns to form
-          forceScrollToTop();
-        }}
+        isOpen={showQuestions}
+        onClose={() => setShowQuestions(false)}
         questions={questions}
         answers={answers}
         onAnswer={handleAnswer}
-        onComplete={handleModalComplete}
+        onComplete={calculateRisk}
         activeFramework={activeFramework}
+        autoAdvance={false}
       />
-
-      {/* Loading Overlay */}
-      {calculating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-card rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
-            <div className={`w-12 h-12 border-4 border-muted ${
-              activeFramework === "ndpa" ? "border-t-primary" : "border-t-accent"
-            } rounded-full animate-spin`} />
-            <p className="text-foreground font-medium">{t('scanner.analyzing')}</p>
-            <p className="text-sm text-muted-foreground">Please wait</p>
-          </div>
-        </div>
-      )}
-    </>
+    </div>
   );
 };
 

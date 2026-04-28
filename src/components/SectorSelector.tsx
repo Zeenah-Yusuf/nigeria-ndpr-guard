@@ -1,27 +1,15 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { sectorProfiles } from "@/lib/sectorRecommendations";
-import { 
-  Stethoscope, 
-  Landmark, 
-  GraduationCap, 
-  ShoppingBag, 
-  Users, 
-  Truck, 
-  Building2,
-  Globe,
-  Briefcase 
-} from "lucide-react";
+import { Wallet, HeartPulse, ShoppingCart, GraduationCap, Sprout, Building2, Share2, Briefcase } from "lucide-react";
 
-// Map sector IDs to professional Lucide icons
 const sectorIcons: Record<string, React.ElementType> = {
-  health: Stethoscope,
-  fintech: Landmark,
+  fintech: Wallet,
+  healthtech: HeartPulse,
+  ecommerce: ShoppingCart,
   edtech: GraduationCap,
-  ecommerce: ShoppingBag,
-  social: Users,
-  logistics: Truck,
-  government: Building2,
-  other: Briefcase,
+  agritech: Sprout,
+  enterprise: Building2,
+  social_media: Share2,
 };
 
 interface Props {
@@ -41,7 +29,6 @@ const SectorSelector = ({ selected, onSelect }: Props) => {
         {sectorProfiles.map(s => {
           const Icon = sectorIcons[s.id] || Briefcase;
           const isSelected = selected === s.id;
-          
           return (
             <button
               key={s.id}
@@ -53,7 +40,7 @@ const SectorSelector = ({ selected, onSelect }: Props) => {
               }`}
             >
               <Icon className={`w-3.5 h-3.5 ${isSelected ? "text-primary-foreground" : "text-muted-foreground"}`} />
-              <span>{t(`sectors.${s.id}.name`)}</span>
+              <span>{s.name}</span>
             </button>
           );
         })}

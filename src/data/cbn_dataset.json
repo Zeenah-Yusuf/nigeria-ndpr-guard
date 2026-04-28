@@ -1,68 +1,83 @@
 {
+  "metadata": {
+    "regulation": "CBN AML/CFT Regulations 2022 & Consumer Protection Regulations 2019",
+    "issued_by": "CBN (Central Bank of Nigeria)",
+    "date": "2022",
+    "version": "2.0",
+    "framework": "CBN"
+  },
   "clauses": [
     {
       "id": "cbn-aml-001",
       "article_ref": "CBN AML 6.1",
       "title": "Customer Due Diligence (CDD)",
-      "summary": "Financial institutions must identify and verify customers using BVN, NIN, or international passport before establishing business relationships. Risk-based CDD procedures must be implemented including customer identification, verification, and ongoing monitoring.",
       "category": "kyc",
+      "summary": "Financial institutions must identify and verify customers using BVN, NIN, or international passport before establishing business relationships. Risk-based CDD procedures must be implemented.",
       "penalty_info": "Penalties may include fines up to ₦10,000,000 or suspension of license"
     },
     {
       "id": "cbn-aml-002",
       "article_ref": "CBN AML 7.1-7.2",
       "title": "Transaction Monitoring & PEP Screening",
-      "summary": "Real-time transaction monitoring required to detect suspicious activities including unusual transaction patterns and large cash transactions. Customers must be screened against Politically Exposed Persons (PEP) lists with enhanced due diligence for high-risk customers.",
       "category": "monitoring",
+      "summary": "Real-time transaction monitoring required to detect suspicious activities. Customers must be screened against PEP lists with enhanced due diligence.",
       "penalty_info": "Non-compliance may result in regulatory sanctions and fines"
     },
     {
       "id": "cbn-aml-003",
       "article_ref": "CBN AML 8.3",
       "title": "Suspicious Transaction Reporting (STR)",
-      "summary": "Suspicious Transaction Reports (STR) must be filed with NFIU within 24 hours of forming suspicion. Staff who report suspicious activities in good faith are protected by law.",
       "category": "reporting",
+      "summary": "STR must be filed with NFIU within 24 hours of forming suspicion. Staff who report in good faith are protected by law.",
       "penalty_info": "Failure to file STR within 24 hours may result in significant penalties"
     },
     {
       "id": "cbn-aml-004",
       "article_ref": "CBN AML 5.2",
       "title": "Enterprise-wide AML Risk Assessment",
-      "summary": "Annual enterprise-wide AML risk assessment covering products, services, customers, and geographic locations. Risk assessment methodology and findings must be documented.",
       "category": "risk_management",
-      "penalty_info": "Failure to conduct annual risk assessment may result in enforcement action"
+      "summary": "Annual AML risk assessment covering products, services, customers, and geographic locations. Methodology and findings must be documented.",
+      "penalty_info": "Failure to conduct annual risk assessment may result in enforcement"
     },
     {
       "id": "cbn-aml-005",
       "article_ref": "CBN AML 12.1",
       "title": "Annual AML/CFT Training",
-      "summary": "All relevant employees including board members, management, and front-line staff must receive annual AML/CFT training covering recent regulations and emerging risks.",
       "category": "training",
+      "summary": "All employees including board and management must receive annual AML/CFT training covering recent regulations and emerging risks.",
       "penalty_info": "Inadequate training may be considered a compliance failure"
     },
     {
       "id": "cbn-aml-006",
       "article_ref": "CBN AML 15.1",
       "title": "Record Keeping Requirements",
-      "summary": "Transaction records, customer identification documents, and account files must be retained for at least 5 years after account closure or transaction completion.",
       "category": "record_keeping",
+      "summary": "Transaction records and customer identification documents must be retained for at least 5 years after account closure.",
       "penalty_info": "Failure to maintain proper records may result in penalties"
     },
     {
       "id": "cbn-aml-007",
       "article_ref": "CBN AML 18.4",
       "title": "Independent AML Compliance Audit",
-      "summary": "Annual independent AML compliance audit by internal audit or external qualified party. Audit must assess compliance with AML/CFT obligations and recommend improvements.",
       "category": "audit",
+      "summary": "Annual independent AML compliance audit by internal or external qualified party assessing compliance with AML/CFT obligations.",
       "penalty_info": "Lack of independent audit may be considered a compliance gap"
     },
     {
       "id": "cbn-aml-008",
       "article_ref": "CBN AML 19",
       "title": "AML Compliance Officer",
-      "summary": "A designated AML/CFT Compliance Officer at senior management level must be appointed to oversee all compliance matters including reporting suspicious transactions to NFIU.",
       "category": "governance",
-      "penalty_info": "Failure to appoint a compliance officer may result in regulatory action"
+      "summary": "Designated AML/CFT Compliance Officer at senior management level must oversee all compliance including STR reporting to NFIU.",
+      "penalty_info": "Failure to appoint compliance officer may result in regulatory action"
+    },
+    {
+      "id": "cbn-cp-001",
+      "article_ref": "CBN CP 4.2",
+      "title": "Consumer Data Privacy",
+      "category": "privacy",
+      "summary": "Financial service providers must protect consumer privacy, not disclose information without consent, and comply with data protection laws.",
+      "penalty_info": "Violation of consumer privacy triggers enforcement"
     }
   ],
   "risk_scanner_questions": [
@@ -71,7 +86,7 @@
       "question": "Do you collect customer information for financial services?",
       "risk_weight": 15,
       "clause_ids": ["cbn-aml-001"],
-      "explanation": "CBN AML regulations require customer due diligence for all financial services."
+      "explanation": "CBN AML regulations require CDD for all financial services."
     },
     {
       "id": "kycVerification",
@@ -82,7 +97,7 @@
     },
     {
       "id": "pepScreening",
-      "question": "Do you screen customers against Politically Exposed Persons (PEP) lists?",
+      "question": "Do you screen customers against PEP lists?",
       "risk_weight": 16,
       "clause_ids": ["cbn-aml-002"],
       "explanation": "Enhanced due diligence required for high-risk customers."

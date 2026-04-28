@@ -1,0 +1,57 @@
+project_id = "regtrack-ndpa"
+
+[db]
+port = 54322
+pooler = { port = 54329, pool_mode = "transaction" }
+
+[api]
+port = 54321
+max_rows = 1000
+extra_search_path = ["public", "extensions"]
+
+[studio]
+port = 54323
+
+[auth]
+enable_signup = true
+site_url = "http://localhost:5173"
+
+[functions.monitor-regulators]
+enabled = true
+verify_jwt = false
+
+[functions.parse-document]
+enabled = true
+verify_jwt = false
+
+[functions.generate-alerts]
+enabled = true
+verify_jwt = false
+
+[functions.generate-report]
+enabled = true
+verify_jwt = true
+
+[functions.scan]
+enabled = true
+verify_jwt = true
+
+[functions.search]
+enabled = true
+verify_jwt = true
+
+[storage]
+file_size_limit = "50MiB"
+
+[storage.buckets.regulatory-docs]
+public = true
+file_size_limit = "20MiB"
+allowed_mime_types = ["application/pdf", "text/plain", "application/msword"]
+
+[storage.buckets.user-uploads]
+public = false
+file_size_limit = "10MiB"
+allowed_mime_types = ["application/pdf", "image/png", "image/jpeg"]
+
+[analytics]
+enabled = true

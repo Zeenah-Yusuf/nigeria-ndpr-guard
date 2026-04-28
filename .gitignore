@@ -27,15 +27,12 @@ dist-ssr
 # Supabase local configuration
 supabase/.branches/
 supabase/.temp/
-supabase/config.toml
 
-# Backend local settings (if you had Azure Functions)
-backend/local.settings.json
+# Backend local settings
 local.settings.json
 
 # Keep templates (safe to commit)
 !.env.example
-!backend/local.settings.json.example
 
 # ============================================
 # Editor directories and files
@@ -65,3 +62,15 @@ out/
 *.temp
 .cache/
 .vercel
+
+# ============================================
+# Supabase (keep migrations, ignore temp)
+# ============================================
+supabase/.temp/
+supabase/.branches/
+
+# ============================================
+# Scripts output
+# ============================================
+scripts/*.log
+backup.sql

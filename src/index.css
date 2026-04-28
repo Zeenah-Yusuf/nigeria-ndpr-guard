@@ -27,11 +27,19 @@
     --ring: 207 62% 30%;
     --radius: 0.75rem;
 
+    /* Framework colors */
+    --framework-ndpa: 152 55% 32%;      /* Green - NDPC */
+    --framework-cbn: 207 62% 30%;        /* Blue - CBN */
+    --framework-sec: 271 81% 56%;        /* Purple - SEC */
+    --framework-nitda: 189 94% 43%;      /* Cyan - NITDA */
+
     /* Brand gradients — blue (#1B4F82) to green (#1A8754) */
     --gradient-brand: linear-gradient(135deg, hsl(207, 62%, 30%) 0%, hsl(152, 55%, 32%) 100%);
     --gradient-brand-vivid: linear-gradient(135deg, hsl(207, 72%, 38%) 0%, hsl(152, 65%, 40%) 50%, hsl(165, 60%, 36%) 100%);
     --gradient-hero: linear-gradient(160deg, hsl(215, 50%, 8%) 0%, hsl(210, 55%, 14%) 40%, hsl(180, 35%, 12%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(38, 92%, 50%) 0%, hsl(28, 90%, 55%) 100%);
+    --gradient-framework: linear-gradient(135deg, hsl(152, 55%, 32%) 0%, hsl(207, 62%, 30%) 50%, hsl(271, 81%, 56%) 75%, hsl(189, 94%, 43%) 100%);
+    
     --shadow-card: 0 4px 24px -4px hsl(215 25% 10% / 0.06);
     --shadow-elevated: 0 16px 48px -12px hsl(215 25% 10% / 0.12);
     --shadow-glow: 0 0 32px -4px hsl(180, 50%, 40%, 0.25);
@@ -66,6 +74,13 @@
     --border: 220 18% 18%;
     --input: 220 18% 18%;
     --ring: 207 72% 45%;
+
+    /* Framework colors - Dark mode */
+    --framework-ndpa: 152 60% 42%;
+    --framework-cbn: 207 72% 45%;
+    --framework-sec: 271 81% 56%;
+    --framework-nitda: 189 94% 43%;
+
     --sidebar-background: 220 25% 6%;
     --sidebar-foreground: 215 18% 92%;
     --sidebar-primary: 207 72% 45%;
@@ -93,6 +108,7 @@
 }
 
 @layer utilities {
+  /* Brand Gradients */
   .bg-brand-gradient {
     background: var(--gradient-brand);
   }
@@ -105,13 +121,84 @@
     background: var(--gradient-hero);
   }
   
+  .bg-framework-gradient {
+    background: var(--gradient-framework);
+  }
+  
   .text-brand-gradient {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     background-image: var(--gradient-brand-vivid);
   }
+
+  /* Framework Colors */
+  .text-ndpa {
+    color: hsl(var(--framework-ndpa));
+  }
   
+  .text-cbn {
+    color: hsl(var(--framework-cbn));
+  }
+  
+  .text-sec {
+    color: hsl(var(--framework-sec));
+  }
+  
+  .text-nitda {
+    color: hsl(var(--framework-nitda));
+  }
+
+  .bg-ndpa {
+    background-color: hsl(var(--framework-ndpa) / 0.1);
+  }
+  
+  .bg-cbn {
+    background-color: hsl(var(--framework-cbn) / 0.1);
+  }
+  
+  .bg-sec {
+    background-color: hsl(var(--framework-sec) / 0.1);
+  }
+  
+  .bg-nitda {
+    background-color: hsl(var(--framework-nitda) / 0.1);
+  }
+
+  .border-ndpa {
+    border-color: hsl(var(--framework-ndpa) / 0.3);
+  }
+  
+  .border-cbn {
+    border-color: hsl(var(--framework-cbn) / 0.3);
+  }
+  
+  .border-sec {
+    border-color: hsl(var(--framework-sec) / 0.3);
+  }
+  
+  .border-nitda {
+    border-color: hsl(var(--framework-nitda) / 0.3);
+  }
+
+  /* Ring colors for frameworks */
+  .ring-ndpa {
+    --tw-ring-color: hsl(var(--framework-ndpa) / 0.5);
+  }
+  
+  .ring-cbn {
+    --tw-ring-color: hsl(var(--framework-cbn) / 0.5);
+  }
+  
+  .ring-sec {
+    --tw-ring-color: hsl(var(--framework-sec) / 0.5);
+  }
+  
+  .ring-nitda {
+    --tw-ring-color: hsl(var(--framework-nitda) / 0.5);
+  }
+  
+  /* Shadows */
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
@@ -122,6 +209,40 @@
   
   .shadow-glow {
     box-shadow: var(--shadow-glow);
+  }
+
+  /* Risk Level Colors */
+  .risk-low {
+    color: #22c55e;
+  }
+  
+  .risk-medium {
+    color: #eab308;
+  }
+  
+  .risk-high {
+    color: #f97316;
+  }
+  
+  .risk-critical {
+    color: #ef4444;
+  }
+
+  /* Priority Colors */
+  .priority-critical {
+    border-left-color: #ef4444;
+  }
+  
+  .priority-high {
+    border-left-color: #f97316;
+  }
+  
+  .priority-medium {
+    border-left-color: #eab308;
+  }
+  
+  .priority-low {
+    border-left-color: #22c55e;
   }
 }
 
@@ -157,25 +278,13 @@
 }
 
 @keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes scale-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
 }
 
 @keyframes fade-out {
@@ -184,25 +293,13 @@
 }
 
 @keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes bounce {
@@ -227,12 +324,14 @@
 }
 
 @keyframes glow {
-  0%, 100% { 
-    box-shadow: 0 0 0 0 rgba(27, 79, 130, 0.4);
-  }
-  50% { 
-    box-shadow: 0 0 20px 4px rgba(27, 79, 130, 0.3);
-  }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(27, 79, 130, 0.4); }
+  50% { box-shadow: 0 0 20px 4px rgba(27, 79, 130, 0.3); }
+}
+
+@keyframes framework-pulse {
+  0%, 100% { opacity: 1; }
+  33% { color: hsl(var(--framework-ndpa)); }
+  66% { color: hsl(var(--framework-cbn)); }
 }
 
 /* ==================== ANIMATION CLASSES ==================== */
@@ -301,12 +400,29 @@
   animation: glow 2s ease-in-out infinite;
 }
 
+.animate-framework-pulse {
+  animation: framework-pulse 3s ease-in-out infinite;
+}
+
+/* ==================== ACCELERATED ANIMATIONS (SKIP TO END) ==================== */
+.animate-fade-in-up-fast {
+  animation: fade-in-up 0.3s ease-out both;
+}
+
+.animate-fade-in-fast {
+  animation: fade-in 0.2s ease-out both;
+}
+
+.animate-scale-in-fast {
+  animation: scale-in 0.15s ease-out both;
+}
+
 /* ==================== SCROLL BEHAVIOR ==================== */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Account for fixed navbar */
 }
 
-/* Disable smooth scroll for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -317,7 +433,8 @@ html {
   .animate-slide-in-right,
   .animate-scale-in,
   .animate-slide-down,
-  .animate-slide-up {
+  .animate-slide-up,
+  .animate-framework-pulse {
     animation: none;
     opacity: 1;
   }
@@ -328,6 +445,18 @@ html {
   outline: 2px solid hsl(207, 62%, 30%);
   outline-offset: 2px;
   border-radius: 0.25rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 /* ==================== CUSTOM SCROLLBAR ==================== */
@@ -368,4 +497,44 @@ html {
 /* ==================== MAIN CONTENT ==================== */
 main {
   flex: 1;
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card, .border {
+    border: 1px solid #e5e7eb !important;
+  }
+  
+  nav, footer, .no-print {
+    display: none !important;
+  }
+}
+
+/* ==================== SELECTION ==================== */
+::selection {
+  background-color: hsl(var(--primary) / 0.2);
+  color: hsl(var(--foreground));
+}
+
+/* ==================== FOCUS WITHIN ==================== */
+.focus-within-ring:focus-within {
+  ring: 2px solid hsl(var(--ring));
+  ring-offset: 2px;
+}
+
+/* ==================== LOADING SKELETON ==================== */
+.skeleton {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.1) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius);
 }

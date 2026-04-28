@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "RegTrack",
-    "tagline": "NDP Act Compliance Simulator",
+    "tagline": "Multi-Framework Compliance Simulator",
     "builtFor": "An Gina Don Najeriya"
   },
   "nav": {
@@ -10,474 +10,259 @@
     "compliance": "Matsalar",
     "solution": "Mafita",
     "demo": "Ƙimar Bin Doka",
-    "resources": "Albarkatu",
-    "regulator": "Duban Mai Kula"
+    "regulator": "Duban Mai Kula",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "signIn": "Shiga",
+    "signOut": "Fita",
+    "register": "Yi Rajista",
+    "switchAccount": "Canja Account",
+    "joinWaitlist": "Shiga Jerin Jira"
   },
   "hero": {
-    "title": "Ka guje wa tarar NDP Act kafin ka ƙaddamar.",
     "badge": "Tsaro Mai Amfani da AI ga Masu Ƙirƙira a Najeriya",
     "trusted": "Masu Ƙirƙira a Najeriya Sun Amince Da Mu",
-    "titlePart1": "Ka guje wa tarar NDP Act",
+    "titlePart1": "Ka guje wa tarar",
     "titlePart2": "kafin ka ƙaddamar.",
-    "subtitle": "RegTrack na taimaka wa masu ƙirƙira a Najeriya su gwada hadarin bin doka cikin mintuna — ta hanyar AI, NDP Act 2023, da GAID 2025.",
-    "scanner": "Ƙimar Bin Doka",
+    "subtitle": "RegTrack na taimaka wa masu ƙirƙira a Najeriya su gwada hadarin bin doka cikin mintuna.",
+    "scanner": "Fara Ƙimar",
     "learnMore": "Ƙara Koyo",
+    "seeWhatWeStandFor": "Duba Abin Da Muka Tsaya A Kai",
     "stats": {
-      "articles": "Abubuwan NDP Act GAID",
-      "maxFine": "Mafi Girma Taran Keta Doka",
-      "breachDeadline": "Lokacin Sanar da Keta Doka"
+      "frameworks": "Tsarukan Mulki",
+      "maxFine": "Mafi Girma Tara",
+      "breachDeadline": "Lokacin Sanarwa"
     }
   },
   "scanner": {
-    "title": "Ƙimar Bin Doka",
-    "subtitle": "Amsa tambayoyi game da kasuwancin ku. Sami makin bin doka nan take tare da sassan da suka shafa da bayani a harshe mai sauƙi.",
-    "progress": "Tambaya {{current}} na {{total}}",
-    "complete": "{{percent}}% An Kammala",
+    "appName": "Menene kake ginawa?",
+    "appNamePlaceholder": "misali, Dandalin sarrafa biyan kuɗi",
     "defaultAppName": "Kasuwancin ku",
-    "progressAnswered": "{{current}} cikin {{total}} an amsa",
-    "appName": {
-      "label": "Menene sunan kasuwancin ku?",
-      "placeholder": "misali, Manhajar Lafiya Ta",
-      "cbnLabel": "Menene sabis ɗin kuɗin ku?",
-      "cbnPlaceholder": "misali, Dandalin sarrafa biyan kuɗi"
-    },
-    "sector": {
-      "keyRisks": "Manyan Hadarurruka"
-    },
-    "feedback": {
-      "lowers": "↓ Yana rage makin hadarinku",
-      "increases": "↑ Yana ƙara makin hadarinku"
-    },
+    "startAssessment": "Fara Ƙimar",
     "calculate": "Ƙididdige Makin Bin Doka",
-    "calculateCbn": "Ƙididdige Makin Bin Doka CBN AML",
     "analyzing": "Ana nazarin matsayin bin dokar ku...",
-    "framework": {
-      "ndpa": "Tsarin Aiki: NDP Act 2023",
-      "cbn": "Tsarin Aiki: CBN AML 2022"
-    },
-    "explanation": {
-      "low": "\"{{appName}}\" yana da ƙaramin hadarin bin doka a ƙarƙashin {{framework}}. Kariya ta asali tana nan. Ci gaba da lura da ayyukan ku.",
-      "medium": "\"{{appName}}\" yana da matsakaicin hadarin bin doka a ƙarƙashin {{framework}}. Wurare da yawa suna buƙatar kulawa don guje wa yiwuwar matakin tilastawa.",
-      "high": "\"{{appName}}\" yana da manyan hadarurrukan bin doka a ƙarƙashin {{framework}}. Idan ba a gyara ba, za ka iya fuskantar hukuncin doka.",
-      "critical": "\"{{appName}}\" yana cikin babban hadari a ƙarƙashin {{framework}}! Ana buƙatar matakin gaggawa don guje wa hukunci mai tsanani."
-    },
+    "enterAppAndSector": "Shigar da sunan app ɗin ku kuma zaɓi sashe don farawa",
     "questions": {
       "collectsData": "Shin kasuwancin ku yana tattara bayanan sirri (sunaye, imel, lambobin waya)?",
       "sensitiveData": "Shin kuna adana bayanan lafiya, bayometrik, ko wasu bayanai masu mahimmanci?",
-      "hasPrivacyPolicy": "Shin kuna da manufar sirri da aka buga akan manhajar ku ko gidan yanar gizon ku?",
+      "hasPrivacyPolicy": "Shin kuna da manufar sirri da aka buga?",
       "crossBorderTransfer": "Shin kuna tura bayanan masu amfani zuwa wajen Najeriya?",
-      "hasConsentMechanism": "Shin kuna da tsari don samun izinin mai amfani kafin tattara bayanai?",
+      "hasConsentMechanism": "Shin kuna da tsari don samun izinin mai amfani?",
       "targetsChildren": "Shin kasuwancin ku yana shafar masu amfani da basu kai shekara 18 ba?",
       "thirdPartySharing": "Shin kuna raba bayanan masu amfani da wasu kamfanoni?",
-      "hasBreachProcess": "Shin kuna da tsarin sanar da ɓoyewar bayanai (sanarwa cikin awa 72 ga NDPC)?",
-      "registeredWithNDPC": "Shin kuna da rajista da NDPC a matsayin mai sarrafa bayanai mai mahimmanci?",
-      "usesAI": "Shin kasuwancin ku yana amfani da AI, yanke shawara ta atomatik, ko tsara bayanan martaba?"
+      "hasBreachProcess": "Shin kuna da tsarin sanar da ɓoyewar bayanai (awa 72)?",
+      "registeredWithNDPC": "Shin kuna da rajista da NDPC?",
+      "usesAI": "Shin kasuwancin ku yana amfani da AI ko yanke shawara ta atomatik?"
     },
     "explanations": {
       "collectsData": "Dokar NDP ta shafi duk wani sarrafa bayanan sirri na 'yan Najeriya.",
-      "sensitiveData": "Sashe na 30 yana buƙatar kariya ta musamman ga bayanan sirri masu mahimmanci ciki har da bayanan lafiya da bayometrik.",
+      "sensitiveData": "Sashe na 30 yana buƙatar kariya ta musamman ga bayanan sirri masu mahimmanci.",
       "hasPrivacyPolicy": "Sashe na 27 yana buƙatar manufar sirri mai gaskiya da sauƙin isa.",
-      "crossBorderTransfer": "Sassan 41-43 suna hana canja wurin bayanai zuwa ƙasashen da basu da isasshen matakan kariya.",
-      "hasConsentMechanism": "Sashe na 26 yana buƙatar izini na musamman, bayyananne, da kuma maras shakka.",
-      "targetsChildren": "Sashe na 31 yana buƙatar tabbatar da shekaru da izinin iyaye ga masu amfani da basu kai shekara 18 ba.",
-      "thirdPartySharing": "Sashe na 25 yana buƙatar yarjejeniyar sarrafa bayanai tare da masu sarrafa ɓangare na uku.",
-      "hasBreachProcess": "Sashe na 40 yana buƙatar bayar da rahoton ɓoyewar bayanai cikin awa 72 ga NDPC.",
-      "registeredWithNDPC": "Sashe na 44 yana buƙatar rajista a matsayin mai sarrafa bayanai mai mahimmanci.",
-      "usesAI": "GAID 2025 Mataki na 15 yana buƙatar bayyana gaskiya don tsarin yanke shawara ta atomatik."
+      "crossBorderTransfer": "Sassan 41-43 suna hana canja wurin bayanai zuwa ƙasashen da basu da isasshen kariya.",
+      "hasConsentMechanism": "Sashe na 26 yana buƙatar izini na musamman, bayyananne.",
+      "targetsChildren": "Sashe na 31 yana buƙatar tabbatar da shekaru da izinin iyaye.",
+      "thirdPartySharing": "Sashe na 25 yana buƙatar yarjejeniyar sarrafa bayanai.",
+      "hasBreachProcess": "Sashe na 40 yana buƙatar bayar da rahoton ɓoyewar bayanai cikin awa 72.",
+      "registeredWithNDPC": "Sashe na 44 yana buƙatar rajista a matsayin mai sarrafa bayanai.",
+      "usesAI": "GAID 2025 Mataki na 15 yana buƙatar bayyana gaskiya."
     },
-    "cbnQuestions": {
-      "collectsData": "Shin kuna tattara bayanan abokin ciniki don ayyukan kuɗi?",
-      "kycVerification": "Shin kuna tabbatar da shaidar abokin ciniki ta amfani da BVN, NIN, ko fasfo na ƙasa?",
-      "pepScreening": "Shin kuna bincika abokan ciniki a jerin Mutanen Da Suka Shafi Siyasa (PEP)?",
-      "transactionMonitoring": "Shin kuna lura da ma'amaloli don ayyukan da ake tuhuma a ainihin lokacin?",
-      "strFiling": "Shin kuna bayar da rahoton ma'amaloli da ake tuhuma ga NFIU cikin awa 24?",
-      "amlTraining": "Shin kuna ba da horon AML/CFT na shekara ga duk ma'aikatan da abin ya shafa?",
-      "recordKeeping": "Shin kuna adana bayanan ma'amala na akalla shekaru 5?",
-      "complianceOfficer": "Shin kun nada Jami'in Amincewa da AML/CFT?",
-      "riskAssessment": "Shin kuna gudanar da kimanta hadarin AML na shekara-shekara?",
-      "independentAudit": "Shin kuna gudanar da binciken bin doka na AML mai zaman kansa kowace shekara?"
-    },
-    "cbnExplanations": {
-      "collectsData": "Dokokin CBN AML suna buƙatar binciken abokin ciniki don duk ayyukan kuɗi.",
-      "kycVerification": "Sashe na 6 yana buƙatar shaidar abokin ciniki da za a iya tantancewa.",
-      "pepScreening": "Ana buƙatar ƙarin bincike mai zurfi don abokan ciniki masu haɗari.",
-      "transactionMonitoring": "Sashe na 7.1 yana buƙatar tantance ma'amaloli na ainihin lokacin.",
-      "strFiling": "Sashe na 8.3 yana buƙatar bayar da rahoton STR cikin awa 24.",
-      "amlTraining": "Sashe na 12.1 yana buƙatar horar da ma'aikata na shekara.",
-      "recordKeeping": "Sashe na 15.1 yana buƙatar adana bayanan shekaru 5.",
-      "complianceOfficer": "Sashe na 19 yana buƙatar Jami'in Amincewa da aka nada.",
-      "riskAssessment": "Sashe na 5.2 yana buƙatar kimanta hadarin shekara-shekara.",
-      "independentAudit": "Sashe na 18.4 yana buƙatar bincike mai zaman kansa."
+    "explanation": {
+      "low": "{{appName}} yana da ƙaramin hadarin bin doka.",
+      "medium": "{{appName}} yana da matsakaicin hadarin bin doka.",
+      "high": "{{appName}} yana da manyan hadarurrukan bin doka.",
+      "critical": "{{appName}} yana cikin babban hadari!"
     }
   },
-  "problem": {
-    "badge": "Matsalar",
-    "titlePart1": "Yawancin Masu Farawa a Najeriya Suna Gano",
-    "titlePart2": "Gurbin Bin Doka Da Latti",
-    "storyPart1": "Wani mai ƙirƙira a Najeriya ya ƙaddamar da manhajar lafiya.",
-    "storyPart2": "Masu amfani suna son ta — 5,000 sun yi rajista a mako na farko. Bayan makonni biyu, NDPC ta aika da sanarwar tilastawa.",
-    "finePart1": "Tarar?",
-    "finePart2": "— ko 2% na kudaden shiga na shekara, wanda ya fi girma. Babu manufar sirri. Babu tsarin yarda. Babu binciken bayanai.",
-    "solution": "RegTrack na hana wannan. Cikin mintuna, ba watanni ba."
-  },
-  "solution": {
-    "badge": "Mafitarmu",
-    "titlePart1": "Kayan aiki biyu.",
-    "titlePart2": "Cikakken haske.",
-    "subtitle": "RegTrack yana ba ku damar fahimtar bin doka nan take ta hanyar cikakken tsarin NDP Act da GAID 2025.",
-    "scanner": {
-      "title": "Ƙimar Bin Doka",
-      "description": "Amsa tambayoyi game da kasuwancin ku. Sami makin bin doka nan take tare da sassan NDP Act da suka shafa da bayani a harshe mai sauƙi.",
-      "flow": {
-        "step1": "Tambayoyi",
-        "step2": "Makin Bin Doka",
-        "step3": "Bayani"
-      }
-    },
-    "finder": {
-      "title": "Neman Sashe",
-      "description": "Bincika cikakken tsarin NDP Act da GAID 2025 ta kalma. Nemo ainihin sashen da ya shafi yanayinka tare da taƙaitaccen bayani.",
-      "flow": {
-        "step1": "Binciken Kalma",
-        "step2": "Sashen NDP Act",
-        "step3": "Taƙaitawa"
-      }
-    }
-  },
-  "sector": {
-    "label": "Wane bangare ne kasuwancin ku yake?"
-  },
-  "sectors": {
-    "health": { "name": "Lafiya" },
-    "fintech": { "name": "Fintech" },
-    "edtech": { "name": "EdTech" },
-    "ecommerce": { "name": "E-Kasuwanci" },
-    "social": { "name": "Zamantakewa" },
-    "logistics": { "name": "Logistics" },
-    "government": { "name": "Gwamnati" },
-    "other": { "name": "Sauran" }
-  },
+  "sector": { "label": "Wane bangare ne kasuwancin ku yake?" },
   "common": {
-    "yes": "Ee",
-    "no": "A'a"
+    "yes": "Ee", "no": "A'a", "back": "Baya", "cancel": "Soke", "confirm": "Tabbatar",
+    "save": "Ajiye", "delete": "Share", "edit": "Gyara", "view": "Duba",
+    "close": "Rufe", "loading": "Ana Lodi...", "refresh": "Sabunta",
+    "export": "Fitar", "download": "Sauke", "send": "Aika",
+    "approve": "Amincewa", "reject": "Ƙi", "change": "Canza", "remove": "Cire", "upload": "Loda"
   },
-  "button": {
-    "next": "Gaba",
-    "back": "Baya",
-    "analyze": "Bincika Bin Doka",
-    "restart": "Fara Sabon Ƙimantawa",
-    "downloadPDF": "Sauke Rahoto (PDF)"
+  "auth": {
+    "welcomeBack": "Barka Da Komai",
+    "createAccount": "Ƙirƙiri Account",
+    "signInMessage": "Shiga cikin account ɗin RegTrack ɗin ku",
+    "joinMessage": "Shiga RegTrack don sarrafa bin dokar ku",
+    "email": "Imel",
+    "password": "Kalmar Sirri",
+    "forgotPassword": "Ka manta kalmar sirri?",
+    "signIn": "Shiga",
+    "register": "Ƙirƙiri Account",
+    "continueWithGoogle": "Ci gaba da Google",
+    "or": "ko",
+    "noAccount": "Ba ku da account?",
+    "haveAccount": "Kuna da account?",
+    "createOne": "Ƙirƙiri ɗaya",
+    "signInInstead": "Shiga maimakon",
+    "resetPassword": "Sake Saiti Kalmar Sirri",
+    "sendResetLink": "Aika Link ɗin Sake Saiti",
+    "sending": "Ana Aika...",
+    "checkEmail": "Duba Imel ɗin ku",
+    "resetEmailSent": "Mun aika link ɗin sake saitin kalmar sirri zuwa",
+    "backToSignIn": "Koma Shiga",
+    "setNewPassword": "Saita Sabuwar Kalmar Sirri",
+    "enterNewPassword": "Shigar da sabuwar kalmar sirri",
+    "passwordUpdated": "An sabunta kalmar sirri!",
+    "redirecting": "Ana turawa zuwa shiga...",
+    "updating": "Ana Sabuntawa...",
+    "setPassword": "Saita Kalmar Sirri",
+    "iAmA": "Ni",
+    "organization": "Ƙungiya / Farawa",
+    "organizationDesc": "Ina buƙatar tantance bin dokata",
+    "dpco": "Jami'in Bin Doka (DPCO)",
+    "dpcoDesc": "Ina ba da sabis na bin doka",
+    "companyName": "Sunan Kamfani",
+    "fullName": "Cikakken Suna / Sunan Kamfani",
+    "companySize": "Girman Kamfani",
+    "sector": "Sashe",
+    "website": "Yanar Gizo (na zaɓi)",
+    "phoneNumber": "Lambar Waya",
+    "registrationNumber": "Lambar Rajista / Lasisi",
+    "sectorSpecialization": "Ƙwarewar Sashe",
+    "selectSector": "Zaɓi sashe",
+    "selectSpecialization": "Zaɓi ƙwarewa",
+    "errors": {
+      "emailExists": "Akwai account da wannan imel ɗin. Shiga maimakon.",
+      "invalidCredentials": "Imel ko kalmar sirri ba daidai ba. Gwada sake.",
+      "emailNotConfirmed": "Da fatan duba imel ɗin ku kuma tabbatar da account ɗin ku kafin shiga.",
+      "createFailed": "An kasa ƙirƙirar account"
+    },
+    "success": {
+      "accountCreated": "An ƙirƙiri account! Kuna iya shiga yanzu.",
+      "checkEmailConfirm": "An ƙirƙiri account! Duba imel ɗin ku don tabbatar da rajista."
+    }
   },
   "waitlist": {
     "badge": "Samun Farko",
     "title": "Samu damar farko ta RegTrack",
-    "subtitle": "Shiga jerin masu jira don cikakken dandali tare da sarrafa bin doka ta AI, sa ido na ainihi, da haɗin gwiwar ƙungiya.",
+    "subtitle": "Shiga jerin masu jira don cikakken dandali.",
     "placeholder": "imel ɗinka@misali.com",
     "button": "Shiga Jerin Jira",
-    "success": {
-      "title": "Kana cikin jerin!",
-      "message": "Za mu sanar da kai lokacin da RegTrack ta ƙaddamar."
-    }
+    "success": { "title": "Kana cikin jerin!", "message": "Za mu sanar da kai lokacin da RegTrack ta ƙaddamar." }
   },
   "risk": {
-    "low": "Ƙananan Hadari",
-    "medium": "Matsakaicin Hadari",
-    "high": "Babban Hadari",
-    "critical": "Hadari Mai Tsanani"
+    "low": "Ƙananan Hadari", "medium": "Matsakaicin Hadari", "high": "Babban Hadari", "critical": "Hadari Mai Tsanani"
   },
   "results": {
-    "newScan": "Sabon Ƙimantawa",
-    "downloadPDF": "Sauke PDF",
-    "yourApp": "Kasuwancin Ku",
-    "steps": {
-      "analyze": "Nazari",
-      "understand": "Fahimta",
-      "fix": "Gyara"
-    },
-    "stats": {
-      "clauses": "Sassan Da Aka Kunna",
-      "actions": "Ayyuka Da Ake Bukata",
-      "maxFine": "Mafi Girma Tara"
-    },
-    "answerBreakdown": "Rarraba Amsoshin",
-    "understandImpact": "Fahimtar Tasiri",
-    "plainEnglish": "Bayani A Harshe Mai Sauƙi",
-    "consequences": {
-      "title": "Sakamakon Da Ke Iya Faruwa",
-      "fine": "Tara har ₦10,000,000 ko 2% na kudaden shiga na shekara",
-      "enforcement": "Sanarwar tilastawa NDPC da bincike",
-      "suspension": "Dakatar da sabis da gargadin jama'a",
-      "carPenalty": "Jinkirin shigar da CAR: 50% hukuncin gudanarwa akan kuɗin shigarwa (GAID Art. 10)",
-      "prosecution": "Gurfanar da laifi a ƙarƙashin NDP Act 2023"
-    },
-    "sectorTips": "Shawarwari",
-    "triggeredClauses": "Sassan Da Aka Kunna",
-    "backToAnalyze": "Nazari",
-    "fixIt": "Gyara",
-    "backToImpact": "Koma Zuwa Tasiri",
-    "downloadFullReport": "Sauke Cikakken Rahoto (PDF)",
-    "scanAnother": "Sabon Ƙimantawa",
-    "toast": {
-      "downloaded": {
-        "title": "An sauke rahoto!",
-        "description": "RegTrack_Rahoto_{{date}}.pdf"
-      },
-      "error": {
-        "title": "Kuskure",
-        "description": "An kasa samar da PDF. Da fatan a sake gwadawa."
-      }
-    },
-    "dcpmTier": "Rarraba DCPMI",
-    "aiConfidence": "Amincewar AI",
-    "basedOn": "Bisa ga"
+    "newScan": "Sabon Ƙimantawa", "downloadPDF": "Sauke PDF", "yourApp": "Kasuwancin Ku",
+    "steps": { "analyze": "Nazari", "understand": "Fahimta", "fix": "Gyara" },
+    "stats": { "clauses": "Sassan Da Aka Kunna", "actions": "Ayyuka Da Ake Bukata", "maxFine": "Mafi Girma Tara" },
+    "answerBreakdown": "Rarraba Amsoshin", "understandImpact": "Fahimtar Tasiri", "plainEnglish": "Bayani A Harshe Mai Sauƙi",
+    "consequences": { "title": "Sakamakon Da Ke Iya Faruwa", "fine": "Tara har N10,000,000 ko 2%", "enforcement": "Sanarwar tilastawa da bincike", "suspension": "Dakatar da sabis da gargadin jama'a", "carPenalty": "Jinkirin shigar da CAR: 50% hukunci", "prosecution": "Gurfanar da laifi mai yiwuwa" },
+    "sectorTips": "Shawarwari", "triggeredClauses": "Sassan Da Aka Kunna", "backToAnalyze": "Nazari", "fixIt": "Gyara",
+    "backToImpact": "Koma Zuwa Tasiri", "scanAnother": "Sabon Ƙimantawa",
+    "basedOn": "Dangane da", "clause": "sashe", "clauses": "sassan", "triggered": "sun kunna",
+    "officer": { "title": "Jami'in Bin Doka Da Aka Ba da Shawara", "for": "na", "linked": "An Haɗa", "linkOfficer": "Haɗa Jami'i", "linking": "Ana Haɗawa...", "linkMessage": "Haɗa da wannan jami'in don tabbatar da bin doka da tallafi a duk tafiyar gyaran ku.", "contactToLink": "Je zuwa Gyara don haɗawa da wannan jami'in don tabbatar da bin doka." }
   },
-  "search": {
-    "placeholder": "Nemo sassan NDP Act...",
-    "button": "Nemo Sassan",
-    "searching": "Ana Nema...",
-    "noResults": "Ba a sami sashe ba. Gwada wasu kalmomi.",
-    "resultsFound": "An sami sashe {{count}}",
-    "terms": {
-      "consent": "yarda",
-      "breach": "ɓoyewa",
-      "children": "yara",
-      "transfer": "turawa",
-      "audit": "bincike",
-      "penalty": "tara"
-    },
-    "categories": {
-      "consent": "Yarda",
-      "rights": "Haƙƙoƙin Mai Bayani",
-      "obligations": "Wajibcin Mai Sarrafawa",
-      "transfer": "Turawa Ƙetare",
-      "enforcement": "Tilastawa",
-      "security": "Tsaro",
-      "breach": "ɓoyewar Bayanai"
-    },
-    "title": "Neman NDP Act & GAID Framework"
-  },
+  "search": { "placeholder": "Nemo sassan dokoki...", "button": "Nemo Sassan", "searching": "Ana Nema...", "noResults": "Ba a sami sashe ba.", "resultsFound": "An sami sashe {{count}}" },
   "checklist": {
-    "progress": {
-      "title": "Ci gaban Gyara",
-      "count": "An kammala {{completed}} daga cikin {{total}}"
-    },
-    "priority": {
-      "critical": "Muhimmanci Na Farko",
-      "high": "Muhimmanci Mai Girma",
-      "medium": "Muhimmanci Matsakaici",
-      "low": "Muhimmanci Kadan"
-    },
-    "difficulty": {
-      "easy": "Sauƙi",
-      "medium": "Matsakaici",
-      "hard": "Wuya"
-    },
-    "empty": {
-      "title": "Yayi kyau!",
-      "message": "Ba a sami manyan matsaloli ba. Ci gaba da kyawawan halayen bin doka."
-    },
-    "critical": "Mafi Muhimmanci (Gyara kafin ƙaddamarwa)",
-    "high": "Babban Muhimmanci (Gyara cikin mako 1)",
-    "medium": "Matsakaicin Muhimmanci (Gyara cikin wata 1)",
-    "items": {
-      "rem-privacy-policy": {
-        "title": "Buga Manufar Sirri",
-        "description": "Kasuwancin ku yana tattara bayanan sirri amma ba ta da manufar sirri. Sashe na 27 na NDP Act yana buƙatar bayani mai gaskiya game da sarrafa bayanai."
-      },
-      "rem-consent": {
-        "title": "Ƙaddamar da Tsarin Yarda",
-        "description": "Samu yarda bayyananniya kafin tattara bayanan sirri kamar yadda Sashe na 26 na NDP Act ya buƙata."
-      },
-      "rem-children": {
-        "title": "Kariyar Bayanan Yara",
-        "description": "Ƙaddamar da tabbatar da shekaru da yardar iyaye ga masu amfani da ba su kai shekara 18 ba kamar yadda Sashe na 31 na NDP Act ya buƙata."
-      },
-      "rem-appoint-dpo": {
-        "title": "Nada Jami'in Kare Bayanai",
-        "description": "Nada DPO kamar yadda ake buƙata don ayyukan sarrafawa a ƙarƙashin Sashe na 32 na NDP Act."
-      },
-      "rem-file-audit": {
-        "title": "Shigar da Rahoton Binciken Bin Doka",
-        "description": "Ƙaddamar da shigar da CAR na shekara ga NDPC kafin 31 ga Maris kamar yadda GAID 2025 ya buƙata."
-      },
-      "rem-register-ndpc": {
-        "title": "Yi Rajista da NDPC",
-        "description": "Yi rajista a matsayin mai sarrafa bayanai mai muhimmanci a ƙarƙashin Sashe na 44 na NDP Act."
-      },
-      "rem-dpia": {
-        "title": "Gudanar da Kimanta Tasirin Kare Bayanai",
-        "description": "Gudanar da DPIA don ayyukan sarrafawa masu haɗari kamar yadda Sashe na 28 na NDP Act ya buƙata."
-      },
-      "rem-cross-border": {
-        "title": "Kariyar Canja Sheƙa ta Ƙetare",
-        "description": "Tabbatar da isasshen kariya ga canja sheƙar bayanai na ƙasa da ƙasa kamar yadda Sassan 41-43 na NDP Act suka buƙata."
-      },
-      "rem-third-party": {
-        "title": "Yarjejeniyar Sarrafa Bayanai ta Ƙungiya ta Uku",
-        "description": "Ƙaddamar da yarjejeniyar sarrafa bayanai a rubuce tare da duk masu siyarwa da masu ba da sabis."
-      },
-      "rem-agf-coord": {
-        "title": "Haɗin Kai da Babban Lauyan Tarayya",
-        "description": "Haɗa kai da ofishin AGF don amincewar canja sheƙa ta ƙetare kamar yadda ake buƙata."
-      },
-      "rem-cookie-consent": {
-        "title": "Ƙaddamar da Yardar Kuki",
-        "description": "Ƙaddamar da banner ɗin yardar kuki don bin diddigin yanar gizo da nazari."
-      },
-      "cbn-kyc-implementation": {
-        "title": "Ƙaddamar da Tsarin Tabbatar da KYC",
-        "description": "Dokokin CBN AML suna buƙatar gano abokin ciniki da tabbatarwa ta amfani da BVN, NIN, ko fasfo na ƙasa don duk ayyukan kuɗi."
-      },
-      "cbn-aml-policy": {
-        "title": "Ƙaddamar da Manufar AML/CFT",
-        "description": "Ƙirƙira da aiwatar da cikakkiyar manufar Yaƙi da Haramtattun Kuɗi da Tallafin Ta'addanci."
-      },
-      "cbn-compliance-officer": {
-        "title": "Nada Jami'in Bin Doka na AML",
-        "description": "Nada Jami'in Bin Doka na AML/CFT wanda zai kula da duk al'amuran bin doka."
-      },
-      "cbn-transaction-monitoring": {
-        "title": "Ƙaddamar da Tsarin Sa ido kan Ma'amaloli",
-        "description": "Tura sa ido kan ma'amaloli na ainihin lokaci don gano ayyukan da ake tuhuma."
-      },
-      "cbn-str-filing": {
-        "title": "Ƙaddamar da Tsarin Ƙaddamar da STR",
-        "description": "Ƙirƙiri tsari don ƙaddamar da Rahoton Ma'amalolin da ake tuhuma zuwa NFIU cikin awa 24."
-      },
-      "cbn-aml-training": {
-        "title": "Gudanar da Horon AML na Shekara",
-        "description": "Ba da horon AML/CFT na shekara ga duk ma'aikatan da abin ya shafa."
-      },
-      "cbn-record-keeping": {
-        "title": "Ƙaddamar da Tsarin Adana Bayanai",
-        "description": "Ƙirƙiri tsarin adana bayanan ma'amala na akalla shekaru 5."
-      },
-      "cbn-risk-assessment": {
-        "title": "Gudanar da Kimanta Hadarin AML",
-        "description": "Gudanar da kimanta hadarin AML na shekara-shekara ga dukkan kasuwancin."
-      },
-      "cbn-independent-audit": {
-        "title": "Shirya Binciken AML Mai Zaman Kansa",
-        "description": "Gudanar da binciken bin doka na AML mai zaman kansa kowace shekara."
-      },
-      "cbn-pep-screening": {
-        "title": "Ƙaddamar da Binciken PEP",
-        "description": "Bincika abokan ciniki akan jerin Mutanen Da Suka Shafi Siyasa."
-      },
-      "cbn-fintech-licensing": {
-        "title": "Samun Lasisin Fintech na CBN",
-        "description": "Samun lasisin CBN da ya dace don ayyukan sabis na kuɗi."
-      }
-    }
+    "title": "Jerin Gyara", "progress": { "title": "Ci gaban Gyara", "count": "An kammala {{completed}} daga {{total}}" },
+    "priority": { "critical": "Muhimmanci", "high": "Babba", "medium": "Matsakaici", "low": "Kadan" },
+    "difficulty": { "easy": "Sauƙi", "medium": "Matsakaici", "hard": "Wuya" },
+    "currentRiskScore": "Makin Hadari na Yanzu",
+    "allTasksCompleted": "An Kammala Dukkan Ayyuka!",
+    "complianceImproved": "Makin bin dokar ku ya inganta sosai",
+    "noItems": "Ba a sami abubuwan gyara ba!",
+    "appearsCompliant": "Ga alama app ɗin ku yana cikin cikakken bin doka.",
+    "completed": "an kammala", "of": "daga",
+    "linkOfficer": "Haɗa da jami'in bin doka don tabbatarwa:",
+    "linkedToOfficer": "An Haɗa da Jami'in Bin Doka",
+    "signInRequired": "Ana buƙatar shiga don haɗawa",
+    "signInOrRegister": "Shiga ko yi rajista don haɗawa da wannan jami'in",
+    "uploadEvidence": "Loda Shaida Da Ake Bukata",
+    "awaitingVerification": "Ana Jiran Tabbatarwa",
+    "linkConfirmation": { "title": "Haɗa da Jami'in Bin Doka?", "message": "Wannan jami'in zai iya duba matsayin bin dokar ku kuma ya tabbatar da ci gaban gyaran ku. Ka tabbata?" }
   },
-  "dcpm": {
-    "uhl": "Matakin Ultra-High",
-    "ehl": "Matakin Extra-High",
-    "ohl": "Matakin Ordinary-High"
-  },
-  "footer": {
-    "by": "ta Nexus SafeSphere",
-    "tagline": "Haɗa ƙirƙira da ƙa'idojin Najeriya. Bin NDP Act & GAID 2025 ta AI ga masu gina makomar Afirka.",
-    "quickLinks": "Hanyoyin Sauri",
-    "about": "Game da Mu",
-    "ndpcResources": "Albarkatun NDPC",
-    "joinWaitlist": "Shiga Jerin Jira",
-    "regulator": "Duban Mai Kula",
-    "connect": "Haɗa",
-    "contact": "Tuntuɓi",
-    "twitter": "Twitter",
-    "linkedin": "LinkedIn",
-    "whyBuilt": {
-      "title": "Me Ya Sa Muka Gina Wannan don Najeriya",
-      "description": "An gina shi a Abuja daga masu ƙirƙira 'yan Najeriya, don ƙa'idojin Najeriya. Mun yi imani kowane mai farawa a Najeriya ya cancanci ƙaddamarwa da tabbaci — sanin cewa ayyukan bayanansu suna kare masu amfani da kasuwancinsu. RegTrack ta wanzu saboda bin ƙa'ida bai kamata ya zama shamaki ga ƙirƙira a cikin mafi girman yanayin fasaha na Afirka ba. Ana amfani da NDP Act 2023, Tsarin Aiwatar da NDPR, da GAID 2025."
-    },
-    "builtFor": "An Gina Don Najeriya da",
-    "madeIn": "An Yi a Abuja",
-    "privacy": "Manufar Sirri",
-    "terms": "Sharuddan Sabis",
-    "poweredBy": "Ana Amfani da AI",
-    "hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
-    "copyright": "© 2026 RegTrack ta NSS.",
-    "frameworkStatus": "Matsayin Tsarin Mulki",
-    "lastSynced": "A ƙarshe an daidaita da NDPC"
-  },
-  "resources": {
-    "title": "Albarkatun Sauri",
-    "privacyTemplate": {
-      "label": "Samfurin Manufar Sirri",
-      "desc": "NDPC na Hukuma"
-    },
-    "dpcoDirectory": {
-      "label": "Jagorar DPCO",
-      "desc": "Nemo ƙungiyoyin bin doka masu lasisi"
-    },
-    "breachTemplate": {
-      "label": "Samfurin Sanarwar Keta Doka",
-      "desc": "Rahoto cikin awa 72"
-    },
-    "dpa": {
-      "label": "Yarjejeniyar Sarrafa Bayanai",
-      "desc": "Samfurin DPA"
-    },
-    "fullText": {
-      "label": "NDP Act & GAID 2025",
-      "desc": "Takardun doka na hukuma"
-    },
-    "auditPortal": {
-      "label": "Tashar Ƙaddamar da Bincike",
-      "desc": "Ƙaddamar da bincikenka na shekara"
-    }
-  },
-  "demo": {
-    "title": {
-      "part1": "Gwada shi",
-      "part2": "yanzu"
-    },
-    "subtitle": "Gwada shirye-shiryen bin doka a cikin ƙasa da minti 2.",
-    "tabs": {
-      "scanner": "Ƙimar Bin Doka",
-      "finder": "Neman Sashe",
-      "extractor": "Mai Cire Wajibai"
-    },
-    "framework": {
-      "ndpa": "NDP Act 2023",
-      "cbn": "CBN AML 2024",
-      "hint": "Gwada sauya tsarin da ke sama — sauya tsakanin NDP Act 2023 da CBN AML 2024 nan take.",
-      "policyAsCode": "Manufa-kamar-Code: Fayil JSON ɗaya kowane tsari. Babu canje-canjen code."
-    }
-  },
+  "demo": { "title": { "part1": "Gwada shi", "part2": "yanzu" }, "subtitle": "Gwada shirye-shiryen bin doka a cikin minti 2.", "tabs": { "scanner": "Ƙimar Bin Doka", "finder": "Neman Sashe", "extractor": "Mai Cire Wajibai" } },
   "extractor": {
-    "title": "Mai Cire Wajibai na AI",
-    "subtitle": "Loda kowane takardar manufa — AI yana cire wajiban NDP Act ta atomatik",
-    "dropzone": "Jawo & sauke takardar manufar ku",
-    "browse": "ko danna don lilo",
-    "supports": "Yana goyan bayan PDF, DOCX, TXT (Max 10MB)",
-    "extract": "Cire Wajibai",
-    "analyzing": "Ana Nazarin Takarda...",
-    "total": "Jimillar",
-    "compliant": "Masu Yardawa",
-    "partial": "Bangare",
-    "nonCompliant": "Marasa Yardawa",
-    "extracted": "Wajiban Da Aka Ciro",
-    "viewClause": "Duba Sashe",
-    "exportReport": "Fitar da Rahoto",
-    "uploadAnother": "Loda Wata Takarda",
-    "demoNotice": "Nuni: A samarwa, wannan yana amfani da Azure OpenAI don cire wajibai daga kowane takaddar da aka loda."
+    "title": "Mai Cire Wajibai na AI", "subtitle": "Loda kowane takardar manufa", "dropzone": "Jawo & sauke takardar ku",
+    "browse": "ko danna don lilo", "supports": "PDF, DOCX, TXT (Max 10MB)", "extract": "Cire Wajibai",
+    "analyzing": "Ana Nazarin Takarda...", "total": "Jimillar", "compliant": "Masu Yardawa", "partial": "Bangare",
+    "nonCompliant": "Marasa Yardawa", "viewClause": "Duba Sashe", "exportReport": "Fitar da Rahoto", "uploadAnother": "Loda Wata Takarda"
+  },
+  "dashboard": {
+    "org": {
+      "title": "Dashboard ɗin Bin Doka", "subtitle": "Dashboard ɗin Bin Doka",
+      "totalAssessments": "Jimillar Ƙimomi", "avgRiskScore": "Matsakaicin Makin Hadari",
+      "highRisk": "Babban Hadari", "linkedOfficers": "Jami'ai Da Aka Haɗa", "pendingApprovals": "Tabbatarwa Masu Jiran",
+      "assessedBusinesses": "Kasuwancin Da Aka Ƙimanta", "noAssessments": "Babu ƙimomi tukuna",
+      "startFirst": "Fara ƙimar bin dokar ku ta farko", "newAssessment": "Sabuwar Ƙimar",
+      "refreshData": "Sabunta Bayanai", "reminders": "Tunatarwa",
+      "itemsAwaiting": "abubuwan da ke jiran amincewar DPCO", "allUpToDate": "Dukkan abubuwa na yau",
+      "remediationProgress": "Ci gaban Gyara", "viewDetails": "Duba Cikakkun Bayanai",
+      "clausesTriggered": "sassan da aka kunna", "itemsCompleted": "abubuwan da aka kammala",
+      "riskLevel": "hadari", "pending": "jiran amincewa", "noOfficer": "Babu jami'in da aka haɗa",
+      "sendReminder": "Aika Tunatarwa", "sending": "Ana Aikawa...", "linkedTo": "An Haɗa da"
+    },
+    "dpco": {
+      "title": "Dashboard ɗin DPCO", "subtitle": "Barka, {{name}}",
+      "linkedOrgs": "Ƙungiyoyin Da Aka Haɗa", "pending": "Tabbatarwa Masu Jiran",
+      "compliant": "Masu Bin Doka", "highRisk": "Babban Hadari",
+      "noOrgs": "Babu ƙungiyoyi da aka haɗa tukuna.",
+      "orgsWillAppear": "Ƙungiyoyi za su bayyana anan lokacin da suka zaɓi haɗawa da kai bayan ƙimar bin doka.",
+      "noPending": "Babu tabbatarwa masu jiran.", "licensePending": "Lasisi na Jiran"
+    },
+    "admin": {
+      "title": "Dashboard ɗin Admin", "subtitle": "Duba da sarrafa dandali",
+      "organizations": "Ƙungiyoyi", "dpcos": "Jami'an Bin Doka",
+      "totalScans": "Jimillar Ƙimomi", "avgRiskScore": "Matsakaicin Makin Hadari",
+      "highRisk": "Babban Hadari", "compliant": "Masu Bin Doka",
+      "pending": "Masu Jiran", "completed": "An Kammala",
+      "overview": "Duba Gabaɗaya", "noOrganizations": "Babu ƙungiyoyi tukuna.",
+      "noDPCOs": "Babu DPCO da suka yi rajista tukuna.",
+      "lastScan": "Ƙimar ƙarshe", "never": "Ba a taɓa ba",
+      "noLicense": "Babu lasisi", "linkedOrgs": "ƙungiyoyi", "pendingVerifications": "jiran"
+    }
   },
   "regulator": {
-    "title": "Duban Mai Kula na NDPC",
-    "subtitle": "Matsayin bin doka na ainihi a duk ƙungiyoyin da aka tsara",
-    "suptech": "Nunin SupTech",
-    "totalEntities": "Jimillar Ƙungiyoyi",
-    "compliant": "Masu Yardawa",
-    "atRisk": "Masu Hadari",
-    "highRisk": "Babban Hadari",
-    "avgSectorRisk": "Matsakaicin Hadarin Sashe",
-    "pendingCAR": "CAR Masu Jiran Aiki",
-    "recentScans": "Binciken Bin Doka na Kwanan nan",
-    "sectorBreakdown": "Rarraba Sashe",
-    "viewDetails": "Duba Cikakkun Bayanai",
-    "exportData": "Fitar da Bayanai",
-    "backToHome": "Koma Gida"
+    "title": "Dashboard ɗin Masu Kula Da Yawa", "subtitle": "Bin doka na ainihi a cikin NDPC, CBN, SEC, da NITDA",
+    "suptech": "Nunin SupTech", "totalEntities": "Jimillar Ƙungiyoyi", "compliant": "Masu Yardawa",
+    "atRisk": "Masu Hadari", "highRisk": "Babban Hadari", "avgRisk": "Matsakaicin Hadari",
+    "pendingCAR": "CAR Masu Jiran", "recentScans": "Ƙimomin Kwanan nan", "backToHome": "Koma Gida",
+    "lastUpdated": "Sabuntawa na ƙarshe", "frameworksMonitored": "tsarukan da ake sa ido",
+    "clearAll": "Share Duka", "noAssessments": "Ba a sami ƙimomi ba.",
+    "suptechMessage": "Matsayin bin doka na ainihi a cikin tsarukan NDPC, CBN, SEC, da NITDA ta hanyar API ɗin RegTrack."
+  },
+  "frameworks": { "ndpa": "NDP Act 2023", "cbnAml": "CBN AML/CFT", "secCf": "SEC Crowdfunding", "nitdaDp": "NITDA DP" },
+  "sectors": {
+    "fintech": { "name": "Fintech" }, "healthtech": { "name": "HealthTech" }, "ecommerce": { "name": "E-Kasuwanci" },
+    "edtech": { "name": "EdTech" }, "agritech": { "name": "AgriTech" }, "enterprise": { "name": "Enterprise SaaS" },
+    "social_media": { "name": "Kafofin Watsa Labarai" }
+  },
+  "evidence": {
+    "title": "Loda Shaida", "requiredFor": "Ana buƙata don bin {{framework}}",
+    "acceptedFormats": "Siffofin da aka yarda", "maxSize": "Matsakaicin girman fayil",
+    "examples": "Misalan takaddun da ake yarda", "guidance": "Jagorar {{regulator}}",
+    "uploadSuccess": "An kammala lodawa!", "keepExisting": "Ci gaba da Shaida"
+  },
+  "features": {
+    "everythingYouNeed": "Duk Abin Da Kuke Bukata Don Bin Doka",
+    "subtitle": "RegTrack yana haɗa abubuwa masu ƙarfi a cikin tsarukan NDPA, CBN, SEC, da NITDA.",
+    "multilingual": "Taimakon Harsuna Da Yawa",
+    "multilingualDesc": "Cikakken tallafi ga Turanci, Hausa, Igbo, da Yoruba a duk tsarukan.",
+    "frameworks": "Tsarukan Mulki 4",
+    "frameworksDesc": "NDPA, CBN AML/CFT, SEC Crowdfunding, da NITDA DP - duk a dandali ɗaya.",
+    "deadlines": "Kada Ku Manta Lokutan Ƙarshe",
+    "deadlinesDesc": "NDPC CAR ya ƙare Maris 31st. Rahoton CBN AML a kowace kwata. Kasance gaba da dukkan lokutan ƙarshe.",
+    "seeKeyFeatures": "Duba Muhimman Abubuwa",
+    "complianceAssessment": "Ƙimar Bin Doka",
+    "myDashboard": "Dashboard ɗina",
+    "tryDemo": "Gwada Demo",
+    "getStarted": "Fara Kyauta",
+    "backToTop": "Koma Sama"
+  },
+  "footer": {
+    "by": "ta Nexus SafeSphere", "tagline": "Haɗa ƙirƙira da ƙa'idojin Najeriya.",
+    "quickLinks": "Hanyoyin Sauri", "about": "Game da Mu", "joinWaitlist": "Shiga Jerin Jira",
+    "connect": "Haɗa", "contact": "Tuntuɓi", "privacy": "Manufar Sirri", "terms": "Sharuddan Sabis",
+    "monitored": "Tsarukan Da Ake Sa Ido", "activelyMonitored": "Ana sa ido sosai daga tushen hukuma",
+    "synced": "An Daidaita",
+    "whyBuilt": { "title": "Me Ya Sa Muka Gina Wannan", "description": "An gina shi a Abuja daga masu ƙirƙira 'yan Najeriya." },
+    "builtFor": "An Gina Don Najeriya da", "madeIn": "An Yi a Abuja",
+    "hackathon": "RegTech Hackathon - Abuja 2026",
+    "disclaimer": "RegTrack yana ba da jagora na ilimi a cikin tsarukan NDPA, CBN, SEC, da NITDA. Wannan ba shawara ta shari'a ba ce."
   }
 }

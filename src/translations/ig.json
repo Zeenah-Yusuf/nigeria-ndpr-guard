@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "RegTrack",
-    "tagline": "NDP Act Compliance Simulator",
+    "tagline": "Multi-Framework Compliance Simulator",
     "builtFor": "Ewubere Maka Naịjịrịa"
   },
   "nav": {
@@ -10,474 +10,251 @@
     "compliance": "Nsogbu",
     "solution": "Ngwọta",
     "demo": "Ntụle Nrubeisi",
-    "resources": "Akụrụngwa",
-    "regulator": "Nlele Onye Nchịkwa"
+    "regulator": "Nlele Onye Nchịkwa",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "signIn": "Banye",
+    "signOut": "Pụọ",
+    "register": "Debanye Aha",
+    "switchAccount": "Gbanwee Akaụntụ",
+    "joinWaitlist": "Sonye Ndepụta Nchere"
   },
   "hero": {
-    "title": "Zenarị ntaramahụhụ NDP Act tupu ị malite.",
-    "badge": "Nrubeisi Nke AI Maka Ndị Na-emepụta Ihe Na Naịjirịa",
-    "trusted": "Ndị Na-emepụta Ihe Na Naịjirịa Tụkwasịrị Anyị Obi",
-    "titlePart1": "Zenarị ntaramahụhụ NDP Act",
+    "badge": "Nrubeisi Nke AI Maka Ndị Na-emepụta Ihe",
+    "trusted": "Ndị Na-emepụta Ihe Tụkwasịrị Anyị Obi",
+    "titlePart1": "Zenarị ntaramahụhụ",
     "titlePart2": "tupu ị malite.",
-    "subtitle": "RegTrack na-enyere ndị Naịjịrịa na-emepụta ihe aka ịnwale ihe ize ndụ nrubeisi n'ime nkeji — site na AI, NDP Act 2023, na GAID 2025.",
-    "scanner": "Ntụle Nrubeisi",
+    "subtitle": "RegTrack na-enyere ndị Naịjịrịa aka ịnwale ihe ize ndụ nrubeisi n'ime nkeji.",
+    "scanner": "Bido Ntụle",
     "learnMore": "Mụtakwuo",
-    "stats": {
-      "articles": "Akwụkwọ NDP Act GAID",
-      "maxFine": "Ntaramahụhụ Kasịnụ Maka Mmebi",
-      "breachDeadline": "Oge Ịkọ Akụkọ Mmebi"
-    }
+    "seeWhatWeStandFor": "Lee Ihe Anyị Kwụrụ",
+    "stats": { "frameworks": "Usoro Iwu", "maxFine": "Ntaramahụhụ Kasịnụ", "breachDeadline": "Oge Ịkọ Akụkọ" }
   },
   "scanner": {
-    "title": "Ntụle Nrubeisi",
-    "subtitle": "Zaa ajụjụ gbasara azụmahịa gị. Nweta akara nrubeisi ozugbo yana nkebi ndị metụtara na nkọwa dị mfe nghọta.",
-    "progress": "Ajụjụ {{current}} nke {{total}}",
-    "complete": "{{percent}}% Emechara",
+    "appName": "Gịnị ka ị na-ewu?",
+    "appNamePlaceholder": "dịka, Ikpo okwu nhazi ịkwụ ụgwọ",
     "defaultAppName": "Azụmahịa gị",
-    "progressAnswered": "{{current}} n'ime {{total}} azara",
-    "appName": {
-      "label": "Gịnị bụ aha azụmahịa ma ọ bụ ngwa gị?",
-      "placeholder": "dịka, Ngwa Ahụike M",
-      "cbnLabel": "Gịnị bụ ọrụ ego gị?",
-      "cbnPlaceholder": "dịka, Ikpo okwu nhazi ịkwụ ụgwọ"
-    },
-    "sector": {
-      "keyRisks": "Ihe Ize Ndụ Dị Mkpa"
-    },
-    "feedback": {
-      "lowers": "↓ Na-ebelata akara ihe ize ndụ gị",
-      "increases": "↑ Na-abawanye akara ihe ize ndụ gị"
-    },
+    "startAssessment": "Bido Ntụle",
     "calculate": "Gbakọọ Akara Nrubeisi",
-    "calculateCbn": "Gbakọọ Akara Nrubeisi CBN AML",
     "analyzing": "Na-enyocha ọnọdụ nrubeisi gị...",
-    "framework": {
-      "ndpa": "Usoro Ọrụ: NDP Act 2023",
-      "cbn": "Usoro Ọrụ: CBN AML 2022"
-    },
-    "explanation": {
-      "low": "\"{{appName}}\" nwere obere ihe ize ndụ nrubeisi n'okpuru {{framework}}. Nchebe ndị bụ isi dị ka ọ dị. Gaa n'ihu na-enyocha omume gị.",
-      "medium": "\"{{appName}}\" nwere ihe ize ndụ nrubeisi na-agafeghị oke n'okpuru {{framework}}. Ọtụtụ ebe chọrọ nlebara anya iji zere mmanye iwu nwere ike ime.",
-      "high": "\"{{appName}}\" nwere nnukwu ihe ize ndụ nrubeisi n'okpuru {{framework}}. Na-enweghị ndozi, ị nwere ike ịta ntaramahụhụ iwu.",
-      "critical": "\"{{appName}}\" nọ n'ihe ize ndụ dị oke egwu n'okpuru {{framework}}! Achọrọ ime ihe ozugbo iji zere ntaramahụhụ siri ike."
-    },
+    "enterAppAndSector": "Tinye aha ngwa gị ma họrọ ngalaba iji malite",
     "questions": {
-      "collectsData": "Azụmahịa gị ọ na-anakọta data nkeonwe (aha, ozi-e, nọmba ekwentị)?",
-      "sensitiveData": "Ị na-echekwa ahụike, bayometrik, ma ọ bụ data nkeonwe ndị ọzọ dị nro?",
-      "hasPrivacyPolicy": "Ị nwere amụma nzuzo ebipụtara na ngwa gị ma ọ bụ weebụsaịtị gị?",
-      "crossBorderTransfer": "Ị na-ebufe data onye ọrụ na mpụga Naịjirịa?",
-      "hasConsentMechanism": "Ị nwere usoro iji nweta nkwenye doro anya nke onye ọrụ tupu ịnakọta data?",
-      "targetsChildren": "Azụmahịa gị ọ na-elekwasị anya na ndị ọrụ na-erubeghị afọ 18?",
-      "thirdPartySharing": "Ị na-eso ndị ọrụ ndị ọzọ na-ekerịta data onye ọrụ?",
-      "hasBreachProcess": "Ị nwere usoro mgbasa ozi mmebi data (ịkọrọ NDPC n'ime awa 72)?",
-      "registeredWithNDPC": "Ị debanyere aha na NDPC dị ka onye nchịkwa data ma ọ bụ onye mmebe data dị mkpa?",
-      "usesAI": "Azụmahịa gị ọ na-eji AI, mkpebi akpaaka, ma ọ bụ ịkọwapụta profaịlụ?"
+      "collectsData": "Ị na-anakọta data nkeonwe (aha, ozi-e, nọmba ekwentị)?",
+      "sensitiveData": "Ị na-echekwa ahụike, bayometrik, ma ọ bụ data dị nro?",
+      "hasPrivacyPolicy": "Ị nwere amụma nzuzo ebipụtara?",
+      "crossBorderTransfer": "Ị na-ebufe data na mpụga Naịjịrịa?",
+      "hasConsentMechanism": "Ị nwere usoro iji nweta nkwenye onye ọrụ?",
+      "targetsChildren": "Ị na-elekwasị anya na ndị na-erubeghị afọ 18?",
+      "thirdPartySharing": "Ị na-ekerịta data onye ọrụ na ndị ọzọ?",
+      "hasBreachProcess": "Ị nwere usoro mgbasa ozi mmebi data (awa 72)?",
+      "registeredWithNDPC": "Ị debanyere aha na NDPC?",
+      "usesAI": "Ị na-eji AI ma ọ bụ mkpebi akpaaka?"
     },
     "explanations": {
-      "collectsData": "Iwu NDP na-emetụta nhazi ọ bụla nke data nkeonwe nke ụmụ amaala Naịjirịa.",
-      "sensitiveData": "Nkebi 30 chọrọ nchebe pụrụ iche maka data nkeonwe dị nro gụnyere ozi ahụike na bayometrik.",
-      "hasPrivacyPolicy": "Nkebi 27 chọrọ amụma nzuzo doro anya ma dị mfe ịnweta.",
-      "crossBorderTransfer": "Nkebi 41-43 na-amachibido mbufe data gaa mba ndị na-enweghị ọkwa nchebe zuru oke.",
-      "hasConsentMechanism": "Nkebi 26 chọrọ nkwenye akọwapụtara, doro anya, na enweghị obi abụọ.",
-      "targetsChildren": "Nkebi 31 chọrọ nkwenye nne na nna maka ndị ọrụ na-erubeghị afọ 18.",
-      "thirdPartySharing": "Nkebi 25 chọrọ nkwekọrịta nhazi data na ndị nhazi nke atọ.",
-      "hasBreachProcess": "Nkebi 40 chọrọ ịkọ akụkọ mmebi data n'ime awa 72 na NDPC.",
-      "registeredWithNDPC": "Nkebi 44 chọrọ ndebanye aha dị ka onye nchịkwa data ma ọ bụ onye mmebe data dị mkpa.",
-      "usesAI": "GAID 2025 Nkeji 15 chọrọ nghọta maka sistemu mkpebi akpaaka."
+      "collectsData": "Iwu NDP na-emetụta nhazi data nkeonwe niile.",
+      "sensitiveData": "Nkebi 30 chọrọ nchebe pụrụ iche maka data dị nro.",
+      "hasPrivacyPolicy": "Nkebi 27 chọrọ amụma nzuzo doro anya.",
+      "crossBorderTransfer": "Nkebi 41-43 na-amachibido mbufe na-enweghị nchebe zuru oke.",
+      "hasConsentMechanism": "Nkebi 26 chọrọ nkwenye doro anya.",
+      "targetsChildren": "Nkebi 31 chọrọ nkwenye nne na nna.",
+      "thirdPartySharing": "Nkebi 25 chọrọ nkwekọrịta nhazi data.",
+      "hasBreachProcess": "Nkebi 40 chọrọ ịkọ akụkọ n'ime awa 72.",
+      "registeredWithNDPC": "Nkebi 44 chọrọ ndebanye aha.",
+      "usesAI": "GAID 2025 chọrọ nghọta maka sistemu akpaaka."
     },
-    "cbnQuestions": {
-      "collectsData": "Ị na-anakọta ozi ndị ahịa maka ọrụ ego?",
-      "kycVerification": "Ị na-enyocha njirimara ndị ahịa site na iji BVN, NIN, ma ọ bụ paspọtụ mba ụwa?",
-      "pepScreening": "Ị na-enyocha ndị ahịa megide ndepụta Ndị E Metụtara na ndọrọ ndọrọ ọchịchị (PEP)?",
-      "transactionMonitoring": "Ị na-enyocha azụmahịa maka ihe a na-enyo enyo na oge ngafe?",
-      "strFiling": "Ị na-akọ azụmahịa a na-enyo enyo na NFIU n'ime awa 24?",
-      "amlTraining": "Ị na-enye ọzụzụ AML/CFT kwa afọ maka ndị ọrụ niile emetụtara?",
-      "recordKeeping": "Ị na-edobe ndekọ azụmahịa ma ọ dịkarịa ala afọ 5?",
-      "complianceOfficer": "Ị họpụtala Onye Ọrụ Nrubeisi AML/CFT?",
-      "riskAssessment": "Ị na-eme ntụle ihe ize ndụ AML kwa afọ?",
-      "independentAudit": "Ị na-eme nyocha nrubeisi AML nọọrọ onwe ya kwa afọ?"
-    },
-    "cbnExplanations": {
-      "collectsData": "Iwu CBN AML chọrọ nyocha ndị ahịa maka ọrụ ego niile.",
-      "kycVerification": "Nkebi 6 chọrọ njirimara ndị ahịa a pụrụ ịdabere na ya.",
-      "pepScreening": "Achọrọ nyocha miri emi maka ndị ahịa nwere nnukwu ihe ize ndụ.",
-      "transactionMonitoring": "Nkebi 7.1 chọrọ nyocha azụmahịa oge ngafe.",
-      "strFiling": "Nkebi 8.3 chọrọ ịkọ akụkọ STR n'ime awa 24.",
-      "amlTraining": "Nkebi 12.1 chọrọ ọzụzụ ndị ọrụ kwa afọ.",
-      "recordKeeping": "Nkebi 15.1 chọrọ idobe ndekọ afọ 5.",
-      "complianceOfficer": "Nkebi 19 chọrọ Onye Ọrụ Nrubeisi a họpụtara.",
-      "riskAssessment": "Nkebi 5.2 chọrọ ntụle ihe ize ndụ kwa afọ.",
-      "independentAudit": "Nkebi 18.4 chọrọ nyocha nọọrọ onwe ya."
+    "explanation": {
+      "low": "{{appName}} nwere obere ihe ize ndụ nrubeisi.",
+      "medium": "{{appName}} nwere ihe ize ndụ na-agafeghị oke.",
+      "high": "{{appName}} nwere nnukwu ihe ize ndụ nrubeisi.",
+      "critical": "{{appName}} nọ n'ihe ize ndụ dị oke egwu!"
     }
   },
-  "problem": {
-    "badge": "Ọdịiche Nrubeisi",
-    "titlePart1": "Ọtụtụ Ndị Na-amalite Azụmahịa Na Naịjirịa Na-achọpụta",
-    "titlePart2": "Ọdịiche Nrubeisi n'Oge Na-adịghị Mma",
-    "storyPart1": "Onye Naịjirịa na-emepụta ihe malitere ngwa ahụike.",
-    "storyPart2": "Ndị ọrụ hụrụ ya n'anya — 5,000 debanyere aha n'izu mbụ. Izu abụọ ka e mesịrị, NDPC zigara ọkwa mmanye.",
-    "finePart1": "Ntaramahụhụ?",
-    "finePart2": "— ma ọ bụ 2% nke ego ha nwetara n'afọ, nke ọ bụla ka ukwuu. Enweghị amụma nzuzo. Enweghị usoro nkwenye. Enweghị nyocha data.",
-    "solution": "RegTrack na-egbochi nke a. N'ime nkeji, ọ bụghị ọnwa."
-  },
-  "solution": {
-    "badge": "Ngwọta Anyị",
-    "titlePart1": "Ngwaọrụ abụọ.",
-    "titlePart2": "Nghọta zuru oke.",
-    "subtitle": "RegTrack na-enye gị nghọta nrubeisi ozugbo site na usoro NDP Act na GAID 2025 zuru oke.",
-    "scanner": {
-      "title": "Ntụle Nrubeisi",
-      "description": "Zaa ajụjụ gbasara azụmahịa gị. Nweta akara nrubeisi ozugbo yana nkebi NDP Act ndị metụtara na nkọwa dị mfe nghọta.",
-      "flow": {
-        "step1": "Ajụjụ",
-        "step2": "Akara Nrubeisi",
-        "step3": "Nkọwa"
-      }
-    },
-    "finder": {
-      "title": "Onye Nchọta Nkebi",
-      "description": "Chọọ usoro NDP Act na GAID 2025 zuru oke site na mkpụrụokwu. Chọta kpọmkwem nkebi nke metụtara ọnọdụ gị na nchịkọta doro anya.",
-      "flow": {
-        "step1": "Nchọ Mkpụrụokwu",
-        "step2": "Nkebi NDP Act",
-        "step3": "Nchịkọta"
-      }
-    }
-  },
-  "sector": {
-    "label": "Kedu ngalaba azụmahịa gị dị na ya?"
-  },
-  "sectors": {
-    "health": { "name": "Ahụike" },
-    "fintech": { "name": "Fintech" },
-    "edtech": { "name": "EdTech" },
-    "ecommerce": { "name": "E-Azụmahịa" },
-    "social": { "name": "Mmekọrịta" },
-    "logistics": { "name": "Logistics" },
-    "government": { "name": "Gọọmenti" },
-    "other": { "name": "Ndị Ọzọ" }
-  },
+  "sector": { "label": "Kedu ngalaba azụmahịa gị?" },
   "common": {
-    "yes": "Ee",
-    "no": "Mba"
+    "yes": "Ee", "no": "Mba", "back": "Azụ", "cancel": "Kagbuo", "confirm": "Kwenye",
+    "save": "Chekwaa", "delete": "Hichapụ", "edit": "Dezie", "view": "Lee",
+    "close": "Mechie", "loading": "Na-ebu...", "refresh": "Nyegharịa",
+    "export": "Bupụta", "download": "Budata", "send": "Ziga",
+    "approve": "Kwado", "reject": "Jụ", "change": "Gbanwee", "remove": "Wepụ", "upload": "Bulite"
   },
-  "button": {
-    "next": "Ọzọ",
-    "back": "Azụ",
-    "analyze": "Nyochaa Nrubeisi",
-    "restart": "Malite Ntụle Ọhụrụ",
-    "downloadPDF": "Budata Akụkọ (PDF)"
+  "auth": {
+    "welcomeBack": "Nnọọ Laghachi",
+    "createAccount": "Mepụta Akaụntụ",
+    "signInMessage": "Banye na akaụntụ RegTrack gị",
+    "joinMessage": "Sonye RegTrack iji jikwaa nrubeisi gị",
+    "email": "Ozi-e",
+    "password": "Okwuntughe",
+    "forgotPassword": "Ichefuru okwuntughe?",
+    "signIn": "Banye",
+    "register": "Mepụta Akaụntụ",
+    "continueWithGoogle": "Gaa n'ihu na Google",
+    "or": "ma ọ bụ",
+    "noAccount": "Enweghị akaụntụ?",
+    "haveAccount": "Ị nwere akaụntụ?",
+    "createOne": "Mepụta otu",
+    "signInInstead": "Banye kama",
+    "resetPassword": "Tọgharịa Okwuntughe",
+    "sendResetLink": "Ziga Njikọ Tọgharịa",
+    "sending": "Na-ezipụ...",
+    "checkEmail": "Lelee Ozi-e Gị",
+    "resetEmailSent": "Anyị ezipụla njikọ tọgharịa okwuntughe na",
+    "backToSignIn": "Laghachi na Nbanye",
+    "setNewPassword": "Tinye Okwuntughe Ọhụrụ",
+    "enterNewPassword": "Tinye okwuntughe ọhụrụ gị",
+    "passwordUpdated": "Emelitere okwuntughe!",
+    "redirecting": "Na-ebugharị gaa na nbanye...",
+    "updating": "Na-emelite...",
+    "setPassword": "Tinye Okwuntughe",
+    "iAmA": "Abụ m",
+    "organization": "Ụlọ Ọrụ / Mbido",
+    "organizationDesc": "Achọrọ m ịtụle nrubeisi m",
+    "dpco": "Onye Ọrụ Nrubeisi (DPCO)",
+    "dpcoDesc": "Ana m enye ọrụ nrubeisi",
+    "companyName": "Aha Ụlọ Ọrụ",
+    "fullName": "Aha Zuru Ezu / Aha Ụlọ Ọrụ",
+    "companySize": "Ogo Ụlọ Ọrụ",
+    "sector": "Ngalaba",
+    "website": "Weebụsaịtị (nhọrọ)",
+    "phoneNumber": "Nọmba Ekwentị",
+    "registrationNumber": "Nọmba Ndebanye Aha / Ikikere",
+    "sectorSpecialization": "Ọpụrụiche Ngalaba",
+    "selectSector": "Họrọ ngalaba",
+    "selectSpecialization": "Họrọ ọpụrụiche",
+    "errors": {
+      "emailExists": "Akaụntụ nwere ozi-e a adịlarị. Biko banye kama.",
+      "invalidCredentials": "Ozi-e ma ọ bụ okwuntughe ezighi ezi. Biko nwaa ọzọ.",
+      "emailNotConfirmed": "Biko lelee ozi-e gị ma kwado akaụntụ gị tupu ịbanye.",
+      "createFailed": "Emepụtaghị akaụntụ"
+    },
+    "success": {
+      "accountCreated": "Emepụtala akaụntụ! Ị nwere ike ịbanye ugbu a.",
+      "checkEmailConfirm": "Emepụtala akaụntụ! Biko lelee ozi-e gị iji kwado ndebanye aha gị."
+    }
   },
   "waitlist": {
-    "badge": "Ohere Mbụ",
-    "title": "Nweta ohere mbụ na RegTrack",
-    "subtitle": "Sonye na ndepụta nchere maka ikpo okwu zuru oke nwere nrubeisi akpaaka nke AI, nlekota ozugbo, na mmekọrịta otu.",
-    "placeholder": "ozi-e gị@example.com",
-    "button": "Sonye Ndepụta Nchere",
-    "success": {
-      "title": "Ị nọ na ndepụta!",
-      "message": "Anyị ga-agwa gị mgbe RegTrack malitere."
-    }
+    "badge": "Ohere Mbụ", "title": "Nweta ohere mbụ na RegTrack",
+    "subtitle": "Sonye na ndepụta nchere maka ikpo okwu zuru oke.",
+    "placeholder": "ozi-e gị@example.com", "button": "Sonye Ndepụta Nchere",
+    "success": { "title": "Ị nọ na ndepụta!", "message": "Anyị ga-agwa gị mgbe RegTrack malitere." }
   },
-  "risk": {
-    "low": "Obere Ihe Ize Ndụ",
-    "medium": "Ihe Ize Ndụ Na-agafeghị Oke",
-    "high": "Nnukwu Ihe Ize Ndụ",
-    "critical": "Ihe Ize Ndụ Dị Oké Egwu"
-  },
+  "risk": { "low": "Obere Ihe Ize Ndụ", "medium": "Na-agafeghị Oke", "high": "Nnukwu", "critical": "Dị Oké Egwu" },
   "results": {
-    "newScan": "Ntụle Ọhụrụ",
-    "downloadPDF": "Budata PDF",
-    "yourApp": "Azụmahịa Gị",
-    "steps": {
-      "analyze": "Nyochaa",
-      "understand": "Ghọta",
-      "fix": "Mezie"
-    },
-    "stats": {
-      "clauses": "Nkebi Ndị Akpalitere",
-      "actions": "Omume Ndị A Chọrọ",
-      "maxFine": "Ntaramahụhụ Kasịnụ"
-    },
-    "answerBreakdown": "Nkewa Azịza",
-    "understandImpact": "Ghọta Mmetụta",
-    "plainEnglish": "Nkọwa Dị Mfe Nghọta",
-    "consequences": {
-      "title": "Ihe Ndị Nwere Ike Ime",
-      "fine": "Ntaramahụhụ ruru ₦10,000,000 ma ọ bụ 2% nke ego a nwetara n'afọ",
-      "enforcement": "Ọkwa mmanye na nyocha NDPC",
-      "suspension": "Nkwụsị ọrụ na ịdọ aka ná ntị ọha",
-      "carPenalty": "Nbịnye CAR n'oge: 50% ntaramahụhụ nchịkwa na ụgwọ nbịnye (GAID Art. 10)",
-      "prosecution": "Ikpe mpụ n'okpuru NDP Act 2023"
-    },
-    "sectorTips": "Ndụmọdụ",
-    "triggeredClauses": "Nkebi Ndị Akpalitere",
-    "backToAnalyze": "Nyochaa",
-    "fixIt": "Mezie",
-    "backToImpact": "Laghachi na Mmetụta",
-    "downloadFullReport": "Budata Akụkọ Zuru Oke (PDF)",
-    "scanAnother": "Ntụle Ọhụrụ",
-    "toast": {
-      "downloaded": {
-        "title": "Ebudatala akụkọ!",
-        "description": "RegTrack_Akụkọ_{{date}}.pdf"
-      },
-      "error": {
-        "title": "Njehie",
-        "description": "Enweghị ike ịmepụta PDF. Biko nwaa ọzọ."
-      }
-    },
-    "dcpmTier": "Nhazi DCPMI",
-    "aiConfidence": "Ntụkwasị Obi AI",
-    "basedOn": "Dabere na"
+    "newScan": "Ntụle Ọhụrụ", "downloadPDF": "Budata PDF", "yourApp": "Azụmahịa Gị",
+    "steps": { "analyze": "Nyochaa", "understand": "Ghọta", "fix": "Mezie" },
+    "stats": { "clauses": "Nkebi Ndị Akpalitere", "actions": "Omume Ndị A Chọrọ", "maxFine": "Ntaramahụhụ Kasịnụ" },
+    "answerBreakdown": "Nkewa Azịza", "understandImpact": "Ghọta Mmetụta", "plainEnglish": "Nkọwa Dị Mfe Nghọta",
+    "consequences": { "title": "Ihe Ndị Nwere Ike Ime", "fine": "Ntaramahụhụ ruru N10,000,000 ma ọ bụ 2%", "enforcement": "Ọkwa mmanye na nyocha", "suspension": "Nkwụsị ọrụ na ịdọ aka ná ntị", "carPenalty": "Nbịnye n'oge: 50% ntaramahụhụ", "prosecution": "Ikpe mpụ nwere ike ime" },
+    "sectorTips": "Ndụmọdụ", "triggeredClauses": "Nkebi Ndị Akpalitere", "backToAnalyze": "Nyochaa", "fixIt": "Mezie",
+    "backToImpact": "Laghachi na Mmetụta", "scanAnother": "Ntụle Ọhụrụ",
+    "basedOn": "Dabere na", "clause": "nkebi", "clauses": "nkebi", "triggered": "akpalitere",
+    "officer": { "title": "Onye Ọrụ Nrubeisi Atụrụ Aro", "for": "maka", "linked": "Ejikọtara", "linkOfficer": "Jikọọ Onye Ọrụ", "linking": "Na-ejikọta...", "linkMessage": "Jikọọ na onye ọrụ a maka nkwenye nrubeisi na nkwado n'ime njem ndozi gị.", "contactToLink": "Gaa na Mezie iji jikọọ na onye ọrụ a maka nkwenye nrubeisi." }
   },
-  "search": {
-    "placeholder": "Chọọ nkebi NDP Act...",
-    "button": "Chọta Nkebi",
-    "searching": "Na-achọ...",
-    "noResults": "Enweghị nkebi a chọtara. Nwaa mkpụrụokwu ndị ọzọ.",
-    "resultsFound": "A chọtara nkebi {{count}}",
-    "terms": {
-      "consent": "nkwenye",
-      "breach": "mmebi",
-      "children": "ụmụaka",
-      "transfer": "mbufe",
-      "audit": "nyocha",
-      "penalty": "ntaramahụhụ"
-    },
-    "categories": {
-      "consent": "Nkwenye",
-      "rights": "Ikike Onye Nwe Data",
-      "obligations": "Ọrụ Onye Nchịkwa",
-      "transfer": "Mbufe Mba Ọzọ",
-      "enforcement": "Mmanye",
-      "security": "Nchekwa",
-      "breach": "Mmebi Data"
-    },
-    "title": "Chọọ NDP Act & GAID Framework"
-  },
+  "search": { "placeholder": "Chọọ nkebi iwu...", "button": "Chọta Nkebi", "searching": "Na-achọ...", "noResults": "Enweghị nkebi a chọtara.", "resultsFound": "A chọtara {{count}}" },
   "checklist": {
-    "progress": {
-      "title": "Ọganihu Ndozi",
-      "count": "Emechara {{completed}} n'ime {{total}}"
-    },
-    "priority": {
-      "critical": "Mkpa Dị Oké Mkpa",
-      "high": "Mkpa Dị Elu",
-      "medium": "Mkpa Na-agafeghị Oke",
-      "low": "Mkpa Dị Ala"
-    },
-    "difficulty": {
-      "easy": "Dị Mfe",
-      "medium": "Na-agafeghị Oke",
-      "hard": "Siri Ike"
-    },
-    "empty": {
-      "title": "Ọ dị mma!",
-      "message": "Enweghị nsogbu dị oké mkpa a chọtara. Gaa n'ihu na omume nrubeisi ọma."
-    },
-    "critical": "Dị Oké Mkpa (Mezie tupu mmalite)",
-    "high": "Mkpa Dị Elu (Mezie n'ime izu 1)",
-    "medium": "Mkpa Na-agafeghị Oke (Mezie n'ime ọnwa 1)",
-    "items": {
-      "rem-privacy-policy": {
-        "title": "Bipụta Amụma Nzuzo",
-        "description": "Azụmahịa gị na-anakọta data nkeonwe mana enweghị amụma nzuzo. Nkebi 27 nke NDP Act chọrọ ozi nghọta gbasara nhazi data."
-      },
-      "rem-consent": {
-        "title": "Mepụta Usoro Nkwenye",
-        "description": "Nweta nkwenye doro anya tupu ịnakọta data nkeonwe dị ka Nkebi 26 nke NDP Act chọrọ."
-      },
-      "rem-children": {
-        "title": "Nchekwa Data Ụmụaka",
-        "description": "Mepụta nkwenye nne na nna maka ndị ọrụ na-erubeghị afọ 18 dị ka Nkebi 31 nke NDP Act chọrọ."
-      },
-      "rem-appoint-dpo": {
-        "title": "Họpụta Onye Ọrụ Nchekwa Data",
-        "description": "Họpụta DPO dị ka achọrọ maka ọrụ nhazi gị n'okpuru Nkebi 32 nke NDP Act."
-      },
-      "rem-file-audit": {
-        "title": "Tinye Akwụkwọ Nyocha Nrubeisi",
-        "description": "Nyefee CAR kwa afọ na NDPC tupu Machị 31 dị ka GAID 2025 chọrọ."
-      },
-      "rem-register-ndpc": {
-        "title": "Debanye aha na NDPC",
-        "description": "Debanye aha dị ka onye nchịkwa data ma ọ bụ onye mmebe data dị mkpa n'okpuru Nkebi 44 nke NDP Act."
-      },
-      "rem-dpia": {
-        "title": "Mee Ntụle Mmetụta Nchekwa Data",
-        "description": "Mee DPIA maka ọrụ nhazi dị oke egwu dị ka Nkebi 28 nke NDP Act chọrọ."
-      },
-      "rem-cross-border": {
-        "title": "Nchekwa Mbufe Mba Ọzọ",
-        "description": "Hụ na nchekwa zuru oke maka mbufe data mba ụwa dị ka Nkebi 41-43 nke NDP Act chọrọ."
-      },
-      "rem-third-party": {
-        "title": "Nkwekọrịta Nhazi Data nke Ndị Ọzọ",
-        "description": "Mepụta nkwekọrịta nhazi data ederede na ndị na-ere ahịa na ndị na-enye ọrụ niile."
-      },
-      "rem-agf-coord": {
-        "title": "Nchikọta na Attorney-General Federation",
-        "description": "Hazie nkwado mbufe mba ụwa na ụlọ ọrụ AGF dị ka achọrọ."
-      },
-      "rem-cookie-consent": {
-        "title": "Mepụta Nkwenye Kuki",
-        "description": "Mepụta ọkọlọtọ nkwenye kuki maka nsochi na nyocha weebụsaịtị."
-      },
-      "cbn-kyc-implementation": {
-        "title": "Mepụta Usoro Nnyocha KYC",
-        "description": "Iwu CBN AML chọrọ njirimara ndị ahịa na nkwenye site na iji BVN, NIN, ma ọ bụ paspọtụ mba ụwa maka ọrụ ego niile."
-      },
-      "cbn-aml-policy": {
-        "title": "Mepụta Amụma AML/CFT",
-        "description": "Mepụta ma mejuputa amụma zuru oke nke Ịlụso Mpụ Ego Ọgụ na Ịkwụsị Ego Ndị Na-eyi Egwu."
-      },
-      "cbn-compliance-officer": {
-        "title": "Họpụta Onye Ọrụ Nrubeisi AML",
-        "description": "Họpụta Onye Ọrụ Nrubeisi AML/CFT nke ga-ahụ maka ihe niile gbasara nrubeisi."
-      },
-      "cbn-transaction-monitoring": {
-        "title": "Mepụta Usoro Nlekota Azụmahịa",
-        "description": "Wụsa nlekota azụmahịa oge ngafe iji chọpụta ihe ndị a na-enyo enyo."
-      },
-      "cbn-str-filing": {
-        "title": "Mepụta Usoro Ntinye Akwụkwọ STR",
-        "description": "Mepụta usoro maka ịnyefe Akụkọ Azụmahịa A Na-enyo Enyo na NFIU n'ime awa 24."
-      },
-      "cbn-aml-training": {
-        "title": "Nye Ọzụzụ AML Kwa Afọ",
-        "description": "Nye ọzụzụ AML/CFT kwa afọ maka ndị ọrụ niile emetụtara."
-      },
-      "cbn-record-keeping": {
-        "title": "Mepụta Usoro Idebe Ndekọ",
-        "description": "Mepụta usoro idobe ndekọ azụmahịa ma ọ dịkarịa ala afọ 5."
-      },
-      "cbn-risk-assessment": {
-        "title": "Nye Ntụle Ihe Ize Ndụ AML",
-        "description": "Nye ntụle ihe ize ndụ AML kwa afọ maka azụmahịa niile."
-      },
-      "cbn-independent-audit": {
-        "title": "Hazie Nyocha AML Nọọrọ Onwe Ya",
-        "description": "Nye nyocha nrubeisi AML nọọrọ onwe ya kwa afọ."
-      },
-      "cbn-pep-screening": {
-        "title": "Mepụta Nnyocha PEP",
-        "description": "Nyochaa ndị ahịa megide ndepụta Ndị E Metụtara na ndọrọ ndọrọ ọchịchị."
-      },
-      "cbn-fintech-licensing": {
-        "title": "Nweta Ikikere Fintech CBN",
-        "description": "Nweta ikikere CBN kwesịrị ekwesị maka ọrụ ego."
-      }
-    }
+    "title": "Ndepụta Ndozi", "progress": { "title": "Ọganihu Ndozi", "count": "Emechara {{completed}} n'ime {{total}}" },
+    "priority": { "critical": "Dị Oké Mkpa", "high": "Dị Elu", "medium": "Na-agafeghị Oke", "low": "Dị Ala" },
+    "difficulty": { "easy": "Dị Mfe", "medium": "Na-agafeghị Oke", "hard": "Siri Ike" },
+    "currentRiskScore": "Akara Ihe Ize Ndụ Ugbu a",
+    "allTasksCompleted": "Emechara Ọrụ Niile!",
+    "complianceImproved": "Akara nrubeisi gị abawanyela nke ukwuu",
+    "noItems": "Enweghị ihe ndozi achọtara!",
+    "appearsCompliant": "Ngwa gị yiri ka ọ na-erube isi nke ọma.",
+    "completed": "emechara", "of": "n'ime",
+    "linkOfficer": "Jikọọ na onye ọrụ nrubeisi maka nkwenye:",
+    "linkedToOfficer": "Ejikọtara na Onye Ọrụ Nrubeisi",
+    "signInRequired": "Achọrọ ịbanye iji jikọọ",
+    "signInOrRegister": "Banye ma ọ bụ debanye aha iji jikọọ na onye ọrụ a",
+    "uploadEvidence": "Bulite Ihe Akaebe Achọrọ",
+    "awaitingVerification": "Na-eche Nkwenye",
+    "linkConfirmation": { "title": "Jikọọ na Onye Ọrụ Nrubeisi?", "message": "Onye ọrụ a ga-enwe ike ịlele ọnọdụ nrubeisi gị ma kwado ọganihu ndozi gị. Ị ji n'aka?" }
   },
-  "dcpm": {
-    "uhl": "Ọkwa Ultra-High",
-    "ehl": "Ọkwa Extra-High",
-    "ohl": "Ọkwa Ordinary-High"
-  },
-  "footer": {
-    "by": "site na Nexus SafeSphere",
-    "tagline": "Ịgakọta ihe ọhụrụ Naịjirịa na usoro iwu. Nrubeisi NDP Act & GAID 2025 nke AI kwadoro maka ndị na-ewu ọdịnihu Afrịka.",
-    "quickLinks": "Njikọ Ọsọ",
-    "about": "Banyere",
-    "ndpcResources": "Akụrụngwa NDPC",
-    "joinWaitlist": "Sonye Ndepụta Nchere",
-    "regulator": "Nlele Onye Nchịkwa",
-    "connect": "Jikọọ",
-    "contact": "Kpọtụrụ",
-    "twitter": "Twitter",
-    "linkedin": "LinkedIn",
-    "whyBuilt": {
-      "title": "Ihe Mere Anyị Ji Wuo Nke a Maka Naịjirịa",
-      "description": "Ndị Naịjirịa na-emepụta ihe wuru ya na Abuja, maka usoro iwu Naịjirịa. Anyị kwenyere na onye ọ bụla na-amalite azụmahịa na Naịjirịa kwesịrị ịmalite na ntụkwasị obi — n'ịmara na omume data ha na-echekwa ma ndị ọrụ ha ma azụmahịa ha. RegTrack dị n'ihi na nrubeisi ekwesịghị ịbụ ihe mgbochi nye ihe ọhụrụ na gburugburu teknụzụ kacha ukwuu n'Africa. Nke NDP Act 2023, Usoro Mmejuputa NDPR, na GAID 2025 kwadoro."
-    },
-    "builtFor": "Ewubere Maka Naịjirịa na",
-    "madeIn": "Emebere na Abuja",
-    "privacy": "Amụma Nzuzo",
-    "terms": "Usoro Ọrụ",
-    "poweredBy": "AI Kwadoro",
-    "hackathon": "RegTech Hackathon — AI Skills Week Abuja 2026",
-    "copyright": "© 2026 RegTrack nke NSS.",
-    "frameworkStatus": "Ọnọdụ Usoro Iwu",
-    "lastSynced": "Emekọrịtara na NDPC ikpeazụ"
-  },
-  "resources": {
-    "title": "Akụrụngwa Ọsọ",
-    "privacyTemplate": {
-      "label": "Usoro Amụma Nzuzo",
-      "desc": "NDPC Ọchịchị"
-    },
-    "dpcoDirectory": {
-      "label": "Akwụkwọ Nduzi DPCO",
-      "desc": "Chọta ụlọ ọrụ nrubeisi nwere ikike"
-    },
-    "breachTemplate": {
-      "label": "Usoro Ọkwa Mmebi",
-      "desc": "Ịkọ akụkọ n'ime awa 72"
-    },
-    "dpa": {
-      "label": "Nkwekọrịta Nhazi Data",
-      "desc": "Usoro DPA"
-    },
-    "fullText": {
-      "label": "NDP Act & GAID 2025",
-      "desc": "Akwụkwọ iwu gọọmentị"
-    },
-    "auditPortal": {
-      "label": "Ọnụ Ụzọ Ịgba Akwụkwọ Nyocha",
-      "desc": "Gbaa akwụkwọ nyocha gị kwa afọ"
-    }
-  },
-  "demo": {
-    "title": {
-      "part1": "Nwalee ya",
-      "part2": "ugbu a"
-    },
-    "subtitle": "Nwalee njikere nrubeisi gị n'ime ihe na-erughị nkeji 2.",
-    "tabs": {
-      "scanner": "Ntụle Nrubeisi",
-      "finder": "Onye Nchọta Nkebi",
-      "extractor": "Onye Na-ewepụta Ọrụ"
-    },
-    "framework": {
-      "ndpa": "NDP Act 2023",
-      "cbn": "CBN AML 2024",
-      "hint": "Nwaa ntụgharị usoro dị n'elu — gbanwee n'etiti NDP Act 2023 na CBN AML 2024 ozugbo.",
-      "policyAsCode": "Iwu-dịka-Code: Otu faịlụ JSON kwa usoro. Enweghị mgbanwe koodu."
-    }
-  },
+  "demo": { "title": { "part1": "Nwalee ya", "part2": "ugbu a" }, "subtitle": "Nwalee njikere nrubeisi gị n'ime nkeji 2.", "tabs": { "scanner": "Ntụle Nrubeisi", "finder": "Onye Nchọta Nkebi", "extractor": "Onye Na-ewepụta Ọrụ" } },
   "extractor": {
-    "title": "Onye Na-ewepụta Ọrụ AI",
-    "subtitle": "Bulite akwụkwọ iwu ọ bụla — AI na-ewepụta ọrụ NDP Act na-akpaghị aka",
-    "dropzone": "Dọrọ & dobe akwụkwọ iwu gị",
-    "browse": "ma ọ bụ pịa iji chọgharịa",
-    "supports": "Na-akwado PDF, DOCX, TXT (Max 10MB)",
-    "extract": "Wepụta Ọrụ",
-    "analyzing": "Na-enyocha Akwụkwọ...",
-    "total": "Ngụkọta",
-    "compliant": "Na-erube isi",
-    "partial": "Akụkụ",
-    "nonCompliant": "Anaghị erube isi",
-    "extracted": "Ọrụ Ndị Ewepụtara",
-    "viewClause": "Lee Nkebi",
-    "exportReport": "Bupụta Akụkọ",
-    "uploadAnother": "Bulite Akwụkwọ Ọzọ",
-    "demoNotice": "Ngosi: Na mmepụta, nke a na-eji Azure OpenAI wepụta ọrụ site na akwụkwọ ọ bụla ebulitere."
+    "title": "Onye Na-ewepụta Ọrụ AI", "subtitle": "Bulite akwụkwọ iwu ọ bụla", "dropzone": "Dọrọ & dobe akwụkwọ gị",
+    "browse": "ma ọ bụ pịa iji chọgharịa", "supports": "PDF, DOCX, TXT (Max 10MB)", "extract": "Wepụta Ọrụ",
+    "analyzing": "Na-enyocha Akwụkwọ...", "total": "Ngụkọta", "compliant": "Na-erube isi", "partial": "Akụkụ",
+    "nonCompliant": "Anaghị erube isi", "viewClause": "Lee Nkebi", "exportReport": "Bupụta Akụkọ", "uploadAnother": "Bulite Akwụkwọ Ọzọ"
+  },
+  "dashboard": {
+    "org": {
+      "title": "Dashboard Nrubeisi", "subtitle": "Dashboard Nrubeisi",
+      "totalAssessments": "Ngụkọta Ntụle", "avgRiskScore": "Nkezi Akara Ihe Ize Ndụ",
+      "highRisk": "Nnukwu Ihe Ize Ndụ", "linkedOfficers": "Ndị Ọrụ Ejikọtara", "pendingApprovals": "Nkwenye Na-echere",
+      "assessedBusinesses": "Azụmahịa Ndị A Tụlere", "noAssessments": "Enweghị ntụle ọ bụla",
+      "startFirst": "Bido ntụle nrubeisi mbụ gị", "newAssessment": "Ntụle Ọhụrụ",
+      "refreshData": "Nyegharịa Data", "reminders": "Nchetara",
+      "itemsAwaiting": "ihe na-eche nkwenye DPCO", "allUpToDate": "Ihe niile dị ọhụrụ",
+      "remediationProgress": "Ọganihu Ndozi", "viewDetails": "Lee Nkọwa",
+      "clausesTriggered": "nkebi akpalitere", "itemsCompleted": "ihe emechara",
+      "riskLevel": "ihe ize ndụ", "pending": "na-eche nkwenye", "noOfficer": "Enweghị onye ọrụ ejikọtara",
+      "sendReminder": "Ziga Nchetara", "sending": "Na-ezipụ...", "linkedTo": "Ejikọtara na"
+    },
+    "dpco": {
+      "title": "Dashboard DPCO", "subtitle": "Nnọọ, {{name}}",
+      "linkedOrgs": "Ụlọ Ọrụ Ejikọtara", "pending": "Nkwenye Na-echere",
+      "compliant": "Na-erube isi", "highRisk": "Nnukwu Ihe Ize Ndụ",
+      "noOrgs": "Enweghị ụlọ ọrụ ejikọtara.",
+      "orgsWillAppear": "Ụlọ ọrụ ga-apụta ebe a mgbe ha họọrọ ijikọ gị mgbe ntụle nrubeisi gasịrị.",
+      "noPending": "Enweghị nkwenye na-echere.", "licensePending": "Ikikere Na-echere"
+    },
+    "admin": {
+      "title": "Dashboard Admin", "subtitle": "Nchịkọta na njikwa ikpo okwu",
+      "organizations": "Ụlọ Ọrụ", "dpcos": "Ndị Ọrụ Nrubeisi",
+      "totalScans": "Ngụkọta Ntụle", "avgRiskScore": "Nkezi Akara Ihe Ize Ndụ",
+      "highRisk": "Nnukwu Ihe Ize Ndụ", "compliant": "Na-erube isi",
+      "pending": "Na-echere", "completed": "Emechara",
+      "overview": "Nchịkọta", "noOrganizations": "Enweghị ụlọ ọrụ.",
+      "noDPCOs": "Enweghị DPCO edebanyere aha.",
+      "lastScan": "Ntụle ikpeazụ", "never": "Ọ dịbeghị",
+      "noLicense": "Enweghị ikikere", "linkedOrgs": "ụlọ ọrụ", "pendingVerifications": "na-echere"
+    }
   },
   "regulator": {
-    "title": "Nlele Onye Nchịkwa NDPC",
-    "subtitle": "Ọnọdụ nrubeisi ozugbo n'ofe ụlọ ọrụ niile a haziri ahazi",
-    "suptech": "Ngosi SupTech",
-    "totalEntities": "Ngụkọta Ụlọ Ọrụ",
-    "compliant": "Na-erube isi",
-    "atRisk": "Nọ n'Ihe Ize Ndụ",
-    "highRisk": "Nnukwu Ihe Ize Ndụ",
-    "avgSectorRisk": "Nkezi Ihe Ize Ndụ Ngalaba",
-    "pendingCAR": "CAR Na-echere",
-    "recentScans": "Nyocha Nrubeisi Na-adịbeghị Anya",
-    "sectorBreakdown": "Nkewa Ngalaba",
-    "viewDetails": "Lee Nkọwa",
-    "exportData": "Bupụta Data",
-    "backToHome": "Laghachi n'Ụlọ"
+    "title": "Dashboard Ọtụtụ Ndị Nchịkwa", "subtitle": "Nrubeisi ozugbo n'ofe NDPC, CBN, SEC, na NITDA",
+    "suptech": "Ngosi SupTech", "totalEntities": "Ngụkọta", "compliant": "Na-erube isi",
+    "atRisk": "Nọ n'Ihe Ize Ndụ", "highRisk": "Nnukwu Ihe Ize Ndụ", "avgRisk": "Nkezi Ihe Ize Ndụ",
+    "pendingCAR": "CAR Na-echere", "recentScans": "Ntụle Na-adịbeghị Anya", "backToHome": "Laghachi n'Ụlọ",
+    "lastUpdated": "Emelitere ikpeazụ", "frameworksMonitored": "usoro a na-enyocha",
+    "clearAll": "Hichapụ Ihe Niile", "noAssessments": "Enweghị ntụle achọtara.",
+    "suptechMessage": "Ọnọdụ nrubeisi ozugbo n'ofe usoro NDPC, CBN, SEC, na NITDA site na API RegTrack."
+  },
+  "frameworks": { "ndpa": "NDP Act 2023", "cbnAml": "CBN AML/CFT", "secCf": "SEC Crowdfunding", "nitdaDp": "NITDA DP" },
+  "sectors": {
+    "fintech": { "name": "Fintech" }, "healthtech": { "name": "HealthTech" }, "ecommerce": { "name": "E-Azụmahịa" },
+    "edtech": { "name": "EdTech" }, "agritech": { "name": "AgriTech" }, "enterprise": { "name": "Enterprise SaaS" },
+    "social_media": { "name": "Mgbasa Ozi Ọha" }
+  },
+  "evidence": {
+    "title": "Bulite Ihe Akaebe", "requiredFor": "Achọrọ maka nrubeisi {{framework}}",
+    "acceptedFormats": "Ụdị ndị a nabatara", "maxSize": "Oke nha faịlụ",
+    "examples": "Ọmụmaatụ nke akwụkwọ", "guidance": "Nduzi {{regulator}}",
+    "uploadSuccess": "Emechara bulite!", "keepExisting": "Debe Ihe Akaebe"
+  },
+  "features": {
+    "everythingYouNeed": "Ihe Niile Ị Chọrọ Maka Nrubeisi",
+    "subtitle": "RegTrack na-ejikọta atụmatụ dị ike n'ofe usoro NDPA, CBN, SEC, na NITDA.",
+    "multilingual": "Nkwado Ọtụtụ Asụsụ",
+    "multilingualDesc": "Nkwado zuru oke maka Bekee, Hausa, Igbo, na Yoruba n'ofe usoro niile.",
+    "frameworks": "Usoro Iwu 4",
+    "frameworksDesc": "NDPA, CBN AML/CFT, SEC Crowdfunding, na NITDA DP - ha niile n'otu ikpo okwu.",
+    "deadlines": "Echefula Oge Ngwụcha",
+    "deadlinesDesc": "NDPC CAR ruru March 31st. Akụkọ CBN AML kwa nkeji. Nọrọ n'ihu oge ngwụcha niile.",
+    "seeKeyFeatures": "Lee Atụmatụ Ndị Dị Mkpa",
+    "complianceAssessment": "Ntụle Nrubeisi",
+    "myDashboard": "Dashboard M",
+    "tryDemo": "Nwalee Demo",
+    "getStarted": "Bido n'efu",
+    "backToTop": "Laghachi n'Elu"
+  },
+  "footer": {
+    "by": "site na Nexus SafeSphere", "tagline": "Ịgakọta ihe ọhụrụ Naịjịrịa na usoro iwu.",
+    "quickLinks": "Njikọ Ọsọ", "about": "Banyere", "joinWaitlist": "Sonye Ndepụta Nchere",
+    "connect": "Jikọọ", "contact": "Kpọtụrụ", "privacy": "Amụma Nzuzo", "terms": "Usoro Ọrụ",
+    "monitored": "Usoro A Na-enyocha", "activelyMonitored": "A na-enyocha ya nke ọma site na isi mmalite gọọmentị",
+    "synced": "Emekọrịtara",
+    "whyBuilt": { "title": "Ihe Mere Anyị Ji Wuo Nke a", "description": "Ndị Naịjịrịa wuru ya na Abuja." },
+    "builtFor": "Ewubere Maka Naịjịrịa na", "madeIn": "Emebere na Abuja",
+    "hackathon": "RegTech Hackathon - Abuja 2026",
+    "disclaimer": "RegTrack na-enye nduzi mmụta n'ofe usoro NDPA, CBN, SEC, na NITDA. Nke a abụghị ndụmọdụ iwu."
   }
 }

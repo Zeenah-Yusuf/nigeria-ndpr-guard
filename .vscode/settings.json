@@ -7,5 +7,9 @@
   "css.lint.unknownAtRules": "ignore",
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "webhint.hints": {
+    "no-inline-styles": "off"
+  },
+  "python-envs.defaultEnvManager": "ms-python.python:system"
 }
