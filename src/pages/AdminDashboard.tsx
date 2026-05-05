@@ -7,8 +7,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useRegulatorData } from "@/hooks/useRegulatorData";
 import { 
   Shield, Building2, TrendingUp, AlertTriangle, CheckCircle2, 
-  Clock, Users, UserPlus, RefreshCw, BarChart3, Eye,
-  Mail, Phone, Globe
+  Clock, Users, RefreshCw, BarChart3,
+  Mail, Phone
 } from "lucide-react";
 
 interface OrgSummary {
@@ -46,9 +46,9 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const { t } = useLanguage();
-  const { assessments, refreshData: refreshRegulatorData } = useRegulatorData();
+  const { assessments } = useRegulatorData();
   
   const [stats, setStats] = useState<DashboardStats>({
     totalOrganizations: 0, totalDPCOs: 0, totalScans: 0,
@@ -60,17 +60,32 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "organizations" | "dpcos">("overview");
 
+  // Initial fetch
   useEffect(() => {
     fetchAllData();
   }, []);
 
-  // Refresh when regulator data changes (new scans)
+  // Refresh when regulator data changes
   useEffect(() => {
     fetchAllData();
   }, [assessments]);
 
+  // Real-time listener for all relevant tables
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin-realtime')
+      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'user_profiles' }, () => fetchAllData())
+      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'compliance_scans' }, () => fetchAllData())
+      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'user_compliance_status' }, () => fetchAllData())
+      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'dpco_organization_links' }, () => fetchAllData())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
   async function fetchAllData() {
-    setLoading(true);
     await Promise.all([
       fetchStats(),
       fetchOrganizations(),
@@ -81,7 +96,6 @@ export default function AdminDashboard() {
 
   async function fetchStats() {
     try {
-      // Get counts from Supabase
       const { count: orgCount } = await supabase
         .from('user_profiles')
         .select('*', { count: 'exact', head: true })
@@ -92,12 +106,10 @@ export default function AdminDashboard() {
         .select('*', { count: 'exact', head: true })
         .eq('role', 'dpco');
 
-      // Get Supabase scans
       const { data: supabaseScans } = await supabase
         .from('compliance_scans')
         .select('risk_score, status');
 
-      // Combine Supabase scores with regulator data scores
       const supabaseScores = supabaseScans?.map(s => s.risk_score || 0) || [];
       const regulatorScores = assessments.map(a => a.riskScore);
       const allScores = [...supabaseScores, ...regulatorScores];
@@ -106,10 +118,8 @@ export default function AdminDashboard() {
       const avgRisk = totalScans > 0
         ? Math.round(allScores.reduce((sum, s) => sum + s, 0) / totalScans)
         : 0;
-      
       const highRisk = allScores.filter(s => s >= 60).length;
 
-      // Get verification stats from Supabase
       const { count: pendingCount } = await supabase
         .from('user_compliance_status')
         .select('*', { count: 'exact', head: true })
@@ -120,7 +130,6 @@ export default function AdminDashboard() {
         .select('*', { count: 'exact', head: true })
         .eq('status', 'compliant');
 
-      // Get compliant count from both sources
       const supabaseCompliant = supabaseScans?.filter(s => s.status === 'compliant').length || 0;
       const regulatorCompliant = assessments.filter(a => a.status === 'compliant').length;
       const compliantCount = supabaseCompliant + regulatorCompliant;
@@ -147,12 +156,14 @@ export default function AdminDashboard() {
         .select('id, company_name')
         .eq('role', 'organization');
 
-      if (!orgs) return;
+      if (!orgs || orgs.length === 0) {
+        setOrganizations([]);
+        return;
+      }
 
       const orgSummaries: OrgSummary[] = [];
 
       for (const org of orgs) {
-        // Get latest Supabase scan
         const { data: latestScan } = await supabase
           .from('compliance_scans')
           .select('*')
@@ -161,7 +172,6 @@ export default function AdminDashboard() {
           .limit(1)
           .maybeSingle();
 
-        // Check for matching regulator data
         const orgRegulatorAssessments = assessments.filter(a => 
           a.appName === org.company_name
         );
@@ -178,7 +188,6 @@ export default function AdminDashboard() {
           lastScanDate = latestScan.created_at || '';
         }
 
-        // Merge with regulator data (use highest risk score)
         if (orgRegulatorAssessments.length > 0) {
           const maxRegScore = Math.max(...orgRegulatorAssessments.map(a => a.riskScore));
           riskScore = Math.max(riskScore, maxRegScore);
@@ -193,7 +202,6 @@ export default function AdminDashboard() {
           }
         }
 
-        // Check DPCO link
         const { data: dpcoLink } = await supabase
           .from('dpco_organization_links')
           .select('dpco_id')
@@ -206,11 +214,10 @@ export default function AdminDashboard() {
             .from('user_profiles')
             .select('company_name')
             .eq('id', dpcoLink.dpco_id)
-            .single();
+            .maybeSingle();
           dpcoName = dpco?.company_name || '';
         }
 
-        // Pending verifications
         const { count: pendingCount } = await supabase
           .from('user_compliance_status')
           .select('*', { count: 'exact', head: true })
@@ -230,7 +237,6 @@ export default function AdminDashboard() {
         });
       }
 
-      // Sort by risk score (highest first)
       setOrganizations(orgSummaries.sort((a, b) => b.riskScore - a.riskScore));
     } catch (err) {
       console.error('Error fetching organizations:', err);
@@ -244,18 +250,19 @@ export default function AdminDashboard() {
         .select('id, company_name, phone_number, registration_number')
         .eq('role', 'dpco');
 
-      if (!dpcoProfiles) return;
+      if (!dpcoProfiles || dpcoProfiles.length === 0) {
+        setDPCOs([]);
+        return;
+      }
 
       const dpcoSummaries: DPCOSummary[] = [];
 
       for (const dpco of dpcoProfiles) {
-        // Get linked organizations count
         const { count: linkedCount } = await supabase
           .from('dpco_organization_links')
           .select('*', { count: 'exact', head: true })
           .eq('dpco_id', dpco.id);
 
-        // Get linked org IDs
         const { data: linkedOrgIds } = await supabase
           .from('dpco_organization_links')
           .select('organization_id')
@@ -324,7 +331,6 @@ export default function AdminDashboard() {
       <Navbar />
       <main className="flex-1 pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-6xl">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-destructive/10 flex items-center justify-center">
@@ -340,7 +346,6 @@ export default function AdminDashboard() {
             </button>
           </div>
 
-          {/* Tabs */}
           <div className="flex rounded-xl bg-muted p-1 mb-8 w-fit">
             {(["overview", "organizations", "dpcos"] as const).map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)}
@@ -356,7 +361,6 @@ export default function AdminDashboard() {
 
           {activeTab === "overview" && (
             <>
-              {/* Stats Grid Row 1 */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-card border border-border rounded-xl p-4">
                   <Building2 className="w-5 h-5 text-primary mb-2" />
@@ -380,7 +384,6 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Stats Grid Row 2 */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-card border border-border rounded-xl p-4">
                   <AlertTriangle className="w-5 h-5 text-destructive mb-2" />
@@ -448,7 +451,7 @@ export default function AdminDashboard() {
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           org.dpcoLinked ? 'bg-secondary/10 text-secondary' : 'bg-muted text-muted-foreground'
                         }`}>
-                          {org.dpcoLinked ? `${t('dashboard.org.linkedTo')} ${org.dpcoName}` : t('dashboard.admin.noLicense')}
+                          {org.dpcoLinked ? `${t('dashboard.org.linkedTo')} ${org.dpcoName}` : t('dashboard.org.noOfficer')}
                         </span>
                       </div>
                     </div>

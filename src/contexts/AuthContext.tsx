@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) handleUserSession(session.user);
+      if (session?.user) fetchUserProfile(session.user.id);
       setLoading(false);
     });
 
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        handleUserSession(session.user);
+        fetchUserProfile(session.user.id);
       } else {
         setProfile(null);
       }
@@ -54,22 +54,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  async function handleUserSession(user: User) {
-    const { data: existing } = await supabase
+  async function fetchUserProfile(userId: string) {
+    const { data } = await supabase
       .from('user_profiles')
       .select('*')
-      .eq('id', user.id)
+      .eq('id', userId)
       .maybeSingle();
 
-    if (existing) {
-      setProfile(existing);
+    if (data) {
+      setProfile(data);
     } else {
+      // Create profile if it doesn't exist
       const { data: newProfile } = await supabase
         .from('user_profiles')
         .upsert({
-          id: user.id,
+          id: userId,
           role: 'organization',
-          company_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+          company_name: 'User',
           is_verified: false,
         })
         .select('*')
@@ -86,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         password,
         options: {
           data: { role, ...metadata },
-          emailRedirectTo: window.location.origin + '/',
+          emailRedirectTo: 'https://regtrack-nigeria.vercel.app/login',
         },
       });
 
@@ -100,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!data.user) return { error: 'Failed to create account' };
 
       // Save user profile
-      await supabase.from('user_profiles').upsert({
+      const { error: profileError } = await supabase.from('user_profiles').upsert({
         id: data.user.id,
         role,
         company_name: metadata?.company_name || null,
@@ -112,13 +113,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         is_verified: false,
       });
 
-      // Save user sector — map slug to UUID
+      if (profileError) {
+        console.error('Failed to save user profile:', profileError.message);
+      }
+
+      // Save user sector
       if (metadata?.sector_id) {
         const { data: sectorData } = await supabase
           .from('sectors')
           .select('id')
           .eq('slug', metadata.sector_id)
-          .single();
+          .maybeSingle();
 
         if (sectorData) {
           await supabase.from('user_sectors').upsert({
@@ -128,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
 
+      // Check if email confirmation is required
       if (data.user?.identities?.length === 0) {
         return { success: 'Account created! You can now sign in.' };
       }
@@ -161,7 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin + '/',
+          redirectTo: 'https://regtrack-nigeria.vercel.app/',
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
