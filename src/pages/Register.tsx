@@ -5,10 +5,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthForm } from "@/components/AuthForm";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Mail } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
 
 export default function Register() {
-  const { signUp } = useAuth();
+  const { signUp, user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,6 +16,13 @@ export default function Register() {
   const [registeredEmail, setRegisteredEmail] = useState<string>("");
   const { t } = useLanguage();
   const successRef = useRef<HTMLDivElement>(null);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const handleRegister = async (data: any) => {
     setLoading(true);
@@ -31,26 +38,34 @@ export default function Register() {
     setLoading(false);
   };
 
-  // Scroll to top and focus success message when shown
   useEffect(() => {
     if (success) {
-      // Multiple scroll methods for cross-browser compatibility
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
-      // Also scroll the main content area
       const mainElement = document.querySelector('main');
-      if (mainElement) {
-        mainElement.scrollTop = 0;
-      }
-      
-      // Focus the success message for accessibility
-      setTimeout(() => {
-        successRef.current?.focus();
-      }, 100);
+      if (mainElement) mainElement.scrollTop = 0;
+      setTimeout(() => successRef.current?.focus(), 100);
     }
   }, [success]);
+
+  // If user is already logged in, show redirect message
+  if (user) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center py-20 px-4">
+          <div className="text-center">
+            <p className="text-muted-foreground mb-4">You are already signed in.</p>
+            <button onClick={() => navigate("/")} className="text-primary hover:underline">
+              Go to Home
+            </button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -63,7 +78,6 @@ export default function Register() {
               tabIndex={-1}
               className="w-full max-w-md animate-fade-in-up"
               aria-live="polite"
-              aria-label="Registration successful"
             >
               <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary/10 mb-4">
@@ -80,9 +94,9 @@ export default function Register() {
                   <p className="text-sm text-foreground font-medium mb-2">Next steps:</p>
                   <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
                     <li>Check your email inbox for a message from RegTrack</li>
-                    <li>Click the confirmation link in the email</li>
-                    <li>You'll be redirected to the login page</li>
-                    <li>Sign in with your email and password</li>
+                    <li>Click the <strong>"Confirm Your Account"</strong> button in the email</li>
+                    <li>After confirming, return to the login page</li>
+                    <li>Sign in with <strong>{registeredEmail}</strong> and your password</li>
                   </ol>
                 </div>
                 <p className="text-sm text-muted-foreground mt-4">
@@ -100,19 +114,15 @@ export default function Register() {
               </div>
               <button 
                 onClick={() => navigate("/login")}
-                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all active:scale-[0.98]"
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
               >
+                <ArrowLeft className="w-4 h-4" />
                 {t('auth.backToSignIn')}
               </button>
             </div>
           ) : (
             <>
-              <AuthForm 
-                mode="register" 
-                onSubmit={handleRegister} 
-                loading={loading} 
-                error={error} 
-              />
+              <AuthForm mode="register" onSubmit={handleRegister} loading={loading} error={error} />
               <p className="text-center text-sm text-muted-foreground mt-6">
                 {t('auth.haveAccount')}{" "}
                 <Link to="/login" className="text-primary hover:underline font-medium">

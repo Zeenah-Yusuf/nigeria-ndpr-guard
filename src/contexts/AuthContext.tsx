@@ -23,6 +23,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signInWithGoogle: () => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
+  checkEmailExists: (email: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -63,20 +64,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (data) {
       setProfile(data);
-    } else {
-      // Create profile if it doesn't exist
-      const { data: newProfile } = await supabase
-        .from('user_profiles')
-        .upsert({
-          id: userId,
-          role: 'organization',
-          company_name: 'User',
-          is_verified: false,
-        })
-        .select('*')
-        .single();
+    }
+  }
 
-      if (newProfile) setProfile(newProfile);
+  // Check if email already exists in Supabase auth
+  async function checkEmailExists(email: string): Promise<boolean> {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('id', email) // This won't work directly - we need auth admin
+        .maybeSingle();
+      
+      // Alternative: Try to sign in with invalid password to check if user exists
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: 'this-is-a-test-to-check-if-email-exists-12345',
+      });
+
+      // If error is about invalid credentials (not "user not found"), email exists
+      if (signInError?.message?.includes('Invalid login credentials')) {
+        return true;
+      }
+      
+      return false;
+    } catch {
+      return false;
     }
   }
 
@@ -86,27 +99,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         email,
         password,
         options: {
-          data: { role, ...metadata },
+          data: { 
+            role, 
+            full_name: metadata?.full_name || metadata?.company_name || '',
+            company_name: metadata?.company_name || '',
+            phone_number: metadata?.phone_number || '',
+          },
           emailRedirectTo: 'https://regtrack-nigeria.vercel.app/login',
         },
       });
 
       if (error) {
-        if (error.message.includes('already registered')) {
+        if (error.message.includes('already registered') || error.message.includes('already exists')) {
+          return { error: 'An account with this email already exists. Please sign in instead.' };
+        }
+        if (error.message.includes('User already registered')) {
           return { error: 'An account with this email already exists. Please sign in instead.' };
         }
         return { error: error.message };
       }
 
-      if (!data.user) return { error: 'Failed to create account' };
+      if (!data.user) {
+        return { error: 'Failed to create account. Please try again.' };
+      }
 
-      // Save user profile
+      // Save user profile to user_profiles table
       const { error: profileError } = await supabase.from('user_profiles').upsert({
         id: data.user.id,
         role,
-        company_name: metadata?.company_name || null,
+        company_name: metadata?.company_name || email?.split('@')[0] || 'User',
         company_size: metadata?.company_size || null,
-        website_url: metadata?.website_url || null,
+        website_url: metadata?.website || null,
         phone_number: metadata?.phone_number || null,
         registration_number: metadata?.registration_number || null,
         license_url: metadata?.license_url || null,
@@ -114,10 +137,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (profileError) {
-        console.error('Failed to save user profile:', profileError.message);
+        console.error('Failed to save profile:', profileError.message);
       }
 
-      // Save user sector
+      // Save user sector if provided
       if (metadata?.sector_id) {
         const { data: sectorData } = await supabase
           .from('sectors')
@@ -134,37 +157,66 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Check if email confirmation is required
-      if (data.user?.identities?.length === 0) {
-        return { success: 'Account created! You can now sign in.' };
+      if (data.session === null) {
+        return { 
+          success: 'Confirmation email sent! Please check your inbox and click the confirmation link before signing in.' 
+        };
       }
 
-      return { success: 'Account created! Please check your email to confirm your registration.' };
+      return { success: 'Account created! You can now sign in.' };
     } catch (err: any) {
-      return { error: err.message };
+      return { error: err.message || 'Registration failed. Please try again.' };
     }
   }
 
   async function signIn(email: string, password: string): Promise<{ error?: string }> {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      
       if (error) {
-        if (error.message.includes('Invalid login credentials')) {
+        if (error.message.includes('Invalid login credentials') || error.message.includes('Invalid email or password')) {
           return { error: 'Invalid email or password. Please try again.' };
         }
         if (error.message.includes('Email not confirmed')) {
           return { error: 'Please check your email and confirm your account before signing in.' };
         }
+        if (error.message.includes('User not found')) {
+          return { error: 'No account found with this email. Please register first.' };
+        }
         return { error: error.message };
       }
+
+      // Check and update profile after successful login
+      if (data?.user) {
+        const { data: existingProfile } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .maybeSingle();
+
+        if (!existingProfile) {
+          // Create profile if it doesn't exist
+          await supabase.from('user_profiles').upsert({
+            id: data.user.id,
+            role: data.user.user_metadata?.role || 'organization',
+            company_name: data.user.user_metadata?.company_name || data.user.email?.split('@')[0] || 'User',
+            is_verified: true,
+          });
+        } else if (!existingProfile.is_verified) {
+          // Mark as verified on first successful sign in after email confirmation
+          await supabase.from('user_profiles').update({ is_verified: true }).eq('id', data.user.id);
+        }
+      }
+
       return {};
     } catch (err: any) {
-      return { error: err.message };
+      return { error: err.message || 'Sign in failed. Please try again.' };
     }
   }
 
   async function signInWithGoogle(): Promise<{ error?: string }> {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: 'https://regtrack-nigeria.vercel.app/',
@@ -187,7 +239,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, session, loading, signUp, signIn, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{ 
+      user, profile, session, loading, 
+      signUp, signIn, signInWithGoogle, signOut, 
+      checkEmailExists 
+    }}>
       {children}
     </AuthContext.Provider>
   );
