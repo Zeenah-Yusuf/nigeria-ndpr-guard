@@ -5,13 +5,38 @@ import ClauseFinder from "./ClauseFinder";
 import { ObligationExtractor } from "./ObligationExtractor";
 import { RegulationUpdateBanner } from "./RegulationUpdateBanner";
 import ResourcesSidebar from "./ResourcesSidebar";
-import { Shield, Search, FileText, Building2, ChevronDown, ChevronRight, ClipboardCheck } from "lucide-react";
+import { Shield, Search, FileText, Building2, ClipboardCheck } from "lucide-react";
 
+// CRITICAL FIX: Explicitly map fully qualified static classes to guarantee Tailwind compiler bundle visibility
 const FRAMEWORKS = [
-  { id: "NDPA", name: "NDP Act 2023", regulator: "NDPC", icon: Shield, color: "primary" },
-  { id: "CBN-AML", name: "CBN AML/CFT", regulator: "CBN", icon: Building2, color: "accent" },
-  { id: "SEC-CF", name: "SEC Crowdfunding", regulator: "SEC", icon: Building2, color: "purple" },
-  { id: "NITDA-DP", name: "NITDA DP", regulator: "NITDA", icon: Building2, color: "cyan" },
+  { 
+    id: "NDPA", 
+    name: "NDP Act 2023", 
+    regulator: "NDPC", 
+    icon: Shield, 
+    activeClasses: "bg-primary text-primary-foreground shadow-card" 
+  },
+  { 
+    id: "CBN-AML", 
+    name: "CBN AML/CFT", 
+    regulator: "CBN", 
+    icon: Building2, 
+    activeClasses: "bg-accent text-accent-foreground shadow-card" 
+  },
+  { 
+    id: "SEC-CF", 
+    name: "SEC Crowdfunding", 
+    regulator: "SEC", 
+    icon: Building2, 
+    activeClasses: "bg-purple-600 text-white shadow-card" 
+  },
+  { 
+    id: "NITDA-DP", 
+    name: "NITDA DP", 
+    regulator: "NITDA", 
+    icon: Building2, 
+    activeClasses: "bg-cyan-600 text-white shadow-card" 
+  },
 ];
 
 const DemoSection = () => {
@@ -57,10 +82,13 @@ const DemoSection = () => {
                 const Icon = fw.icon;
                 const isActive = activeFramework === fw.id;
                 return (
-                  <button key={fw.id} onClick={() => handleFrameworkChange(fw.id)}
+                  <button 
+                    key={fw.id} 
+                    onClick={() => handleFrameworkChange(fw.id)}
                     className={`flex-1 min-w-[120px] py-2.5 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                      isActive ? `bg-${fw.color} text-${fw.color}-foreground shadow-card` : "text-muted-foreground hover:text-foreground"
-                    }`}>
+                      isActive ? fw.activeClasses : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
                     <Icon className="w-3.5 h-3.5" />{fw.name}
                   </button>
                 );
@@ -94,11 +122,11 @@ const DemoSection = () => {
             </button>
           </div>
 
-          {/* Tab Content */}
+          {/* Tab Content (FIXED: Standardized activeFramework prop consistency across components) */}
           <div key={`${activeTab}-${activeFramework}`} className="animate-fade-in">
             {activeTab === "scanner" && <RiskScanner key={scannerKey} activeFramework={activeFramework} />}
-            {activeTab === "finder" && <ClauseFinder framework={activeFramework} />}
-            {activeTab === "extractor" && <ObligationExtractor framework={activeFramework} />}
+            {activeTab === "finder" && <ClauseFinder activeFramework={activeFramework} />}
+            {activeTab === "extractor" && <ObligationExtractor activeFramework={activeFramework} />}
           </div>
 
           {/* Switch Framework */}

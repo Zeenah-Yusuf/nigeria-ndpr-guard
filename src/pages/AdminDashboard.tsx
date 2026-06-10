@@ -60,17 +60,14 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "organizations" | "dpcos">("overview");
 
-  // Initial fetch
   useEffect(() => {
     fetchAllData();
   }, []);
 
-  // Refresh when regulator data changes
   useEffect(() => {
     fetchAllData();
   }, [assessments]);
 
-  // Real-time listener for all relevant tables
   useEffect(() => {
     const channel = supabase
       .channel('admin-realtime')
@@ -151,9 +148,18 @@ export default function AdminDashboard() {
 
   async function fetchOrganizations() {
     try {
+      // 1. Unified Relational Query: Gather profile context and map the dynamic user_sector label
       const { data: orgs } = await supabase
         .from('user_profiles')
-        .select('id, company_name')
+        .select(`
+          id, 
+          company_name,
+          user_sectors (
+            sectors (
+              name
+            )
+          )
+        `)
         .eq('role', 'organization');
 
       if (!orgs || orgs.length === 0) {
@@ -176,13 +182,15 @@ export default function AdminDashboard() {
           a.appName === org.company_name
         );
 
-        let sector = 'General';
+        // Resolve sector name gracefully from the active layout mapping array
+        const sectorList: any = org.user_sectors;
+        const resolvedSectorName = sectorList?.[0]?.sectors?.name || 'General';
+
         let riskScore = 0;
         let status = 'pending';
         let lastScanDate = '';
 
         if (latestScan) {
-          sector = latestScan.sector_id || 'General';
           riskScore = latestScan.risk_score || 0;
           status = latestScan.status || 'pending';
           lastScanDate = latestScan.created_at || '';
@@ -227,7 +235,7 @@ export default function AdminDashboard() {
         orgSummaries.push({
           id: org.id,
           name: org.company_name || 'Unnamed',
-          sector,
+          sector: resolvedSectorName,
           riskScore,
           status,
           dpcoLinked: !!dpcoLink,
@@ -245,6 +253,7 @@ export default function AdminDashboard() {
 
   async function fetchDPCOs() {
     try {
+      // 2. Fetch DPCO profiles directly from public storage tables
       const { data: dpcoProfiles } = await supabase
         .from('user_profiles')
         .select('id, company_name, phone_number, registration_number')
@@ -253,6 +262,16 @@ export default function AdminDashboard() {
       if (!dpcoProfiles || dpcoProfiles.length === 0) {
         setDPCOs([]);
         return;
+      }
+
+      // 3. Request Admin system logs directly to resolve the masked auth email maps safely
+      const { data: adminUsers, error: adminErr } = await supabase.rpc('get_user_emails');
+      const emailMap: Record<string, string> = {};
+      
+      if (!adminErr && adminUsers) {
+        adminUsers.forEach((u: { id: string; email: string }) => {
+          emailMap[u.id] = u.email;
+        });
       }
 
       const dpcoSummaries: DPCOSummary[] = [];
@@ -293,7 +312,7 @@ export default function AdminDashboard() {
         dpcoSummaries.push({
           id: dpco.id,
           name: dpco.company_name || 'Unnamed DPCO',
-          email: '',
+          email: emailMap[dpco.id] || 'no-email@system.org', // Populates resolved email cleanly
           phone: dpco.phone_number || '',
           registrationNumber: dpco.registration_number || '',
           linkedOrgs: linkedCount || 0,
@@ -431,7 +450,7 @@ export default function AdminDashboard() {
                         <div>
                           <p className="font-semibold text-foreground">{org.name}</p>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>{org.sector}</span>
+                            <span className="capitalize">{org.sector}</span>
                             <span>•</span>
                             <span>
                               {t('dashboard.admin.lastScan')}: {org.lastScan ? new Date(org.lastScan).toLocaleDateString() : t('dashboard.admin.never')}
@@ -446,7 +465,7 @@ export default function AdminDashboard() {
                           </span>
                         )}
                         <span className={`text-sm font-bold ${getRiskColor(org.riskScore)}`}>
-                          {org.riskScore || 'N/A'}
+                          {org.riskScore || '0'}
                         </span>
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           org.dpcoLinked ? 'bg-secondary/10 text-secondary' : 'bg-muted text-muted-foreground'
@@ -482,9 +501,9 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <p className="font-semibold text-foreground">{dpco.name}</p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            {dpco.email && <><Mail className="w-3 h-3" />{dpco.email}</>}
-                            {dpco.phone && <><Phone className="w-3 h-3" />{dpco.phone}</>}
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+                            {dpco.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{dpco.email}</span>}
+                            {dpco.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{dpco.phone}</span>}
                           </div>
                         </div>
                       </div>

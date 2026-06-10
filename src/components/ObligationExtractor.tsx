@@ -1,7 +1,7 @@
-import { useState, useRef, useCallback, useMemo } from "react";
+import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/lib/SupabaseClient";
-import { Upload, FileText, Loader2, CheckCircle, AlertCircle, X, Download, Eye, Shield, Clock, AlertTriangle, Building2, Search } from "lucide-react";
+import { Upload, FileText, Loader2, CheckCircle, AlertCircle, X, Download, AlertTriangle, Building2, Search } from "lucide-react";
 
 interface ExtractedObligation {
   id: string;
@@ -13,11 +13,12 @@ interface ExtractedObligation {
   framework: string;
 }
 
+// FIXED: Aligned prop interface key with DemoSection.tsx mapping
 interface ObligationExtractorProps {
-  framework?: string;
+  activeFramework?: string;
 }
 
-export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorProps) {
+export function ObligationExtractor({ activeFramework = "NDPA" }: ObligationExtractorProps) {
   const { t } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -28,7 +29,26 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
   const [noObligationsFound, setNoObligationsFound] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const frameworkDisplayName = framework === "CBN-AML" ? "CBN AML/CFT" : framework === "SEC-CF" ? "SEC Crowdfunding" : framework === "NITDA-DP" ? "NITDA DP" : "NDP Act";
+  // FIXED: Adjusted string dependencies to use activeFramework smoothly
+  const frameworkDisplayName = useMemo(() => {
+    return activeFramework === "CBN-AML" 
+      ? "CBN AML/CFT" 
+      : activeFramework === "SEC-CF" 
+      ? "SEC Crowdfunding" 
+      : activeFramework === "NITDA-DP" 
+      ? "NITDA DP" 
+      : "NDP Act";
+  }, [activeFramework]);
+
+  // FIXED: Auto-flush temporary state assets whenever user switches tabs
+  useEffect(() => {
+    setFile(null);
+    setObligations([]);
+    setShowResults(false);
+    setError(null);
+    setNoObligationsFound(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }, [activeFramework]);
 
   const handleFileChange = useCallback((selectedFile: File | null) => {
     if (selectedFile) {
@@ -50,31 +70,18 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
     if (fileInputRef.current) fileInputRef.current.value = "";
   }, []);
 
-  /**
-   * Read file content as text
-   */
   const readFileContent = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (e) => resolve(e.target?.result as string || "");
       reader.onerror = () => reject(new Error("Failed to read file"));
-      
-      if (file.type === "application/pdf" || file.name.endsWith('.pdf')) {
-        // For PDF, extract basic text (in production use a proper PDF parser)
-        reader.readAsText(file);
-      } else {
-        reader.readAsText(file);
-      }
+      reader.readAsText(file);
     });
   };
 
-  /**
-   * Extract regulatory keywords and section references from text
-   */
-  const extractObligationsFromText = (text: string): ExtractedObligation[] => {
+  const extractObligationsFromText = useCallback((text: string): ExtractedObligation[] => {
     const foundObligations: ExtractedObligation[] = [];
     
-    // Define regulatory patterns for each framework
     const patterns: Record<string, { regex: RegExp; sectionPrefix: string }[]> = {
       "NDPA": [
         { regex: /Section\s+(\d+[A-Z]?)[.:\s]+([^.!?]+[.!?])/gi, sectionPrefix: "Section" },
@@ -95,7 +102,7 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
       ],
     };
 
-    const frameworkPatterns = patterns[framework] || patterns["NDPA"];
+    const frameworkPatterns = patterns[activeFramework] || patterns["NDPA"];
     const seenRequirements = new Set<string>();
 
     for (const pattern of frameworkPatterns) {
@@ -104,13 +111,11 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
         const sectionNum = match[1] || "";
         const requirementText = (match[2] || match[1] || "").trim();
         
-        // Filter out short/invalid matches
         if (requirementText.length < 20 || requirementText.length > 500) continue;
         if (seenRequirements.has(requirementText.substring(0, 50))) continue;
         
         seenRequirements.add(requirementText.substring(0, 50));
 
-        // Determine status based on keywords
         const lowerText = requirementText.toLowerCase();
         let status: ExtractedObligation["status"] = "unknown";
         if (/comply|compliant|implemented|in place|established|appointed/i.test(lowerText)) {
@@ -121,7 +126,6 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
           status = "non-compliant";
         }
 
-        // Calculate confidence based on match quality
         let confidence = 65;
         if (sectionNum && sectionNum.length <= 5) confidence += 15;
         if (requirementText.length > 50) confidence += 10;
@@ -129,23 +133,20 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
         confidence = Math.min(98, confidence);
 
         foundObligations.push({
-          id: `${framework.toLowerCase()}-${foundObligations.length + 1}`,
+          id: `${activeFramework.toLowerCase()}-${foundObligations.length + 1}`,
           section: sectionNum ? `${pattern.sectionPrefix} ${sectionNum}` : pattern.sectionPrefix,
           requirement: requirementText.charAt(0).toUpperCase() + requirementText.slice(1),
           status,
           confidence,
           source: frameworkDisplayName,
-          framework,
+          framework: activeFramework,
         });
       }
     }
 
-    return foundObligations.slice(0, 15); // Limit to 15 results
-  };
+    return foundObligations.slice(0, 15);
+  }, [activeFramework, frameworkDisplayName]);
 
-  /**
-   * Main extraction function - calls Edge Function in production, local extraction as fallback
-   */
   const extractObligations = useCallback(async () => {
     if (!file) return;
     
@@ -154,23 +155,20 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
     setNoObligationsFound(false);
 
     try {
-      // Read file content
       const fileContent = await readFileContent(file);
       
-      // Try Edge Function first
       try {
         const { data, error: fnError } = await supabase.functions.invoke('parse-document', {
           body: {
-            documentText: fileContent.substring(0, 10000), // First 10K chars
-            regulatorId: framework,
-            frameworkName: framework,
+            documentText: fileContent.substring(0, 10000),
+            regulatorId: activeFramework,
+            frameworkName: activeFramework,
             autoClassify: true,
             generateEmbeddings: false,
           },
         });
 
         if (!fnError && data?.clausesExtracted > 0) {
-          // Edge function succeeded
           setObligations(data.clauses || []);
           setShowResults(true);
           setExtracting(false);
@@ -180,9 +178,7 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
         console.log("Edge function unavailable, using local extraction:", fnError);
       }
 
-      // Fallback: Local extraction
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate processing
-      
+      await new Promise(resolve => setTimeout(resolve, 1500));
       const extractedObligations = extractObligationsFromText(fileContent);
       
       if (extractedObligations.length === 0) {
@@ -199,14 +195,14 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
     } finally {
       setExtracting(false);
     }
-  }, [file, framework, frameworkDisplayName]);
+  }, [file, activeFramework, extractObligationsFromText]);
 
   const getStatusBadge = useCallback((status: ExtractedObligation["status"]) => {
     const badges = {
       compliant: { label: "Compliant", bg: "bg-secondary/10", text: "text-secondary", icon: CheckCircle },
       partial: { label: "Partial", bg: "bg-accent/10", text: "text-accent", icon: AlertCircle },
       "non-compliant": { label: "Non-Compliant", bg: "bg-destructive/10", text: "text-destructive", icon: AlertTriangle },
-      unknown: { label: "Review", bg: "bg-muted", text: "text-muted-foreground", icon: Clock },
+      unknown: { label: "Review", bg: "bg-muted", text: "text-muted-foreground", icon: AlertCircle },
     };
     return badges[status];
   }, []);
@@ -229,9 +225,9 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
     const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; 
-    a.download = `compliance_obligations_${framework}_${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `compliance_obligations_${activeFramework}_${new Date().toISOString().split("T")[0]}.json`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-  }, [frameworkDisplayName, file, stats, obligations, framework]);
+  }, [frameworkDisplayName, file, stats, obligations, activeFramework]);
 
   return (
     <div className="space-y-4">
@@ -307,9 +303,6 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
           <p className="text-sm text-muted-foreground mb-4">
             We couldn't find any {frameworkDisplayName} regulatory obligations in this document.
           </p>
-          <p className="text-xs text-muted-foreground mb-4">
-            Try uploading a different document or check that the document contains regulatory content.
-          </p>
           <button onClick={clearFile} className="px-6 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90">
             Try Another Document
           </button>
@@ -331,7 +324,7 @@ export function ObligationExtractor({ framework = "NDPA" }: ObligationExtractorP
               const statusBadge = getStatusBadge(obligation.status);
               const StatusIcon = statusBadge.icon;
               return (
-                <div key={obligation.id} className={`bg-card border rounded-xl p-4 transition-all hover:shadow-card animate-fade-in-up [animation-delay:${index * 0.05}s]`}>
+                <div key={obligation.id} className="bg-card border border-border rounded-xl p-4 transition-all hover:shadow-card">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{obligation.section}</span>

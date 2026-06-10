@@ -10,16 +10,17 @@ interface Clause {
   article_ref: string;
   title: string;
   summary: string;
-  keywords?: string[];  // Made optional
+  keywords?: string[];
   category: string;
   penalty_info?: string;
 }
 
+// FIXED: Aligned prop naming convention with DemoSection.tsx
 interface ClauseFinderProps {
-  framework?: string;
+  activeFramework?: string;
 }
 
-const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
+const ClauseFinder = ({ activeFramework = "NDPA" }: ClauseFinderProps) => {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Clause[]>([]);
@@ -29,33 +30,43 @@ const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const dataset = getDatasetByFramework(framework);
-  const clausesData: Clause[] = (dataset?.clauses || []).map((c: any) => ({
-    ...c,
-    keywords: c.keywords || [],
-    penalty_info: c.penalty_info || undefined,
-  }));
+  const dataset = getDatasetByFramework(activeFramework);
+  const clausesData: Clause[] = useMemo(() => {
+    return (dataset?.clauses || []).map((c: any) => ({
+      ...c,
+      keywords: c.keywords || [],
+      penalty_info: c.penalty_info || undefined,
+    }));
+  }, [dataset]);
 
+  // FIXED: Reset local query/results state cleanly when user changes framework context tabs
   useEffect(() => {
-    const saved = localStorage.getItem(`clauseFinder_recent_${framework}`);
+    setQuery("");
+    setResults([]);
+    setSearched(false);
+    
+    const saved = localStorage.getItem(`clauseFinder_recent_${activeFramework}`);
     if (saved) {
       try { setRecentSearches(JSON.parse(saved).slice(0, 5)); }
       catch { setRecentSearches([]); }
+    } else {
+      setRecentSearches([]);
     }
-  }, [framework]);
+  }, [activeFramework]);
 
   const saveRecentSearch = useCallback((term: string) => {
     setRecentSearches(prev => {
       const newSearches = [term, ...prev.filter(t => t !== term)].slice(0, 5);
-      localStorage.setItem(`clauseFinder_recent_${framework}`, JSON.stringify(newSearches));
+      localStorage.setItem(`clauseFinder_recent_${activeFramework}`, JSON.stringify(newSearches));
       return newSearches;
     });
-  }, [framework]);
+  }, [activeFramework]);
 
   const searchClauses = useCallback((searchTerm: string = query) => {
     if (!searchTerm.trim()) return;
     setSearching(true);
     if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    
     searchTimeoutRef.current = setTimeout(() => {
       const q = searchTerm.toLowerCase();
       const matched = clausesData.filter(clause =>
@@ -64,6 +75,7 @@ const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
         (clause.keywords || []).some(k => k.toLowerCase().includes(q)) ||
         clause.category.toLowerCase().includes(q)
       ).slice(0, 8);
+      
       setResults(matched);
       setSearched(true);
       setSearching(false);
@@ -96,7 +108,7 @@ const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
   return (
     <div className="space-y-5">
       <div className="text-xs font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-2 bg-secondary/10 text-secondary">
-        <span>Searching: {framework}</span>
+        <span>Searching: {activeFramework}</span>
       </div>
 
       <div className="rounded-xl overflow-hidden border border-border shadow-card">
@@ -145,7 +157,7 @@ const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
         <div className="space-y-3">
           <p className="text-xs text-muted-foreground">{results.length === 0 ? t('search.noResults') : `${results.length} results found`}</p>
           {results.map((clause, i) => (
-            <div key={clause.id} className="rounded-xl border border-border bg-card p-4 shadow-card hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up" style={{ animationDelay: `${i * 0.05}s` }}>
+            <div key={clause.id} className={`rounded-xl border border-border bg-card p-4 shadow-card hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up delay-[${i * 50}ms]`}>
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <span className="text-xs font-semibold bg-secondary text-secondary-foreground px-2.5 py-0.5 rounded-full">{clause.article_ref}</span>
                 <span className="text-xs text-muted-foreground capitalize">{clause.category?.replace(/_/g, " ")}</span>
@@ -165,7 +177,7 @@ const ClauseFinder = ({ framework = "NDPA" }: ClauseFinderProps) => {
                 </div>
               )}
               <div className="mt-3 pt-3 border-t border-border">
-                <a href={framework.startsWith("CBN") ? "https://www.cbn.gov.ng" : framework.startsWith("SEC") ? "https://sec.gov.ng" : framework.startsWith("NITDA") ? "https://nitda.gov.ng" : "https://ndpc.gov.ng"}
+                <a href={activeFramework.startsWith("CBN") ? "https://www.cbn.gov.ng" : activeFramework.startsWith("SEC") ? "https://sec.gov.ng" : activeFramework.startsWith("NITDA") ? "https://nitda.gov.ng" : "https://ndpc.gov.ng"}
                   target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-[10px] text-primary hover:underline">
                   View official guidance <ExternalLink className="w-3 h-3" />

@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTop from "@/components/ScrollToTop";
 import { useAuth } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute"; // Imported here
+
 import Home from "./pages/Home";
 import ComplianceGap from "./pages/ComplianceGap";
 import Solution from "./pages/solution";
@@ -20,6 +22,7 @@ import ResetPassword from "./pages/ResetPassword";
 import DPCODashboard from "./pages/DPCODashboard";
 import OrganizationDashboard from "./pages/OrganizationDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import AuthCallback from "./pages/AuthCallback"; 
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -32,21 +35,21 @@ const queryClient = new QueryClient({
   },
 });
 
-function ProtectedRoute({ children, roles }: { children: JSX.Element; roles?: string[] }) {
-  const { user, profile, loading } = useAuth();
+// Global smart redirect routing engine based on resolved roles
+function DashboardFallback() {
+  const { profile } = useAuth();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
+  if (!profile) return <Navigate to="/" replace />;
+
+  switch (profile.role) {
+    case "admin":
+      return <Navigate to="/admin-dashboard" replace />;
+    case "dpco":
+      return <Navigate to="/dpco-dashboard" replace />;
+    case "organization":
+    default:
+      return <Navigate to="/org-dashboard" replace />;
   }
-
-  if (!user) return <Navigate to="/login" replace />;
-  if (roles && profile && !roles.includes(profile.role)) return <Navigate to="/" replace />;
-
-  return children;
 }
 
 const App = () => (
@@ -56,7 +59,7 @@ const App = () => (
       <Sonner />
       <ScrollToTop />
       <Routes>
-        {/* Public routes */}
+        {/* Public Marketing & Information Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/compliance-gap" element={<ComplianceGap />} />
         <Route path="/solution" element={<Solution />} />
@@ -68,36 +71,46 @@ const App = () => (
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        
+        {/* Supabase Core Identity Callback Endpoint */}
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
-        {/* Organization Dashboard */}
+        {/* Unified Dashboard Entry Routing Logic */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardFallback />
+          </ProtectedRoute>
+        } />
+
+        {/* Organization Infrastructure Workspace */}
         <Route path="/org-dashboard" element={
           <ProtectedRoute roles={["organization", "admin"]}>
             <OrganizationDashboard />
           </ProtectedRoute>
         } />
 
-        {/* DPCO Dashboard */}
+        {/* Data Protection Compliance Services (DPCO) Panel */}
         <Route path="/dpco-dashboard" element={
           <ProtectedRoute roles={["dpco", "admin"]}>
             <DPCODashboard />
           </ProtectedRoute>
         } />
 
-        {/* Admin Dashboard */}
+        {/* System Administration Configuration Interface */}
         <Route path="/admin-dashboard" element={
           <ProtectedRoute roles={["admin"]}>
             <AdminDashboard />
           </ProtectedRoute>
         } />
 
-        {/* Regulator - admin only */}
+        {/* Apex Regulatory Auditing Environment */}
         <Route path="/regulator" element={
           <ProtectedRoute roles={["admin"]}>
             <Regulator />
           </ProtectedRoute>
         } />
 
-        {/* Catch all */}
+        {/* Wildcard Fallback Router Exception Block */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </TooltipProvider>

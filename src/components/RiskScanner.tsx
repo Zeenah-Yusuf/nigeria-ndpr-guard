@@ -55,40 +55,32 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
   };
 
   /**
-   * Gets the UUID of a sector from the sectors table by its slug
-   * Returns null if sector not found or on error
+   * Safe check to retrieve UUID of a sector by its unique slug string.
    */
   async function getSectorUuid(sectorSlug: string): Promise<string | null> {
     if (!sectorSlug) return null;
     try {
-      // Use maybeSingle() to avoid throwing if no row found
       const { data, error } = await supabase
         .from('sectors')
         .select('id')
         .eq('slug', sectorSlug)
-        .maybeSingle();
+        .maybeSingle(); // Avoids throwing errors on miss 
       
       if (error) {
-        console.warn('Sector lookup error:', error.message);
+        console.warn('Sector reference lookup mismatch:', error.message);
         return null;
       }
       
-      if (!data?.id) {
-        console.warn(`No sector found for slug: ${sectorSlug}`);
-        return null;
-      }
-      
-      console.log(`Sector UUID for ${sectorSlug}:`, data.id);
-      return data.id;
+      return data?.id || null;
     } catch (err) {
-      console.error('getSectorUuid failed:', err);
+      console.error('getSectorUuid runtime error:', err);
       return null;
     }
   }
 
   /**
-   * Saves the scan results to Supabase compliance_scans table
-   * sector_id must be a valid UUID from the sectors table
+   * Saves the structured risk results payload safely to Supabase compliance_scans table.
+   * Resolves issues with strict RLS execution chains failing on client-enforced `.single()`.
    */
   async function saveToSupabase(
     normalizedScore: number,
@@ -124,34 +116,36 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
         completed_at: new Date().toISOString(),
       };
 
-      console.log('Saving scan to Supabase:', scanPayload);
+      console.log('Synchronizing active scan payload to database...', scanPayload);
 
+      // CRITICAL FIX: Removed .single() invocation which breaks inside secure RLS tables
+      // when PostgREST transient states hide immediate return visibilities.
       const { data, error: scanError } = await supabase
         .from('compliance_scans')
         .insert(scanPayload)
-        .select('id')
-        .single();
+        .select('id');
 
       if (scanError) {
-        console.error('Failed to save scan to Supabase:', scanError.message, scanError.details, scanError.hint);
+        console.error('Supabase scan synchronization aborted:', scanError.message, scanError.details);
         toast({
-          title: "Database Save Warning",
-          description: "Scan completed but may not sync to all dashboards. Data saved locally.",
+          title: t('common.error', { defaultValue: "Sync Warning" }),
+          description: "Assessment verified locally, but historical cloud tracking failed.",
           variant: "destructive",
         });
         return false;
       }
 
-      console.log('Scan saved successfully to Supabase:', data?.id);
+      const generatedId = data && data.length > 0 ? data[0].id : null;
+      console.log('Successfully completed database write with structural confirmation ID:', generatedId);
       return true;
     } catch (err) {
-      console.error('Failed to save scan log:', err);
+      console.error('Failed compliance database pipeline logging execution:', err);
       return false;
     }
   }
 
   /**
-   * Saves user's sector preference to user_sectors table
+   * Updates user preference metrics safely for cross-dashboard evaluation context
    */
   async function saveUserSector(sectorUuid: string | null) {
     if (!user?.id || !sectorUuid) return;
@@ -166,10 +160,10 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
         });
       
       if (error) {
-        console.warn('Failed to save user sector preference:', error.message);
+        console.warn('Asynchronous organizational sector alignment warning:', error.message);
       }
     } catch (err) {
-      console.error('Failed to save user sector:', err);
+      console.error('Failed to update dashboard user tracking state:', err);
     }
   }
 
@@ -177,20 +171,19 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
     setShowQuestions(false);
     setCalculating(true);
     
-    // Brief delay for UX
-    await new Promise(r => setTimeout(r, 800));
+    // UI layout optimization block
+    await new Promise(r => setTimeout(r, 600));
 
     let totalRiskScore = 0;
     let maxPossibleScore = 0;
     const triggeredClauseIds = new Set<string>();
     const triggeredFrameworks = new Set<string>([activeFramework]);
 
-    // Add frameworks based on sector
     if (sector) {
       getFrameworksForSector(sector).forEach(fw => triggeredFrameworks.add(fw));
     }
 
-    // Calculate risk based on answers
+    // Process structured questions data
     questions.forEach(q => {
       const answer = answers[q.id];
       if (answer === null || answer === undefined) return;
@@ -210,7 +203,7 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
       }
     });
 
-    // Add sector-based risk
+    // Handle context risks for African operational parameters
     const sectorProfile = getSectorById(sector);
     if (sectorProfile) {
       sectorProfile.recommendedClauses.forEach(id => triggeredClauseIds.add(id));
@@ -219,14 +212,12 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
       maxPossibleScore += 5;
     }
 
-    // Normalize score
     const normalizedScore = maxPossibleScore > 0
       ? Math.max(5, Math.min(100, Math.round((totalRiskScore / maxPossibleScore) * 100)))
       : 35;
 
     const triggeredClauses = clauses.filter((c: any) => triggeredClauseIds.has(c.id));
 
-    // Determine risk level
     let riskLevel: ScanResult["riskLevel"];
     if (normalizedScore <= 25) riskLevel = "low";
     else if (normalizedScore <= 50) riskLevel = "medium";
@@ -235,7 +226,6 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
 
     const appDisplayName = appName.trim() || t('scanner.defaultAppName');
 
-    // Count bad answers
     const badAnswers = questions.filter(q => {
       const answer = answers[q.id];
       if (answer === null || answer === undefined) return false;
@@ -244,17 +234,13 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
     });
 
     const goodPracticesCount = questions.length - badAnswers.length;
+    const explanation = getExplanationText(appDisplayName, riskLevel, goodPracticesCount, badAnswers.length);
 
-    // Generate explanation
-    let explanation = getExplanationText(appDisplayName, riskLevel, goodPracticesCount, badAnswers.length);
-
-    // Determine status
     const status: "compliant" | "at_risk" | "high_risk" =
       normalizedScore <= 30 ? "compliant" : 
       normalizedScore <= 60 ? "at_risk" : 
       "high_risk";
 
-    // Build scan result
     const assessmentResult: ScanResult = {
       riskScore: normalizedScore,
       riskLevel,
@@ -267,7 +253,7 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
       framework: activeFramework,
     };
 
-    // 1. Save to RegulatorData (local state - immediate UI update)
+    // 1. Local context state sync
     const newAssessment = addAssessment({
       appName: appDisplayName,
       sector: sector || "other",
@@ -286,27 +272,22 @@ const RiskScanner = ({ activeFramework = "NDPA" }: RiskScannerProps) => {
 
     assessmentResult.assessmentId = newAssessment.id;
 
-    // 2. Save to Supabase for cross-dashboard sync
+    // 2. Fetch dependencies and coordinate Supabase cluster sync securely
     const sectorUuid = await getSectorUuid(sector);
-    const supabaseSaved = await saveToSupabase(
-      normalizedScore, 
-      riskLevel, 
-      triggeredClauses.length,
-      Array.from(triggeredFrameworks), 
-      appDisplayName,
-      goodPracticesCount, 
-      badAnswers.length, 
-      sectorUuid,
-    );
     
-    // Save user sector preference
-    await saveUserSector(sectorUuid);
-
-    if (supabaseSaved) {
-      console.log('✅ Scan fully synced - all dashboards will reflect this');
-    } else {
-      console.warn('⚠️ Scan saved to regulator data but Supabase sync had issues');
-    }
+    await Promise.all([
+      saveToSupabase(
+        normalizedScore, 
+        riskLevel, 
+        triggeredClauses.length,
+        Array.from(triggeredFrameworks), 
+        appDisplayName,
+        goodPracticesCount, 
+        badAnswers.length, 
+        sectorUuid,
+      ),
+      saveUserSector(sectorUuid)
+    ]);
 
     setResult(assessmentResult);
     setStep("result");

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -21,15 +21,44 @@ const Navbar = () => {
   const isDPCO = profile?.role === "dpco";
   const isOrganization = profile?.role === "organization";
 
-  const navLinks = [
-    { label: t('nav.home'), path: "/" },
-    { label: t('nav.compliance'), path: "/compliance-gap" },
-    { label: t('nav.solution'), path: "/solution" },
-    { label: t('nav.demo'), path: "/demo" },
-    { label: t('nav.about'), path: "/about" },
-    ...(isAdmin ? [{ label: t('nav.regulator'), path: "/regulator" }] : []),
-    ...(isAdmin ? [{ label: t('nav.admin'), path: "/admin-dashboard" }] : []),
-  ];
+  const navLinks = useMemo(() => {
+    const links = [
+      { label: t('nav.home'), path: "/" },
+      { label: t('nav.compliance'), path: "/compliance-gap" },
+      { label: t('nav.solution'), path: "/solution" },
+      { label: t('nav.demo'), path: "/demo" },
+      { label: t('nav.about'), path: "/about" },
+    ];
+
+    if (isAdmin) {
+      links.push({ label: t('nav.regulator'), path: "/regulator" });
+      links.push({ label: t('nav.admin'), path: "/admin-dashboard" });
+    }
+
+    return links;
+  }, [isAdmin, t]);
+
+  // FIXED: Logic mapping to match your App.tsx routes
+  const dashboardPath = useMemo(() => {
+    if (isAdmin) return "/admin-dashboard";
+    if (isDPCO) return "/dpco-dashboard";
+    if (isOrganization) return "/org-dashboard";
+    return "/";
+  }, [isAdmin, isDPCO, isOrganization]);
+
+  const dashboardTitle = useMemo(() => {
+    if (isAdmin) return t('dashboard.admin.title');
+    if (isDPCO) return "DPCO Dashboard";
+    if (isOrganization) return t('features.myDashboard');
+    return t('nav.dashboard');
+  }, [isAdmin, isDPCO, isOrganization, t]);
+
+  const roleBadge = useMemo(() => {
+    if (isAdmin) return { label: "Admin", classes: "bg-destructive/10 text-destructive" };
+    if (isDPCO) return { label: "DPCO", classes: "bg-primary/10 text-primary" };
+    if (isOrganization) return { label: "Org", classes: "bg-primary/10 text-primary" };
+    return null;
+  }, [isAdmin, isDPCO, isOrganization]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -88,17 +117,16 @@ const Navbar = () => {
     }
   }, [location.pathname, navigate]);
 
+  // FIXED: Force hard reload to reset Router state
   const handleSignOut = useCallback(async () => {
     await signOut();
     setMobileOpen(false);
-    navigate("/");
-  }, [signOut, navigate]);
+    window.location.href = "/";
+  }, [signOut]);
 
   const handleDashboardClick = useCallback(() => {
-    if (isOrganization) navigate("/org-dashboard");
-    else if (isDPCO) navigate("/dpco-dashboard");
-    else if (isAdmin) navigate("/admin-dashboard");
-  }, [isOrganization, isDPCO, isAdmin, navigate]);
+    navigate(dashboardPath);
+  }, [dashboardPath, navigate]);
 
   const handleToggleMenu = useCallback(() => setMobileOpen(prev => !prev), []);
   const handleCloseMenu = useCallback(() => setMobileOpen(false), []);
@@ -127,11 +155,14 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map(link => (
-              <Link key={link.path} to={link.path}
+              <Link
+                key={link.path}
+                to={link.path}
                 className={`px-4 py-2 text-sm rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary ${
                   isActive(link.path) ? "text-primary font-semibold bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                 }`}
-                aria-current={isActive(link.path) ? "page" : undefined}>
+                aria-current={isActive(link.path) ? "page" : undefined}
+              >
                 {link.label}
               </Link>
             ))}
@@ -139,60 +170,99 @@ const Navbar = () => {
 
             {user ? (
               <div className="flex items-center gap-2 ml-2">
-                <button onClick={handleDashboardClick}
+                <button
+                  onClick={handleDashboardClick}
                   className="p-2 rounded-lg hover:bg-primary/10 transition-colors text-primary"
-                  aria-label={t('nav.dashboard')} type="button"
-                  title={isOrganization ? t('features.myDashboard') : isDPCO ? t('nav.dashboard') : t('dashboard.admin.title')}>
+                  aria-label={t('nav.dashboard')}
+                  type="button"
+                  title={dashboardTitle}
+                >
                   <LayoutDashboard className="w-4 h-4" />
                 </button>
+
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/50 text-xs text-foreground">
                   <User className="w-3.5 h-3.5 text-primary" />
-                  <span className="max-w-[120px] truncate">{profile?.company_name || user.email?.split('@')[0]}</span>
-                  {isOrganization && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">Org</span>}
-                  {isDPCO && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">DPCO</span>}
-                  {isAdmin && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-destructive/10 text-destructive">Admin</span>}
+                  <span className="max-w-[120px] truncate">
+                    {profile?.company_name || user.email?.split('@')[0]}
+                  </span>
+                  {roleBadge && (
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${roleBadge.classes}`}>
+                      {roleBadge.label}
+                    </span>
+                  )}
                 </div>
-                <button onClick={handleSignOut} className="p-2 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground" aria-label={t('nav.signOut')} type="button">
+
+                <button
+                  onClick={handleSignOut}
+                  className="p-2 rounded-lg hover:bg-muted/60 transition-colors text-muted-foreground hover:text-foreground"
+                  aria-label={t('nav.signOut')}
+                  type="button"
+                >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
               <div className="flex items-center gap-2 ml-2">
-                <Link to="/login" className="px-4 py-2 text-sm rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all">{t('nav.signIn')}</Link>
-                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-all">{t('nav.register')}</Link>
+                <Link to="/login" className="px-4 py-2 text-sm rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-all">
+                  {t('nav.signIn')}
+                </Link>
+                <Link to="/register" className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-all">
+                  {t('nav.register')}
+                </Link>
               </div>
             )}
 
-            <button onClick={handleWaitlistClick}
+            <button
+              onClick={handleWaitlistClick}
               className="ml-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center gap-1.5 shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              aria-label={t('nav.joinWaitlist')} type="button">
+              aria-label={t('nav.joinWaitlist')}
+              type="button"
+            >
               <Shield className="w-4 h-4" />{t('nav.joinWaitlist')}
             </button>
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
             <LanguageSelector />
-            <button ref={toggleButtonRef} type="button" onClick={handleToggleMenu}
+            <button
+              ref={toggleButtonRef}
+              type="button"
+              onClick={handleToggleMenu}
               className="p-2 rounded-lg hover:bg-muted/60 transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              aria-label={mobileOpen ? t('common.close') : t('nav.home')}
-              aria-expanded={ariaExpandedValue} aria-controls="mobile-menu" aria-haspopup="true">
+              aria-label={mobileOpen ? t('common.close') : "Open menu"}
+              aria-expanded={ariaExpandedValue}
+              aria-controls="mobile-menu"
+              aria-haspopup="true"
+            >
               {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
             </button>
           </div>
         </div>
       </nav>
 
-      <div id="mobile-menu" ref={mobileMenuRef}
-        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        role="dialog" aria-modal="true" aria-label="Mobile navigation menu" aria-hidden={!mobileOpen}>
+      <div
+        id="mobile-menu"
+        ref={mobileMenuRef}
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${
+          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        role="dialog" aria-modal="true" aria-label="Mobile navigation menu" aria-hidden={!mobileOpen}
+      >
         <div className="absolute inset-0 bg-foreground/30 backdrop-blur-sm" onClick={handleCloseMenu} aria-hidden="true" />
-        <div className={`absolute top-16 right-0 left-0 bg-card border-b border-border shadow-elevated transition-transform duration-300 ${mobileOpen ? "translate-y-0" : "-translate-y-4"}`}>
+        <div className={`absolute top-16 right-0 left-0 bg-card border-b border-border shadow-elevated transition-transform duration-300 ${
+          mobileOpen ? "translate-y-0" : "-translate-y-4"
+        }`}>
           <div className="p-4 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
             {navLinks.map(link => (
-              <Link key={link.path} to={link.path} onClick={handleCloseMenu}
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={handleCloseMenu}
                 className={`block px-4 py-3 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${
                   isActive(link.path) ? "text-primary font-semibold bg-primary/10" : "text-foreground hover:bg-muted/60"
-                }`} aria-current={isActive(link.path) ? "page" : undefined}>
+                }`}
+                aria-current={isActive(link.path) ? "page" : undefined}
+              >
                 {link.label}
               </Link>
             ))}
@@ -203,28 +273,36 @@ const Navbar = () => {
                   <div className="flex items-center gap-2 px-4 py-2 text-sm text-foreground">
                     <User className="w-4 h-4 text-primary" />
                     <span>{profile?.company_name || user.email}</span>
-                    {isOrganization && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">Org</span>}
-                    {isDPCO && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">DPCO</span>}
-                    {isAdmin && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-destructive/10 text-destructive">Admin</span>}
                   </div>
-                  <Link to={isOrganization ? "/org-dashboard" : isDPCO ? "/dpco-dashboard" : "/admin-dashboard"} onClick={handleCloseMenu}
-                    className="block px-4 py-3 rounded-xl text-sm text-primary hover:bg-primary/5 transition-colors flex items-center gap-2">
+                  <button
+                    onClick={handleDashboardClick}
+                    className="w-full px-4 py-3 rounded-xl text-left text-sm text-primary hover:bg-primary/5 transition-colors flex items-center gap-2"
+                  >
                     <LayoutDashboard className="w-4 h-4" />{t('nav.dashboard')}
-                  </Link>
-                  <button onClick={handleSignOut}
-                    className="w-full px-4 py-3 rounded-xl text-left text-sm text-muted-foreground hover:bg-muted/60 transition-colors flex items-center gap-2">
+                  </button>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full px-4 py-3 rounded-xl text-left text-sm text-muted-foreground hover:bg-muted/60 transition-colors flex items-center gap-2"
+                  >
                     <LogOut className="w-4 h-4" />{t('nav.signOut')}
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" onClick={handleCloseMenu} className="block px-4 py-3 rounded-xl text-sm text-foreground hover:bg-muted/60 transition-colors">{t('nav.signIn')}</Link>
-                  <Link to="/register" onClick={handleCloseMenu} className="block px-4 py-3 rounded-xl text-sm bg-primary text-primary-foreground text-center">{t('nav.register')}</Link>
+                  <Link to="/login" onClick={handleCloseMenu} className="block px-4 py-3 rounded-xl text-sm text-foreground hover:bg-muted/60 transition-colors">
+                    {t('nav.signIn')}
+                  </Link>
+                  <Link to="/register" onClick={handleCloseMenu} className="block px-4 py-3 rounded-xl text-sm bg-primary text-primary-foreground text-center">
+                    {t('nav.register')}
+                  </Link>
                 </>
               )}
-              <button onClick={handleWaitlistClick}
-                className="w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                aria-label={t('nav.joinWaitlist')} type="button">{t('nav.joinWaitlist')}</button>
+              <button
+                onClick={handleWaitlistClick}
+                className="w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-all"
+              >
+                {t('nav.joinWaitlist')}
+              </button>
             </div>
           </div>
         </div>
