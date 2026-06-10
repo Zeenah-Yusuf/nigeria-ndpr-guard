@@ -43,17 +43,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
-    const { data, error } = await supabase
-      .from("user_profiles")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from("user_profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle();
 
-    if (error) return null;
-    if (!data) return null;
-    if (!isValidRole(data.role)) return null;
+      if (error) return null;
+      if (!data) return null;
+      if (!isValidRole(data.role)) return null;
 
-    return data as UserProfile;
+      return data as UserProfile;
+    } catch {
+      return null;
+    }
   }, []);
 
   const ensureProfile = useCallback(async (authUser: User): Promise<UserProfile | null> => {
@@ -70,8 +74,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authUser.email?.split("@")[0] ||
       "User";
 
-    const isOAuth = authUser.app_metadata?.provider === "google";
-
     const { data, error } = await supabase
       .from("user_profiles")
       .upsert(
@@ -79,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           id: authUser.id,
           role,
           company_name: companyName,
-          is_verified: isOAuth,
+          is_verified: false,
         },
         { onConflict: "id" }
       )
@@ -91,9 +93,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [fetchProfile]);
 
   const loadProfile = useCallback(async (authUser: User): Promise<void> => {
-    const userProfile = await ensureProfile(authUser);
-    if (userProfile) {
-      setProfile(userProfile);
+    try {
+      const userProfile = await ensureProfile(authUser);
+      if (userProfile) {
+        setProfile(userProfile);
+      }
+    } catch {
+      // Profile load failed, but we must not block the UI
+    } finally {
+      setLoading(false);
     }
   }, [ensureProfile]);
 
@@ -109,19 +117,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true;
 
     const initAuth = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!mounted) return;
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!mounted) return;
 
-      const currentSession = sessionData.session;
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
+        const currentSession = sessionData.session;
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
 
-      if (currentSession?.user) {
-        await loadProfile(currentSession.user);
-      }
-
-      if (mounted) {
-        setLoading(false);
+        if (currentSession?.user) {
+          await loadProfile(currentSession.user);
+        } else {
+          setLoading(false);
+        }
+      } catch {
+        if (mounted) setLoading(false);
       }
     };
 
@@ -137,6 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await loadProfile(newSession.user);
       } else {
         setProfile(null);
+        setLoading(false);
       }
     });
 
@@ -216,15 +227,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (sectorData) {
           await supabase.from("user_sectors").upsert(
-            {
-              user_id: data.user.id,
-              sector_id: sectorData.id,
-            },
+            { user_id: data.user.id, sector_id: sectorData.id },
             { onConflict: "user_id" }
           );
         }
       } catch {
-        // Sector is optional, account creation succeeds regardless
+        // Sector is optional
       }
     }
 
@@ -267,10 +275,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
 
-    if (error) {
-      return { error: error.message };
-    }
-
+    if (error) return { error: error.message };
     return {};
   }
 
