@@ -25,6 +25,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
   signInWithGoogle: () => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
+  switchAccount: () => void;
   refreshProfile: () => Promise<void>;
 }
 
@@ -93,14 +94,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [fetchProfile]);
 
   const loadProfile = useCallback(async (authUser: User): Promise<void> => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 8000);
+
     try {
       const userProfile = await ensureProfile(authUser);
       if (userProfile) {
         setProfile(userProfile);
       }
     } catch {
-      // Profile load failed, but we must not block the UI
+      // Profile load failed
     } finally {
+      clearTimeout(timeout);
       setLoading(false);
     }
   }, [ensureProfile]);
@@ -137,8 +143,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       if (!mounted) return;
+
+      if (event === "SIGNED_OUT") {
+        setSession(null);
+        setUser(null);
+        setProfile(null);
+        setLoading(false);
+        return;
+      }
+
+      if (event === "TOKEN_REFRESHED") {
+        setSession(newSession);
+        return;
+      }
 
       setSession(newSession);
       setUser(newSession?.user ?? null);
@@ -283,11 +302,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await supabase.auth.signOut();
     } catch {
-      // State cleanup proceeds regardless
+      // Proceed with state cleanup
     }
     setProfile(null);
     setUser(null);
     setSession(null);
+    setLoading(false);
+  }
+
+  function switchAccount(): void {
+    setProfile(null);
+    setUser(null);
+    setSession(null);
+    setLoading(false);
+    window.location.href = "/login";
   }
 
   return (
@@ -301,6 +329,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signInWithGoogle,
         signOut,
+        switchAccount,
         refreshProfile,
       }}
     >

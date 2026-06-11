@@ -28,7 +28,7 @@ const DASHBOARD_ICONS: Record<UserRole, React.ReactNode> = {
 const Home = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, switchAccount } = useAuth();
   const { t } = useLanguage();
   const heroRef = useRef<HTMLElement>(null);
   const trustRef = useRef<HTMLElement>(null);
@@ -46,6 +46,11 @@ const Home = () => {
   const handleSignOut = () => {
     setShowUserMenu(false);
     signOut();
+  };
+
+  const handleSwitchAccount = () => {
+    setShowUserMenu(false);
+    switchAccount();
   };
 
   const handleNavigate = (path: string) => {
@@ -120,7 +125,7 @@ const Home = () => {
 
                   <div className="border-t border-border pt-1 mt-1">
                     <button
-                      onClick={() => handleNavigate("/login")}
+                      onClick={handleSwitchAccount}
                       className="w-full px-3 py-2 text-left text-sm text-muted-foreground hover:bg-muted/50 rounded-lg transition-colors flex items-center gap-2"
                     >
                       <ArrowLeftRight className="w-4 h-4" />
