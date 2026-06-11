@@ -32,6 +32,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const VALID_ROLES: UserRole[] = ["admin", "dpco", "organization"];
+const LOADING_TIMEOUT = 8000;
 
 function isValidRole(value: unknown): value is UserRole {
   return typeof value === "string" && VALID_ROLES.includes(value as UserRole);
@@ -96,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = useCallback(async (authUser: User): Promise<void> => {
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 8000);
+    }, LOADING_TIMEOUT);
 
     try {
       const userProfile = await ensureProfile(authUser);
@@ -128,6 +129,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!mounted) return;
 
         const currentSession = sessionData.session;
+
+        if (currentSession) {
+          const { data: { user: currentUser } } = await supabase.auth.getUser();
+
+          if (!currentUser) {
+            await supabase.auth.signOut();
+            if (mounted) {
+              setSession(null);
+              setUser(null);
+              setProfile(null);
+              setLoading(false);
+            }
+            return;
+          }
+        }
+
+        if (!mounted) return;
+
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
 
