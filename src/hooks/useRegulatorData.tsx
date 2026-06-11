@@ -35,8 +35,6 @@ interface UseRegulatorDataReturn {
   importData: (jsonString: string) => boolean;
 }
 
-const SESSION_SYNC_KEY = 'regulator_synced_session';
-
 export function useRegulatorData(): UseRegulatorDataReturn {
   const [assessments, setAssessments] = useState<ComplianceAssessment[]>([]);
   const [sectorStats, setSectorStats] = useState<SectorStats[]>([]);
@@ -55,76 +53,77 @@ export function useRegulatorData(): UseRegulatorDataReturn {
     sectorBreakdown: [],
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const hasSynced = useRef(false);
 
-  const loadFromLocalStorage = useCallback(() => {
+  const loadFromLocalStorage = () => {
     const allAssessments = regulatorDataService.getAssessments();
     setAssessments(allAssessments);
     setSectorStats(regulatorDataService.getSectorStats());
     setFrameworkStats(regulatorDataService.getFrameworkStats());
     setSummary(regulatorDataService.getDashboardSummary());
-  }, []);
+  };
 
-  const syncFromSupabase = useCallback(async () => {
-    if (hasSynced.current) {
-      loadFromLocalStorage();
-      setLoading(false);
-      return;
-    }
+  useEffect(() => {
+    let mounted = true;
 
-    try {
-      const { data: scans } = await supabase
-        .from('compliance_scans')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(100);
+    async function init() {
+      if (!hasSynced.current) {
+        try {
+          const { data: scans } = await supabase
+            .from('compliance_scans')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(100);
 
-      if (scans && scans.length > 0) {
-        const localAssessments = regulatorDataService.getAssessments();
-        const localIds = new Set(localAssessments.map(a => a.id));
+          if (scans && scans.length > 0) {
+            const localIds = new Set(
+              regulatorDataService.getAssessments().map(a => a.id)
+            );
 
-        for (const scan of scans) {
-          if (!localIds.has(scan.id)) {
-            const results = scan.results || {};
-            const status = scan.risk_score <= 30 ? 'compliant' : scan.risk_score <= 60 ? 'at_risk' : 'high_risk';
-            const riskLevel = scan.risk_score <= 25 ? 'low' : scan.risk_score <= 50 ? 'medium' : scan.risk_score <= 75 ? 'high' : 'critical';
+            for (const scan of scans) {
+              if (!localIds.has(scan.id)) {
+                const results = scan.results || {};
+                const status = scan.risk_score <= 30 ? 'compliant' : scan.risk_score <= 60 ? 'at_risk' : 'high_risk';
+                const riskLevel = scan.risk_score <= 25 ? 'low' : scan.risk_score <= 50 ? 'medium' : scan.risk_score <= 75 ? 'high' : 'critical';
 
-            regulatorDataService.addAssessment({
-              appName: results.appName || 'Untitled Assessment',
-              sector: results.sector || scan.sector_id || 'General',
-              riskScore: scan.risk_score || 50,
-              riskLevel: riskLevel as 'low' | 'medium' | 'high' | 'critical',
-              framework: results.framework || 'NDPA',
-              assessmentDate: scan.created_at || new Date().toISOString(),
-              triggeredClausesCount: results.triggeredClauses || 0,
-              remediationCompleted: 0,
-              remediationTotal: results.remediationTotal || 0,
-              status: status as 'compliant' | 'at_risk' | 'high_risk',
-              triggeredClauseIds: results.triggeredClauseIds || [],
-              triggeredFrameworks: results.triggeredFrameworks || [results.framework || 'NDPA'],
-            });
+                regulatorDataService.addAssessment({
+                  appName: results.appName || 'Untitled Assessment',
+                  sector: results.sector || scan.sector_id || 'General',
+                  riskScore: scan.risk_score || 50,
+                  riskLevel: riskLevel as 'low' | 'medium' | 'high' | 'critical',
+                  framework: results.framework || 'NDPA',
+                  assessmentDate: scan.created_at || new Date().toISOString(),
+                  triggeredClausesCount: results.triggeredClauses || 0,
+                  remediationCompleted: 0,
+                  remediationTotal: results.remediationTotal || 0,
+                  status: status as 'compliant' | 'at_risk' | 'high_risk',
+                  triggeredClauseIds: results.triggeredClauseIds || [],
+                  triggeredFrameworks: results.triggeredFrameworks || [results.framework || 'NDPA'],
+                });
+              }
+            }
           }
+
+          hasSynced.current = true;
+        } catch {
+          // Failed to sync, use localStorage data
         }
       }
 
-      hasSynced.current = true;
-      loadFromLocalStorage();
-    } catch {
-      loadFromLocalStorage();
-    } finally {
-      setLoading(false);
+      if (mounted) {
+        loadFromLocalStorage();
+        setLoading(false);
+      }
     }
-  }, [loadFromLocalStorage]);
 
-  const refreshData = useCallback(() => {
-    loadFromLocalStorage();
-  }, [loadFromLocalStorage]);
+    init();
 
-  useEffect(() => {
-    syncFromSupabase();
     const unsubscribe = regulatorDataService.subscribe(loadFromLocalStorage);
-    return () => unsubscribe();
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
   }, []);
 
   const totalEntities = assessments.length;
@@ -135,6 +134,10 @@ export function useRegulatorData(): UseRegulatorDataReturn {
     ? Math.round(assessments.reduce((sum, a) => sum + a.riskScore, 0) / totalEntities)
     : 0;
   const pendingCAR = summary.pendingCARFilings;
+
+  const refreshData = useCallback(() => {
+    loadFromLocalStorage();
+  }, []);
 
   const addAssessment = useCallback((assessment: Omit<ComplianceAssessment, "id">) => {
     return regulatorDataService.addAssessment(assessment);
@@ -189,7 +192,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
     frameworkStats,
     summary,
     loading,
-    error,
+    error: null,
     totalEntities,
     compliantCount,
     atRiskCount,
