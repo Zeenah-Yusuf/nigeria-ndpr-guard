@@ -53,7 +53,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
     sectorBreakdown: [],
   });
   const [loading, setLoading] = useState(true);
-  const hasSynced = useRef(false);
+  const initialized = useRef(false);
 
   const loadFromLocalStorage = () => {
     const allAssessments = regulatorDataService.getAssessments();
@@ -66,48 +66,48 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   useEffect(() => {
     let mounted = true;
 
-    async function init() {
-      if (!hasSynced.current) {
-        try {
-          const { data: scans } = await supabase
-            .from('compliance_scans')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100);
+    async function syncOnce() {
+      if (initialized.current) {
+        loadFromLocalStorage();
+        if (mounted) setLoading(false);
+        return;
+      }
 
-          if (scans && scans.length > 0) {
-            const localIds = new Set(
-              regulatorDataService.getAssessments().map(a => a.id)
-            );
+      try {
+        const { data: scans } = await supabase
+          .from('compliance_scans')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(100);
 
-            for (const scan of scans) {
-              if (!localIds.has(scan.id)) {
-                const results = scan.results || {};
-                const status = scan.risk_score <= 30 ? 'compliant' : scan.risk_score <= 60 ? 'at_risk' : 'high_risk';
-                const riskLevel = scan.risk_score <= 25 ? 'low' : scan.risk_score <= 50 ? 'medium' : scan.risk_score <= 75 ? 'high' : 'critical';
+        if (scans && scans.length > 0) {
+          regulatorDataService.clearAllAssessments();
 
-                regulatorDataService.addAssessment({
-                  appName: results.appName || 'Untitled Assessment',
-                  sector: results.sector || scan.sector_id || 'General',
-                  riskScore: scan.risk_score || 50,
-                  riskLevel: riskLevel as 'low' | 'medium' | 'high' | 'critical',
-                  framework: results.framework || 'NDPA',
-                  assessmentDate: scan.created_at || new Date().toISOString(),
-                  triggeredClausesCount: results.triggeredClauses || 0,
-                  remediationCompleted: 0,
-                  remediationTotal: results.remediationTotal || 0,
-                  status: status as 'compliant' | 'at_risk' | 'high_risk',
-                  triggeredClauseIds: results.triggeredClauseIds || [],
-                  triggeredFrameworks: results.triggeredFrameworks || [results.framework || 'NDPA'],
-                });
-              }
-            }
+          for (const scan of scans) {
+            const results = scan.results || {};
+            const status = scan.risk_score <= 30 ? 'compliant' as const : scan.risk_score <= 60 ? 'at_risk' as const : 'high_risk' as const;
+            const riskLevel = scan.risk_score <= 25 ? 'low' as const : scan.risk_score <= 50 ? 'medium' as const : scan.risk_score <= 75 ? 'high' as const : 'critical' as const;
+
+            regulatorDataService.addAssessment({
+              appName: results.appName || 'Untitled Assessment',
+              sector: results.sector || scan.sector_id || 'General',
+              riskScore: scan.risk_score || 50,
+              riskLevel,
+              framework: results.framework || 'NDPA',
+              assessmentDate: scan.created_at || new Date().toISOString(),
+              triggeredClausesCount: results.triggeredClauses || 0,
+              remediationCompleted: 0,
+              remediationTotal: results.remediationTotal || 0,
+              status,
+              triggeredClauseIds: results.triggeredClauseIds || [],
+              triggeredFrameworks: results.triggeredFrameworks || [results.framework || 'NDPA'],
+            });
           }
-
-          hasSynced.current = true;
-        } catch {
-          // Failed to sync, use localStorage data
         }
+
+        initialized.current = true;
+      } catch {
+        // Sync failed, use whatever is in localStorage
       }
 
       if (mounted) {
@@ -116,7 +116,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
       }
     }
 
-    init();
+    syncOnce();
 
     const unsubscribe = regulatorDataService.subscribe(loadFromLocalStorage);
 
@@ -153,7 +153,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
 
   const clearAll = useCallback(() => {
     regulatorDataService.clearAllAssessments();
-    hasSynced.current = false;
+    initialized.current = false;
   }, []);
 
   const getAssessmentById = useCallback((id: string) => {
