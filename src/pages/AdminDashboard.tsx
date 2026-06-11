@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/SupabaseClient";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useRegulatorData } from "@/hooks/useRegulatorData";
 import { 
   Shield, Building2, TrendingUp, AlertTriangle, CheckCircle2, 
   Clock, Users, RefreshCw, BarChart3,
@@ -21,6 +20,7 @@ interface OrgSummary {
   dpcoName?: string;
   lastScan: string;
   pendingVerifications: number;
+  totalScans: number;
 }
 
 interface DPCOSummary {
@@ -48,7 +48,6 @@ interface DashboardStats {
 export default function AdminDashboard() {
   const { profile } = useAuth();
   const { t } = useLanguage();
-  const { assessments } = useRegulatorData();
   
   const [stats, setStats] = useState<DashboardStats>({
     totalOrganizations: 0, totalDPCOs: 0, totalScans: 0,
@@ -60,271 +59,182 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "organizations" | "dpcos">("overview");
 
-  useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  useEffect(() => {
-    fetchAllData();
-  }, [assessments]);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel('admin-realtime')
-      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'user_profiles' }, () => fetchAllData())
-      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'compliance_scans' }, () => fetchAllData())
-      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'user_compliance_status' }, () => fetchAllData())
-      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'dpco_organization_links' }, () => fetchAllData())
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  async function fetchAllData() {
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
     await Promise.all([
       fetchStats(),
       fetchOrganizations(),
       fetchDPCOs(),
     ]);
     setLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('admin-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_profiles' }, () => fetchAllData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'compliance_scans' }, () => fetchAllData())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchAllData]);
 
   async function fetchStats() {
-    try {
-      const { count: orgCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true })
-        .eq('role', 'organization');
+    const { data: orgs } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('role', 'organization');
 
-      const { count: dpcoCount } = await supabase
-        .from('user_profiles')
-        .select('*', { count: 'exact', head: true })
-        .eq('role', 'dpco');
+    const { data: dpcos } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('role', 'dpco');
 
-      const { data: supabaseScans } = await supabase
-        .from('compliance_scans')
-        .select('risk_score, status');
+    const { data: scans } = await supabase
+      .from('compliance_scans')
+      .select('risk_score, status');
 
-      const supabaseScores = supabaseScans?.map(s => s.risk_score || 0) || [];
-      const regulatorScores = assessments.map(a => a.riskScore);
-      const allScores = [...supabaseScores, ...regulatorScores];
-      
-      const totalScans = allScores.length;
-      const avgRisk = totalScans > 0
-        ? Math.round(allScores.reduce((sum, s) => sum + s, 0) / totalScans)
-        : 0;
-      const highRisk = allScores.filter(s => s >= 60).length;
+    const allScores = scans?.map(s => s.risk_score || 0) || [];
+    const totalScans = allScores.length;
+    const avgRisk = totalScans > 0
+      ? Math.round(allScores.reduce((sum, s) => sum + s, 0) / totalScans)
+      : 0;
+    const highRisk = allScores.filter(s => s >= 60).length;
+    const compliant = scans?.filter(s => s.status === 'compliant').length || 0;
 
-      const { count: pendingCount } = await supabase
-        .from('user_compliance_status')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'pending_verification');
-
-      const { count: completedCount } = await supabase
-        .from('user_compliance_status')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'compliant');
-
-      const supabaseCompliant = supabaseScans?.filter(s => s.status === 'compliant').length || 0;
-      const regulatorCompliant = assessments.filter(a => a.status === 'compliant').length;
-      const compliantCount = supabaseCompliant + regulatorCompliant;
-
-      setStats({
-        totalOrganizations: orgCount || 0,
-        totalDPCOs: dpcoCount || 0,
-        totalScans,
-        avgRiskScore: avgRisk,
-        highRiskCount: highRisk,
-        compliantCount,
-        pendingVerifications: pendingCount || 0,
-        completedVerifications: completedCount || 0,
-      });
-    } catch (err) {
-      console.error('Error fetching stats:', err);
-    }
+    setStats({
+      totalOrganizations: orgs?.length || 0,
+      totalDPCOs: dpcos?.length || 0,
+      totalScans,
+      avgRiskScore: avgRisk,
+      highRiskCount: highRisk,
+      compliantCount: compliant,
+      pendingVerifications: 0,
+      completedVerifications: 0,
+    });
   }
 
   async function fetchOrganizations() {
-    try {
-      // 1. Unified Relational Query: Gather profile context and map the dynamic user_sector label
-      const { data: orgs } = await supabase
-        .from('user_profiles')
-        .select(`
-          id, 
-          company_name,
-          user_sectors (
-            sectors (
-              name
-            )
-          )
-        `)
-        .eq('role', 'organization');
+    const { data: orgs } = await supabase
+      .from('user_profiles')
+      .select('id, company_name')
+      .eq('role', 'organization');
 
-      if (!orgs || orgs.length === 0) {
-        setOrganizations([]);
-        return;
-      }
-
-      const orgSummaries: OrgSummary[] = [];
-
-      for (const org of orgs) {
-        const { data: latestScan } = await supabase
-          .from('compliance_scans')
-          .select('*')
-          .eq('user_id', org.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle();
-
-        const orgRegulatorAssessments = assessments.filter(a => 
-          a.appName === org.company_name
-        );
-
-        // Resolve sector name gracefully from the active layout mapping array
-        const sectorList: any = org.user_sectors;
-        const resolvedSectorName = sectorList?.[0]?.sectors?.name || 'General';
-
-        let riskScore = 0;
-        let status = 'pending';
-        let lastScanDate = '';
-
-        if (latestScan) {
-          riskScore = latestScan.risk_score || 0;
-          status = latestScan.status || 'pending';
-          lastScanDate = latestScan.created_at || '';
-        }
-
-        if (orgRegulatorAssessments.length > 0) {
-          const maxRegScore = Math.max(...orgRegulatorAssessments.map(a => a.riskScore));
-          riskScore = Math.max(riskScore, maxRegScore);
-          
-          const latestRegAssessment = orgRegulatorAssessments.sort(
-            (a, b) => new Date(b.assessmentDate).getTime() - new Date(a.assessmentDate).getTime()
-          )[0];
-          
-          if (!lastScanDate || new Date(latestRegAssessment.assessmentDate) > new Date(lastScanDate)) {
-            lastScanDate = latestRegAssessment.assessmentDate;
-            status = latestRegAssessment.status;
-          }
-        }
-
-        const { data: dpcoLink } = await supabase
-          .from('dpco_organization_links')
-          .select('dpco_id')
-          .eq('organization_id', org.id)
-          .maybeSingle();
-
-        let dpcoName = '';
-        if (dpcoLink) {
-          const { data: dpco } = await supabase
-            .from('user_profiles')
-            .select('company_name')
-            .eq('id', dpcoLink.dpco_id)
-            .maybeSingle();
-          dpcoName = dpco?.company_name || '';
-        }
-
-        const { count: pendingCount } = await supabase
-          .from('user_compliance_status')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', org.id)
-          .eq('status', 'pending_verification');
-
-        orgSummaries.push({
-          id: org.id,
-          name: org.company_name || 'Unnamed',
-          sector: resolvedSectorName,
-          riskScore,
-          status,
-          dpcoLinked: !!dpcoLink,
-          dpcoName,
-          lastScan: lastScanDate,
-          pendingVerifications: pendingCount || 0,
-        });
-      }
-
-      setOrganizations(orgSummaries.sort((a, b) => b.riskScore - a.riskScore));
-    } catch (err) {
-      console.error('Error fetching organizations:', err);
+    if (!orgs || orgs.length === 0) {
+      setOrganizations([]);
+      return;
     }
+
+    const orgSummaries: OrgSummary[] = [];
+
+    for (const org of orgs) {
+      const { data: scans } = await supabase
+        .from('compliance_scans')
+        .select('id, risk_score, status, created_at')
+        .eq('user_id', org.id)
+        .order('created_at', { ascending: false });
+
+      const latestScan = scans?.[0];
+
+      let sector = 'General';
+      const { data: userSector } = await supabase
+        .from('user_sectors')
+        .select('sectors(name)')
+        .eq('user_id', org.id)
+        .maybeSingle();
+
+      if (userSector) {
+        const sectorData = userSector as any;
+        if (sectorData?.sectors?.name) {
+          sector = sectorData.sectors.name;
+        }
+      }
+
+      const { data: dpcoLink } = await supabase
+        .from('dpco_organization_links')
+        .select('dpco_id')
+        .eq('organization_id', org.id)
+        .maybeSingle();
+
+      let dpcoName = '';
+      if (dpcoLink) {
+        const { data: dpco } = await supabase
+          .from('user_profiles')
+          .select('company_name')
+          .eq('id', dpcoLink.dpco_id)
+          .maybeSingle();
+        dpcoName = dpco?.company_name || '';
+      }
+
+      orgSummaries.push({
+        id: org.id,
+        name: org.company_name || 'Unnamed',
+        sector,
+        riskScore: latestScan?.risk_score || 0,
+        status: latestScan?.status || 'pending',
+        dpcoLinked: !!dpcoLink,
+        dpcoName,
+        lastScan: latestScan?.created_at || '',
+        pendingVerifications: 0,
+        totalScans: scans?.length || 0,
+      });
+    }
+
+    setOrganizations(orgSummaries.sort((a, b) => b.riskScore - a.riskScore));
   }
 
   async function fetchDPCOs() {
+    const { data: dpcoProfiles } = await supabase
+      .from('user_profiles')
+      .select('id, company_name, phone_number, registration_number')
+      .eq('role', 'dpco');
+
+    if (!dpcoProfiles || dpcoProfiles.length === 0) {
+      setDPCOs([]);
+      return;
+    }
+
+    let emailMap: Record<string, string> = {};
     try {
-      // 2. Fetch DPCO profiles directly from public storage tables
-      const { data: dpcoProfiles } = await supabase
-        .from('user_profiles')
-        .select('id, company_name, phone_number, registration_number')
-        .eq('role', 'dpco');
-
-      if (!dpcoProfiles || dpcoProfiles.length === 0) {
-        setDPCOs([]);
-        return;
-      }
-
-      // 3. Request Admin system logs directly to resolve the masked auth email maps safely
-      const { data: adminUsers, error: adminErr } = await supabase.rpc('get_user_emails');
-      const emailMap: Record<string, string> = {};
-      
-      if (!adminErr && adminUsers) {
+      const { data: adminUsers } = await supabase.rpc('get_user_emails');
+      if (adminUsers) {
         adminUsers.forEach((u: { id: string; email: string }) => {
           emailMap[u.id] = u.email;
         });
       }
-
-      const dpcoSummaries: DPCOSummary[] = [];
-
-      for (const dpco of dpcoProfiles) {
-        const { count: linkedCount } = await supabase
-          .from('dpco_organization_links')
-          .select('*', { count: 'exact', head: true })
-          .eq('dpco_id', dpco.id);
-
-        const { data: linkedOrgIds } = await supabase
-          .from('dpco_organization_links')
-          .select('organization_id')
-          .eq('dpco_id', dpco.id);
-
-        let pendingCount = 0;
-        let completedCount = 0;
-
-        if (linkedOrgIds && linkedOrgIds.length > 0) {
-          const orgIds = linkedOrgIds.map(l => l.organization_id);
-          
-          const { count: pCount } = await supabase
-            .from('user_compliance_status')
-            .select('*', { count: 'exact', head: true })
-            .in('user_id', orgIds)
-            .eq('status', 'pending_verification');
-
-          const { count: cCount } = await supabase
-            .from('user_compliance_status')
-            .select('*', { count: 'exact', head: true })
-            .in('user_id', orgIds)
-            .eq('status', 'compliant');
-
-          pendingCount = pCount || 0;
-          completedCount = cCount || 0;
-        }
-
-        dpcoSummaries.push({
-          id: dpco.id,
-          name: dpco.company_name || 'Unnamed DPCO',
-          email: emailMap[dpco.id] || 'no-email@system.org', // Populates resolved email cleanly
-          phone: dpco.phone_number || '',
-          registrationNumber: dpco.registration_number || '',
-          linkedOrgs: linkedCount || 0,
-          pendingVerifications: pendingCount,
-          completedVerifications: completedCount,
-        });
-      }
-
-      setDPCOs(dpcoSummaries);
-    } catch (err) {
-      console.error('Error fetching DPCOs:', err);
+    } catch {
+      // RPC may not exist, continue without emails
     }
+
+    const dpcoSummaries: DPCOSummary[] = [];
+
+    for (const dpco of dpcoProfiles) {
+      const { data: links } = await supabase
+        .from('dpco_organization_links')
+        .select('organization_id')
+        .eq('dpco_id', dpco.id);
+
+      const linkedOrgs = links?.length || 0;
+
+      dpcoSummaries.push({
+        id: dpco.id,
+        name: dpco.company_name || 'Unnamed DPCO',
+        email: emailMap[dpco.id] || 'N/A',
+        phone: dpco.phone_number || '',
+        registrationNumber: dpco.registration_number || '',
+        linkedOrgs,
+        pendingVerifications: 0,
+        completedVerifications: 0,
+      });
+    }
+
+    setDPCOs(dpcoSummaries);
   }
 
   function getRiskColor(score: number) {
@@ -452,25 +362,22 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span className="capitalize">{org.sector}</span>
                             <span>•</span>
+                            <span>{org.totalScans} scans</span>
+                            <span>•</span>
                             <span>
-                              {t('dashboard.admin.lastScan')}: {org.lastScan ? new Date(org.lastScan).toLocaleDateString() : t('dashboard.admin.never')}
+                              {org.lastScan ? new Date(org.lastScan).toLocaleDateString() : 'No scans'}
                             </span>
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
-                        {org.pendingVerifications > 0 && (
-                          <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full">
-                            {org.pendingVerifications} {t('dashboard.admin.pendingVerifications')}
-                          </span>
-                        )}
                         <span className={`text-sm font-bold ${getRiskColor(org.riskScore)}`}>
                           {org.riskScore || '0'}
                         </span>
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           org.dpcoLinked ? 'bg-secondary/10 text-secondary' : 'bg-muted text-muted-foreground'
                         }`}>
-                          {org.dpcoLinked ? `${t('dashboard.org.linkedTo')} ${org.dpcoName}` : t('dashboard.org.noOfficer')}
+                          {org.dpcoLinked ? org.dpcoName : t('dashboard.org.noOfficer')}
                         </span>
                       </div>
                     </div>
@@ -509,15 +416,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                          {dpco.linkedOrgs} {t('dashboard.admin.linkedOrgs')}
-                        </span>
-                        {dpco.pendingVerifications > 0 && (
-                          <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full">
-                            {dpco.pendingVerifications} {t('dashboard.admin.pendingVerifications')}
-                          </span>
-                        )}
-                        <span className="text-xs bg-secondary/10 text-secondary px-2 py-1 rounded-full">
-                          {dpco.completedVerifications} {t('dashboard.admin.completed')}
+                          {dpco.linkedOrgs} linked
                         </span>
                         <span className="text-xs text-muted-foreground">
                           {dpco.registrationNumber || t('dashboard.admin.noLicense')}

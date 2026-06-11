@@ -54,6 +54,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [synced, setSynced] = useState(false);
 
   const loadFromLocalStorage = useCallback(() => {
     const allAssessments = regulatorDataService.getAssessments();
@@ -64,26 +65,26 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   }, []);
 
   const syncFromSupabase = useCallback(async () => {
+    if (synced) {
+      loadFromLocalStorage();
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { data: scans, error: scansError } = await supabase
+      const { data: scans } = await supabase
         .from('compliance_scans')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
-
-      if (scansError) {
-        return;
-      }
 
       if (scans && scans.length > 0) {
         const localAssessments = regulatorDataService.getAssessments();
         const localIds = new Set(localAssessments.map(a => a.id));
 
         for (const scan of scans) {
-          const results = scan.results || {};
-          const scanId = scan.id;
-
-          if (!localIds.has(scanId)) {
+          if (!localIds.has(scan.id)) {
+            const results = scan.results || {};
             const status = scan.risk_score <= 30 ? 'compliant' : scan.risk_score <= 60 ? 'at_risk' : 'high_risk';
             const riskLevel = scan.risk_score <= 25 ? 'low' : scan.risk_score <= 50 ? 'medium' : scan.risk_score <= 75 ? 'high' : 'critical';
 
@@ -105,14 +106,14 @@ export function useRegulatorData(): UseRegulatorDataReturn {
         }
       }
 
+      setSynced(true);
       loadFromLocalStorage();
-    } catch (err) {
-      // Supabase sync failed, fall back to localStorage data
+    } catch {
       loadFromLocalStorage();
     } finally {
       setLoading(false);
     }
-  }, [loadFromLocalStorage]);
+  }, [synced, loadFromLocalStorage]);
 
   const refreshData = useCallback(() => {
     loadFromLocalStorage();
@@ -121,8 +122,8 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   useEffect(() => {
     syncFromSupabase();
     const unsubscribe = regulatorDataService.subscribe(loadFromLocalStorage);
-    return unsubscribe;
-  }, [syncFromSupabase, loadFromLocalStorage]);
+    return () => unsubscribe();
+  }, []);
 
   const totalEntities = assessments.length;
   const compliantCount = assessments.filter(a => a.status === "compliant").length;
@@ -134,8 +135,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   const pendingCAR = summary.pendingCARFilings;
 
   const addAssessment = useCallback((assessment: Omit<ComplianceAssessment, "id">) => {
-    const newAssessment = regulatorDataService.addAssessment(assessment);
-    return newAssessment;
+    return regulatorDataService.addAssessment(assessment);
   }, []);
 
   const updateAssessment = useCallback((id: string, updates: Partial<ComplianceAssessment>) => {
