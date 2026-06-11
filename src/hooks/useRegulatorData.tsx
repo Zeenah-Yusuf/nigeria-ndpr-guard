@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/SupabaseClient";
 import { 
   regulatorDataService, 
@@ -35,6 +35,8 @@ interface UseRegulatorDataReturn {
   importData: (jsonString: string) => boolean;
 }
 
+const SESSION_SYNC_KEY = 'regulator_synced_session';
+
 export function useRegulatorData(): UseRegulatorDataReturn {
   const [assessments, setAssessments] = useState<ComplianceAssessment[]>([]);
   const [sectorStats, setSectorStats] = useState<SectorStats[]>([]);
@@ -54,7 +56,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [synced, setSynced] = useState(false);
+  const hasSynced = useRef(false);
 
   const loadFromLocalStorage = useCallback(() => {
     const allAssessments = regulatorDataService.getAssessments();
@@ -65,7 +67,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   }, []);
 
   const syncFromSupabase = useCallback(async () => {
-    if (synced) {
+    if (hasSynced.current) {
       loadFromLocalStorage();
       setLoading(false);
       return;
@@ -106,14 +108,14 @@ export function useRegulatorData(): UseRegulatorDataReturn {
         }
       }
 
-      setSynced(true);
+      hasSynced.current = true;
       loadFromLocalStorage();
     } catch {
       loadFromLocalStorage();
     } finally {
       setLoading(false);
     }
-  }, [synced, loadFromLocalStorage]);
+  }, [loadFromLocalStorage]);
 
   const refreshData = useCallback(() => {
     loadFromLocalStorage();
@@ -148,6 +150,7 @@ export function useRegulatorData(): UseRegulatorDataReturn {
 
   const clearAll = useCallback(() => {
     regulatorDataService.clearAllAssessments();
+    hasSynced.current = false;
   }, []);
 
   const getAssessmentById = useCallback((id: string) => {
