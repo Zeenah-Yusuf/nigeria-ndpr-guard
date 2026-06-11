@@ -28,7 +28,7 @@ serve(async (req: Request) => {
 
     if (!regulators || regulators.length === 0) {
       return new Response(
-        JSON.stringify({ success: true, updates_found: 0, message: 'No active regulators found' }),
+        JSON.stringify({ success: true, updates_found: 0 }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -36,17 +36,7 @@ serve(async (req: Request) => {
     let totalInserted = 0;
 
     for (const regulator of regulators as RegulatorMonitor[]) {
-      let updates: any[] = [];
-
-      if (regulator.rss_feed_url) {
-        const rssUpdates = await checkRSSFeed(regulator);
-        updates.push(...rssUpdates);
-      }
-
-      if (updates.length === 0 && regulator.website_url) {
-        const scrapedUpdates = await scrapeRegulatorSite(regulator);
-        updates.push(...scrapedUpdates);
-      }
+      const updates = await scrapeRegulatorSite(regulator);
 
       for (const update of updates) {
         const inserted = await storeUpdate(supabase, update);
@@ -67,63 +57,71 @@ serve(async (req: Request) => {
   }
 });
 
-async function checkRSSFeed(regulator: RegulatorMonitor) {
-  try {
-    const response = await fetch(regulator.rss_feed_url!);
-    if (!response.ok) return [];
-    
-    const xml = await response.text();
-    const feed = await parseFeed(xml);
-    
-    return feed.entries.map((entry: any) => ({
-      regulator_id: regulator.id,
-      title: entry.title?.value || entry.title || '',
-      summary: entry.description?.value || entry.content?.value || '',
-      source_url: entry.links?.[0]?.href || '',
-      published_at: entry.published || new Date().toISOString(),
-      source_type: 'rss',
-      affected_sectors: [] as string[],
-      relevance_score: 0.5,
-    }));
-  } catch {
-    return [];
-  }
-}
-
 async function scrapeRegulatorSite(regulator: RegulatorMonitor) {
   try {
-    const response = await fetch(regulator.website_url);
-    if (!response.ok) return [];
+    const response = await fetch(regulator.website_url, {
+      headers: { 'User-Agent': 'RegTrack-Monitor/1.0' }
+    });
+    
+    if (!response.ok) {
+      console.error(`Failed to fetch ${regulator.acronym}: ${response.status}`);
+      return [];
+    }
     
     const html = await response.text();
     const updates: any[] = [];
+    const seenUrls = new Set<string>();
     
-    // Generic scraping: find all links that look like news/press releases
-    const linkRegex = /<a[^>]*href="([^"]*)"[^>]*>([^<]*(?:press|release|news|guideline|circular|notice|regulation|statement|advisory)[^<]*)<\/a>/gi;
+    // Find all links
+    const linkRegex = /<a[^>]*href="([^"]*)"[^>]*>([^<]+)<\/a>/gi;
     let match;
     
     while ((match = linkRegex.exec(html)) !== null) {
-      const href = match[1];
-      const title = match[2].replace(/<[^>]*>/g, '').trim();
+      const href = match[1].trim();
+      const text = match[2].replace(/<[^>]*>/g, '').trim();
       
-      if (title && href && title.length > 20 && title.length < 300) {
-        const fullUrl = href.startsWith('http') ? href : new URL(href, regulator.website_url).href;
-        
-        updates.push({
-          regulator_id: regulator.id,
-          title: title,
-          summary: title,
-          source_url: fullUrl,
-          published_at: new Date().toISOString(),
-          source_type: 'scraping',
-          affected_sectors: [] as string[],
-          relevance_score: 0.5,
-        });
+      // Skip empty, javascript, anchors
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) continue;
+      if (!text || text.length < 10 || text.length > 500) continue;
+      
+      // Resolve full URL
+      let fullUrl: string;
+      try {
+        fullUrl = href.startsWith('http') ? href : new URL(href, regulator.website_url).href;
+      } catch {
+        continue;
       }
+      
+      // Skip duplicates
+      if (seenUrls.has(fullUrl)) continue;
+      seenUrls.add(fullUrl);
+      
+      // Skip non-relevant pages
+      const lowerUrl = fullUrl.toLowerCase();
+      if (lowerUrl.includes('/wp-content/') || 
+          lowerUrl.includes('/wp-admin/') ||
+          lowerUrl.includes('.png') ||
+          lowerUrl.includes('.jpg') ||
+          lowerUrl.includes('.pdf') ||
+          lowerUrl.includes('.css') ||
+          lowerUrl.includes('.js')) continue;
+      
+      updates.push({
+        regulator_id: regulator.id,
+        title: text,
+        summary: text,
+        source_url: fullUrl,
+        published_at: new Date().toISOString(),
+        source_type: 'scraping',
+        affected_sectors: [] as string[],
+        relevance_score: 0.5,
+      });
     }
     
-    return updates.slice(0, 10);
-  } catch {
+    // Limit to 50 per regulator per run
+    return updates.slice(0, 50);
+  } catch (error) {
+    console.error(`Scraping failed for ${regulator.acronym}:`, error);
     return [];
   }
 }
@@ -149,6 +147,3 @@ async function storeUpdate(supabase: any, update: any) {
     return false;
   }
 }
-
-// Import for RSS parsing
-import { parseFeed } from "https://deno.land/x/rss@0.6.0/mod.ts";
