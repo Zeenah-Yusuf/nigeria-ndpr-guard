@@ -1,8 +1,5 @@
-// src/hooks/useRegulatorData.ts
-// Multi-framework regulator data hook
-// Supports: NDPA, CBN-AML, CBN-CP, SEC-CF, NITDA-DP
-
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/lib/SupabaseClient";
 import { 
   regulatorDataService, 
   ComplianceAssessment, 
@@ -12,23 +9,18 @@ import {
 } from "@/lib/RegulatorDataService";
 
 interface UseRegulatorDataReturn {
-  // Data
   assessments: ComplianceAssessment[];
   sectorStats: SectorStats[];
   frameworkStats: FrameworkStats[];
   summary: DashboardSummary;
   loading: boolean;
   error: string | null;
-  
-  // Statistics
   totalEntities: number;
   compliantCount: number;
   atRiskCount: number;
   highRiskCount: number;
   avgRiskScore: number;
   pendingCAR: number;
-  
-  // Actions
   addAssessment: (assessment: Omit<ComplianceAssessment, "id">) => ComplianceAssessment;
   updateAssessment: (id: string, updates: Partial<ComplianceAssessment>) => void;
   deleteAssessment: (id: string) => void;
@@ -63,30 +55,75 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Refresh all data
-  const refreshData = useCallback(() => {
+  const loadFromLocalStorage = useCallback(() => {
+    const allAssessments = regulatorDataService.getAssessments();
+    setAssessments(allAssessments);
+    setSectorStats(regulatorDataService.getSectorStats());
+    setFrameworkStats(regulatorDataService.getFrameworkStats());
+    setSummary(regulatorDataService.getDashboardSummary());
+  }, []);
+
+  const syncFromSupabase = useCallback(async () => {
     try {
-      const allAssessments = regulatorDataService.getAssessments();
-      setAssessments(allAssessments);
-      setSectorStats(regulatorDataService.getSectorStats());
-      setFrameworkStats(regulatorDataService.getFrameworkStats());
-      setSummary(regulatorDataService.getDashboardSummary());
-      setError(null);
+      const { data: scans, error: scansError } = await supabase
+        .from('compliance_scans')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (scansError) {
+        return;
+      }
+
+      if (scans && scans.length > 0) {
+        const localAssessments = regulatorDataService.getAssessments();
+        const localIds = new Set(localAssessments.map(a => a.id));
+
+        for (const scan of scans) {
+          const results = scan.results || {};
+          const scanId = scan.id;
+
+          if (!localIds.has(scanId)) {
+            const status = scan.risk_score <= 30 ? 'compliant' : scan.risk_score <= 60 ? 'at_risk' : 'high_risk';
+            const riskLevel = scan.risk_score <= 25 ? 'low' : scan.risk_score <= 50 ? 'medium' : scan.risk_score <= 75 ? 'high' : 'critical';
+
+            regulatorDataService.addAssessment({
+              appName: results.appName || 'Untitled Assessment',
+              sector: results.sector || scan.sector_id || 'General',
+              riskScore: scan.risk_score || 50,
+              riskLevel: riskLevel as 'low' | 'medium' | 'high' | 'critical',
+              framework: results.framework || 'NDPA',
+              assessmentDate: scan.created_at || new Date().toISOString(),
+              triggeredClausesCount: results.triggeredClauses || 0,
+              remediationCompleted: 0,
+              remediationTotal: results.remediationTotal || 0,
+              status: status as 'compliant' | 'at_risk' | 'high_risk',
+              triggeredClauseIds: results.triggeredClauseIds || [],
+              triggeredFrameworks: results.triggeredFrameworks || [results.framework || 'NDPA'],
+            });
+          }
+        }
+      }
+
+      loadFromLocalStorage();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load regulator data");
+      // Supabase sync failed, fall back to localStorage data
+      loadFromLocalStorage();
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadFromLocalStorage]);
 
-  // Initial load and subscribe to changes
+  const refreshData = useCallback(() => {
+    loadFromLocalStorage();
+  }, [loadFromLocalStorage]);
+
   useEffect(() => {
-    refreshData();
-    const unsubscribe = regulatorDataService.subscribe(refreshData);
+    syncFromSupabase();
+    const unsubscribe = regulatorDataService.subscribe(loadFromLocalStorage);
     return unsubscribe;
-  }, [refreshData]);
+  }, [syncFromSupabase, loadFromLocalStorage]);
 
-  // Computed statistics
   const totalEntities = assessments.length;
   const compliantCount = assessments.filter(a => a.status === "compliant").length;
   const atRiskCount = assessments.filter(a => a.status === "at_risk").length;
@@ -96,7 +133,6 @@ export function useRegulatorData(): UseRegulatorDataReturn {
     : 0;
   const pendingCAR = summary.pendingCARFilings;
 
-  // Actions
   const addAssessment = useCallback((assessment: Omit<ComplianceAssessment, "id">) => {
     const newAssessment = regulatorDataService.addAssessment(assessment);
     return newAssessment;
@@ -107,15 +143,11 @@ export function useRegulatorData(): UseRegulatorDataReturn {
   }, []);
 
   const deleteAssessment = useCallback((id: string) => {
-    if (confirm("Are you sure you want to delete this assessment?")) {
-      regulatorDataService.deleteAssessment(id);
-    }
+    regulatorDataService.deleteAssessment(id);
   }, []);
 
   const clearAll = useCallback(() => {
-    if (confirm("⚠️ WARNING: This will delete ALL assessment data. This action cannot be undone. Are you sure?")) {
-      regulatorDataService.clearAllAssessments();
-    }
+    regulatorDataService.clearAllAssessments();
   }, []);
 
   const getAssessmentById = useCallback((id: string) => {
